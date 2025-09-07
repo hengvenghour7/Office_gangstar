@@ -1,5 +1,6 @@
 #include <iostream>
 #include <raylib.h>
+#include <raymath.h>
 
 using namespace std;
 
@@ -7,13 +8,8 @@ int main () {
 
     const int SCREEN_WIDTH = 800;
     const int SCREEN_HEIGHT = 600;
-    int ball_x = 100;
-    int ball_y = 100;
-    int ball_speed_x = 5;
-    int ball_speed_y = 5;
-    int ball_radius = 15;
+    Vector2 mapPos = {0,0};
 
-    cout << "Hello World" << endl;
 
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Office Gang");
     SetTargetFPS(60);
@@ -30,6 +26,7 @@ int main () {
         int maxCols;
         int colIndex;
         int rowIndex;
+        float updateAnimationTime = 0;
         Rectangle characterRecDes;
         Rectangle characterRecSrc;
         Image characterImg;
@@ -51,21 +48,14 @@ int main () {
             characterRecDes = {desX, desY, width*2, height*2};
             characterRecSrc = { colIndex*width, rowIndex*height, width, height};
         }
-        void updateAnimation () {
-            colIndex++;
-            if (colIndex > maxCols - 1) colIndex = 0;
-            characterRecSrc = { colIndex*width, rowIndex*height, width, height};
-        }
-        void updateCharacterMovement () {
-            if (IsKeyDown(KEY_A)) {
-                desX -= speed;
+        void updateAnimation (float deltaTime) {
+            updateAnimationTime += deltaTime;
+            if (updateAnimationTime > 0.1) {
+                updateAnimationTime = 0;
+                colIndex++;
+                if (colIndex > maxCols - 1) colIndex = 0;
+                characterRecSrc = { colIndex*width, rowIndex*height, width, height};
             }
-            if (IsKeyDown(KEY_D)) {
-                desX += speed;
-            }
-            if (IsKeyDown(KEY_W)) desY -= speed;
-            if (IsKeyDown(KEY_S)) desY += speed;
-            characterRecDes = {desX, desY, width*2, height*2};
         }
         void drawImage () {
             DrawTexturePro(characterTexture, characterRecSrc, characterRecDes, {0,0}, 0, WHITE);
@@ -73,24 +63,43 @@ int main () {
         void tryLog () {
             cout << "creating enw world";
         }
-        void updateCharacterProgess () {
+        void updateCharacterProgess (float deltaTime) {
             drawImage();
-            updateAnimation();
-            updateCharacterMovement();
+            updateAnimation(deltaTime);
         }
     };
     class Player: public Character
     {
     private:
-        /* data */
+        Vector2 worldPos{0,0};
+        Vector2 direction{0,0};
     public:
         Player (const char * imageTexture): Character(imageTexture) {
-            
+            desX = SCREEN_WIDTH/2;
+            desY = SCREEN_HEIGHT/2;
+            characterRecDes = {desX, desY, width*2, height*2};
         }
-        void updateAnimation () {
-            colIndex++;
-            if (colIndex > maxCols - 1) colIndex = 0;
-            characterRecSrc = { colIndex*width, rowIndex*height, width, height};
+        void updateCharacterMovement () {
+            if (IsKeyDown(KEY_A)) {
+                direction.x = -1;
+            }
+            if (IsKeyDown(KEY_D)) {
+                direction.x = 1;
+            }
+            if (IsKeyDown(KEY_W)) direction.y = -1;
+            if (IsKeyDown(KEY_S)) direction.y = 1;
+            if(Vector2Length(direction) != 0) {
+                worldPos = Vector2Subtract(worldPos, Vector2Normalize(direction)*speed);
+            }
+            direction = {0,0};
+        }
+        void updateCharacterProgess (float deltaTime) {
+            drawImage();
+            updateAnimation(deltaTime);
+            updateCharacterMovement();
+        }
+        Vector2 getWorldPos () {
+            return worldPos;
         }
     };
     
@@ -102,45 +111,30 @@ int main () {
             AIPlayer (const char * imageTexture) : Character(imageTexture) {
             
         }
-        void updateAnimation () {
-            colIndex++;
-            if (colIndex > maxCols - 1) colIndex = 0;
-            characterRecSrc = { colIndex*width, rowIndex*height, width, height};
-        }
-        void updateCharacterProgess () {
+        void updateCharacterProgess (float deltaTime) {
             drawImage();
-            updateAnimation();
+            updateAnimation(deltaTime);
+        }
+        void setAIPos (Vector2 mapPos) {
+            characterRecDes = {mapPos.x, mapPos.y, width*2, height*2};
         }
     };
-    Player character1("resources/image/character/workingman2.png");
+    Player player1("resources/image/character/workingman2.png");
     AIPlayer character2("resources/image/character/workingman.png");
-    int characterImgIndex = 0;
-    int maxImgIndex = 6;
-    while (WindowShouldClose() == false){   
-        ball_x += ball_speed_x;
-        ball_y += ball_speed_y;
-
-        if(ball_x + ball_radius >= SCREEN_WIDTH || ball_x - ball_radius <= 0)
-        {
-            ball_speed_x *= -1;
-        }
-        if(ball_y + ball_radius >= SCREEN_HEIGHT || ball_y - ball_radius <= 0)
-        {
-            ball_speed_y *= -1;
-        }
+    while (WindowShouldClose() == false){
+        float deltaTime = GetFrameTime();
+        mapPos = player1.getWorldPos();
         Image mapImg = LoadImage("resources/image/office_gang_map.png");
-        Texture2D texture = LoadTextureFromImage(mapImg);
-        UnloadImage(mapImg);
+        Texture2D mapTexture = LoadTextureFromImage(mapImg);
         BeginDrawing();
         ClearBackground(BLACK);
-        DrawTexture(texture, 0, 0, WHITE);
-        character1.updateCharacterProgess();
-        character2.updateCharacterProgess();
+        // DrawTexture(texture, 0, 0, WHITE);
+        DrawTextureEx(mapTexture, mapPos, 0,1,WHITE);
+        player1.updateCharacterProgess(deltaTime);
+        character2.setAIPos(mapPos);
+        character2.updateCharacterProgess(deltaTime);
+        UnloadImage(mapImg);
             // Free the image, texture now lives on GPU
-            DrawCircle(ball_x,ball_y,ball_radius, WHITE);
-            characterImgIndex++;
-            if (characterImgIndex >= maxImgIndex) characterImgIndex = 0;
-
         EndDrawing();
     }
 
