@@ -10,7 +10,7 @@ MapBoundary::MapBoundary(std::vector<int> inputDataArray, int inputMapWidth, int
         std::vector<int> chunk;
         for (int i = j; i< j + inputMapWidth; i++) {
             if (inputDataArray[i] == 79732) {
-                dataArray.push_back({i-j, n});
+                dataArray.push_back({i-j, n, 16, 16});
             }
             // chunk.push_back(inputDataArray[i]);
         }
@@ -30,9 +30,29 @@ std::vector<Boundary> MapBoundary::getCollisionBoundary() {
     return dataArray;
 }
 void MapBoundary::drawBoundary(float scale, Vector2 mapPos) {
-    for (int i=0 ; i< dataArray.size(); i++) {
-        DrawRectangle (dataArray[i].x*16 + mapPos.x,dataArray[i].y*16 + mapPos.y, 16, 16, GREEN);
+    for (Boundary data: dataArray) {
+        // std::cout << "pppp" << data.x;
+        DrawRectangle (data.x*16*scale + mapPos.x,data.y*16*scale + mapPos.y, data.width*scale, data.height*scale, GREEN);
     };
+}
+CollisionProperty MapBoundary::checkBoundaryCollision (Boundary characterCollision, Vector2 mapPos) {
+    CollisionProperty collision1 {false, {}};
+    for (Boundary data: dataArray) {
+        if (checkIsCollide(characterCollision, data, mapPos).isCollide) {
+            collision1.isCollide = true;
+            collision1.collider = data;
+            return collision1;
+        };
+    };
+    return collision1;
+}
+CollisionProperty checkIsCollide (Boundary firstCollider, Boundary secondCollider, Vector2 mapPos) {
+    CollisionProperty collision1;
+    if (firstCollider.x > secondCollider.x*16*1.5 + mapPos.x) {
+        collision1.isCollide = true;
+        std::cout << "uuuu" << firstCollider.x << "hhhh" << secondCollider.x*16*1.5 + mapPos.x;
+    };
+    return collision1;
 }
 std::vector<int> collisionData = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,

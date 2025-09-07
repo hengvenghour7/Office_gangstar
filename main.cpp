@@ -26,11 +26,13 @@ int main () {
         int maxCols;
         int colIndex;
         int rowIndex;
+        float scale_facter{2.f};
         float updateAnimationTime = 0;
         Rectangle characterRecDes;
         Rectangle characterRecSrc;
         Image characterImg;
         Texture2D characterTexture;
+        Boundary characterCollision;
     public:
         Character (const char * imageTexture) {
             width = 896/56;
@@ -45,8 +47,9 @@ int main () {
             speed = 2;
             characterImg = LoadImage(imageTexture);
             characterTexture = LoadTextureFromImage(characterImg);
-            characterRecDes = {desX, desY, width*2, height*2};
+            characterRecDes = {desX, desY, width*scale_facter, height*scale_facter};
             characterRecSrc = { colIndex*width, rowIndex*height, width, height};
+            characterCollision = {(int)desX, (int)desY, width*scale_facter, height*scale_facter};
         }
         void updateAnimation (float deltaTime) {
             updateAnimationTime += deltaTime;
@@ -67,6 +70,9 @@ int main () {
             drawImage();
             updateAnimation(deltaTime);
         }
+        Boundary getCharacterCollision() {
+            return characterCollision;
+        };
     };
     class Player: public Character
     {
@@ -77,7 +83,9 @@ int main () {
         Player (const char * imageTexture): Character(imageTexture) {
             desX = SCREEN_WIDTH/2;
             desY = SCREEN_HEIGHT/2;
-            characterRecDes = {desX, desY, width*2, height*2};
+            characterRecDes = {desX, desY, width*scale_facter, height*scale_facter};
+            characterCollision = {(int)desX, (int)desY, width*scale_facter, height*scale_facter};
+
         }
         void updateCharacterMovement () {
             if (IsKeyDown(KEY_A)) {
@@ -130,8 +138,9 @@ int main () {
         BeginDrawing();
         ClearBackground(BLACK);
         // DrawTexture(texture, 0, 0, WHITE);
-        DrawTextureEx(mapTexture, mapPos, 0,1,WHITE);
+        DrawTextureEx(mapTexture, mapPos, 0,MAP_SCALE,WHITE);
         mapCollision.drawBoundary(MAP_SCALE, mapPos);
+        mapCollision.checkBoundaryCollision(player1.getCharacterCollision(), mapPos);
         // DrawRectangle (272,200, 16, 16, RED);
         player1.updateCharacterProgess(deltaTime);
         character2.setAIPos(mapPos);
