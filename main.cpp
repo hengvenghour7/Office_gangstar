@@ -1,6 +1,7 @@
 #include <iostream>
 #include <raylib.h>
 #include <raymath.h>
+#include "mapCollision.h"
 
 using namespace std;
 
@@ -8,9 +9,8 @@ int main () {
 
     const int SCREEN_WIDTH = 800;
     const int SCREEN_HEIGHT = 600;
+    const float MAP_SCALE = 1.5;
     Vector2 mapPos = {0,0};
-
-
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Office Gang");
     SetTargetFPS(60);
     class Character
@@ -122,6 +122,7 @@ int main () {
     Player player1("resources/image/character/workingman2.png");
     AIPlayer character2("resources/image/character/workingman.png");
     while (WindowShouldClose() == false){
+        cout << "jjjjjj" << mapCollision.getWidth();
         float deltaTime = GetFrameTime();
         mapPos = player1.getWorldPos();
         Image mapImg = LoadImage("resources/image/office_gang_map.png");
@@ -130,6 +131,8 @@ int main () {
         ClearBackground(BLACK);
         // DrawTexture(texture, 0, 0, WHITE);
         DrawTextureEx(mapTexture, mapPos, 0,1,WHITE);
+        mapCollision.drawBoundary(MAP_SCALE, mapPos);
+        // DrawRectangle (272,200, 16, 16, RED);
         player1.updateCharacterProgess(deltaTime);
         character2.setAIPos(mapPos);
         character2.updateCharacterProgess(deltaTime);
