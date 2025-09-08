@@ -21,8 +21,8 @@ class MapBoundary {
     int getWidth ();
     std::vector<Boundary> getCollisionBoundary();
     void drawBoundary(float scale, Vector2 mapPos);
-    CollisionProperty checkBoundaryCollision(Boundary characterCollision, Vector2 mapPos);
+    CollisionProperty checkBoundaryCollision(Boundary characterCollision, Vector2 mapPos, float XOffset, float YOffset);
 };
 
-CollisionProperty checkIsCollide (Boundary firstCollider, Boundary secondCollider, Vector2 mapPos);
+CollisionProperty checkIsCollide (Boundary firstCollider, Boundary secondCollider, Vector2 mapPos, float XOffset, float YOffset);
 extern MapBoundary mapCollision;

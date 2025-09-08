@@ -35,22 +35,27 @@ void MapBoundary::drawBoundary(float scale, Vector2 mapPos) {
         DrawRectangle (data.x*16*scale + mapPos.x,data.y*16*scale + mapPos.y, data.width*scale, data.height*scale, GREEN);
     };
 }
-CollisionProperty MapBoundary::checkBoundaryCollision (Boundary characterCollision, Vector2 mapPos) {
+CollisionProperty MapBoundary::checkBoundaryCollision (Boundary characterCollision, Vector2 mapPos, float XOffset, float YOffset) {
     CollisionProperty collision1 {false, {}};
     for (Boundary data: dataArray) {
-        if (checkIsCollide(characterCollision, data, mapPos).isCollide) {
+        if (checkIsCollide(characterCollision, data, mapPos, XOffset, YOffset).isCollide) {
             collision1.isCollide = true;
             collision1.collider = data;
+            // std::cout << "aadd" << collision1.isCollide << "ssvv";
             return collision1;
         };
     };
+    // std::cout << "zzd" << collision1.isCollide << "zzz";
     return collision1;
 }
-CollisionProperty checkIsCollide (Boundary firstCollider, Boundary secondCollider, Vector2 mapPos) {
-    CollisionProperty collision1;
-    if (firstCollider.x > secondCollider.x*16*1.5 + mapPos.x) {
+CollisionProperty checkIsCollide (Boundary firstCollider, Boundary secondCollider, Vector2 mapPos, float XOffset, float YOffset) {
+    CollisionProperty collision1 {false, {}};
+    float secondColliderLocationX = secondCollider.x*16*1.5 + mapPos.x;
+    float secondColliderLocationY = secondCollider.y*16*1.5 + mapPos.y;
+    if (firstCollider.x + XOffset + firstCollider.width > secondColliderLocationX && firstCollider.x + XOffset < secondColliderLocationX + secondCollider.width && 
+        firstCollider.y + YOffset + firstCollider.height > secondColliderLocationY && firstCollider.y + YOffset < secondColliderLocationY + secondCollider.height) {
         collision1.isCollide = true;
-        std::cout << "uuuu" << firstCollider.x << "hhhh" << secondCollider.x*16*1.5 + mapPos.x;
+        // std::cout << "uuuu" << firstCollider.x << "hhhh" << secondCollider.x*16*1.5 + mapPos.x << "colll" << collision1.isCollide;
     };
     return collision1;
 }

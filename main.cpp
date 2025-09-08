@@ -85,9 +85,11 @@ int main () {
             desY = SCREEN_HEIGHT/2;
             characterRecDes = {desX, desY, width*scale_facter, height*scale_facter};
             characterCollision = {(int)desX, (int)desY, width*scale_facter, height*scale_facter};
-
         }
         void updateCharacterMovement () {
+            // if (mapCollision.checkBoundaryCollision(getCharacterCollision(), worldPos).isCollide) {
+            //     return;
+            // }
             if (IsKeyDown(KEY_A)) {
                 direction.x = -1;
             }
@@ -96,7 +98,7 @@ int main () {
             }
             if (IsKeyDown(KEY_W)) direction.y = -1;
             if (IsKeyDown(KEY_S)) direction.y = 1;
-            if(Vector2Length(direction) != 0) {
+            if(Vector2Length(direction) != 0 && !mapCollision.checkBoundaryCollision(getCharacterCollision(), worldPos, direction.x*speed , direction.y*speed).isCollide) {
                 worldPos = Vector2Subtract(worldPos, Vector2Normalize(direction)*speed);
             }
             direction = {0,0};
@@ -117,7 +119,6 @@ int main () {
         
         public: 
             AIPlayer (const char * imageTexture) : Character(imageTexture) {
-            
         }
         void updateCharacterProgess (float deltaTime) {
             drawImage();
@@ -130,7 +131,6 @@ int main () {
     Player player1("resources/image/character/workingman2.png");
     AIPlayer character2("resources/image/character/workingman.png");
     while (WindowShouldClose() == false){
-        cout << "jjjjjj" << mapCollision.getWidth();
         float deltaTime = GetFrameTime();
         mapPos = player1.getWorldPos();
         Image mapImg = LoadImage("resources/image/office_gang_map.png");
@@ -140,7 +140,6 @@ int main () {
         // DrawTexture(texture, 0, 0, WHITE);
         DrawTextureEx(mapTexture, mapPos, 0,MAP_SCALE,WHITE);
         mapCollision.drawBoundary(MAP_SCALE, mapPos);
-        mapCollision.checkBoundaryCollision(player1.getCharacterCollision(), mapPos);
         // DrawRectangle (272,200, 16, 16, RED);
         player1.updateCharacterProgess(deltaTime);
         character2.setAIPos(mapPos);
