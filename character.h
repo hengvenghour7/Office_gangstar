@@ -31,8 +31,8 @@ class Character
         void updateAnimation (float deltaTime);
         void drawImage ();
         void updateCharacterProgess (float deltaTime) {
-            drawImage();
             updateAnimation(deltaTime);
+            drawImage();
         }
         Rectangle getCharacterCollision();
     };
@@ -42,30 +42,20 @@ class Player: public Character
         Vector2 direction{0,0};
         MapBoundary* boundary{};
     public:
-        virtual void tick(float deltaTime) override;
         Player (const char * imageTexture, MapBoundary* inputBoundary);
-        void updateCharacterProgess (float deltaTime) {
-            drawImage();
-            updateAnimation(deltaTime);
-        }
-        Vector2 getWorldPos () {
-            return worldPos;
+        virtual void tick(float deltaTime) override;
+        Vector2* getWorldPos () {
+            return &worldPos;
         }
     };
     
 class AIPlayer : public Character {
     private:
-    
-    
+        Vector2* playerWorldPos;
     public: 
-        // virtual void tick(float deltaTime) override;
+        AIPlayer (const char * imageTexture, Vector2* inputPlayerWorldPos);
+        virtual void tick(float deltaTime) override;
         AIPlayer (const char * imageTexture) : Character(imageTexture) {
     }
-    void updateCharacterProgess (float deltaTime) {
-        drawImage();
-        updateAnimation(deltaTime);
-    }
-    void setAIPos (Vector2 mapPos) {
-        characterRecDes = {mapPos.x, mapPos.y, width*2, height*2};
-    }
+    void setAIPos (Vector2 worldPos);
 };
