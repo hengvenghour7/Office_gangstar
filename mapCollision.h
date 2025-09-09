@@ -1,16 +1,8 @@
 #include <vector>
 #include <iostream>
+#include "helpers.h"
 
-struct Boundary {
-    int x;
-    int y;
-    float width;
-    float height;
-};
-struct CollisionProperty {
-    bool isCollide;
-    Boundary collider;
-};
+
 class MapBoundary {
     private:
     int inputCollisionSize{};
@@ -22,8 +14,5 @@ class MapBoundary {
     int getWidth ();
     std::vector<std::vector<int>> getCollisionBoundary();
     void drawBoundary(float scale, Vector2 mapPos);
-    CollisionProperty checkBoundaryCollision(Boundary characterCollision, Vector2 mapPos, float XOffset, float YOffset);
+    CollisionProperty checkBoundaryCollision(Rectangle characterCollision, Vector2 mapPos, float XOffset, float YOffset);
 };
-
-CollisionProperty checkIsCollide (Boundary firstCollider, Boundary secondCollider, Vector2 mapPos, float XOffset, float YOffset);
-extern MapBoundary mapCollision;
