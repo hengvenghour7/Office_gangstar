@@ -5,15 +5,10 @@
 
 using namespace std;
 
-int main () {
-
-    const int SCREEN_WIDTH = 800;
-    const int SCREEN_HEIGHT = 600;
-    const float MAP_SCALE = 1.5;
-    Vector2 mapPos = {0,0};
-    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Office Gang");
-    SetTargetFPS(60);
-    class Character
+const int SCREEN_WIDTH = 800;
+const int SCREEN_HEIGHT = 600;
+const float MAP_SCALE = 1.5;
+class Character
     {
     protected:
         float width;
@@ -61,6 +56,7 @@ int main () {
             }
         }
         void drawImage () {
+            DrawRectangle(desX, desY, width*scale_facter, height*scale_facter, BLUE);
             DrawTexturePro(characterTexture, characterRecSrc, characterRecDes, {0,0}, 0, WHITE);
         }
         void tryLog () {
@@ -128,6 +124,12 @@ int main () {
             characterRecDes = {mapPos.x, mapPos.y, width*2, height*2};
         }
     };
+int main () {
+
+    Vector2 mapPos = {0,0};
+    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Office Gang");
+    SetTargetFPS(60);
+    
     Player player1("resources/image/character/workingman2.png");
     AIPlayer character2("resources/image/character/workingman.png");
     while (WindowShouldClose() == false){

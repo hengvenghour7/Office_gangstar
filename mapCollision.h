@@ -13,13 +13,14 @@ struct CollisionProperty {
 };
 class MapBoundary {
     private:
-    std::vector<Boundary> dataArray {};
+    int inputCollisionSize{};
+    std::vector<std::vector<int>> dataArray {};
     int mapWidth;
     int mapHeight;
     public: 
     MapBoundary (std::vector<int> inputDataArray, int inputMapWidth, int inputMapHeight, int inputTileSize);
     int getWidth ();
-    std::vector<Boundary> getCollisionBoundary();
+    std::vector<std::vector<int>> getCollisionBoundary();
     void drawBoundary(float scale, Vector2 mapPos);
     CollisionProperty checkBoundaryCollision(Boundary characterCollision, Vector2 mapPos, float XOffset, float YOffset);
 };

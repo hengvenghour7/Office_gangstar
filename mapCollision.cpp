@@ -1,59 +1,75 @@
 #include <vector>
 #include <iostream>
 #include <raylib.h>
+#include <raymath.h>
 #include "mapCollision.h"
 
 MapBoundary::MapBoundary(std::vector<int> inputDataArray, int inputMapWidth, int inputMapHeight, int inputTileSize) {
     
     int n = 0;
-    for (int j=0 ; j < inputDataArray.size(); j+= inputMapWidth) {
-        std::vector<int> chunk;
+    inputCollisionSize = inputDataArray.size();
+    for (int j=0 ; j < (int)inputDataArray.size(); j+= inputMapWidth) {
+        std::vector<int> chunk{};
         for (int i = j; i< j + inputMapWidth; i++) {
-            if (inputDataArray[i] == 79732) {
-                dataArray.push_back({i-j, n, 16, 16});
-            }
-            // chunk.push_back(inputDataArray[i]);
+            chunk.push_back(inputDataArray[i]);
+            // if (inputDataArray[i] == 79732) {
+            //     dataArray.push_back({i-j, n, 16, 16});
+            // }
         }
-        // dataArray.push_back(chunk);
-        // if (chunk.size() > 3) {
-        // }
         n++;
+        dataArray.push_back(chunk);
     }
-    std::cout << "fffvvvvvv" << dataArray[3].x;
+    std::cout<< "lengthvvvv"<< dataArray.size();
+    std::cout<< "yyyyt"<< dataArray[5][35];
+    // for (int y = 0; y< (int)dataArray.size(); y++) {
+    //     // std::cout<< "ttttt";
+    //     for (int x = 0; x < inputMapWidth; x++) {
+    //         std::cout<< "bb" << dataArray[y][x];
+    //     }
+    // }
     mapWidth = inputMapWidth;
     mapHeight = inputMapHeight;
 }
 int MapBoundary::getWidth() {
     return mapWidth;
 }
-std::vector<Boundary> MapBoundary::getCollisionBoundary() {
+std::vector<std::vector<int>> MapBoundary::getCollisionBoundary() {
     return dataArray;
 }
 void MapBoundary::drawBoundary(float scale, Vector2 mapPos) {
-    for (Boundary data: dataArray) {
-        // std::cout << "pppp" << data.x;
-        DrawRectangle (data.x*16*scale + mapPos.x,data.y*16*scale + mapPos.y, data.width*scale, data.height*scale, GREEN);
+    for (int y = 0; y < (int)dataArray.size(); y++) {
+        for (int x = 0; x < mapWidth; x++) {
+            if (dataArray[y][x] == 79732) {
+                DrawRectangle (x*16*scale + mapPos.x,y*16*scale + mapPos.y, 16*scale, 16*scale, GREEN);
+            }
+        }
     };
 }
 CollisionProperty MapBoundary::checkBoundaryCollision (Boundary characterCollision, Vector2 mapPos, float XOffset, float YOffset) {
     CollisionProperty collision1 {false, {}};
-    for (Boundary data: dataArray) {
-        if (checkIsCollide(characterCollision, data, mapPos, XOffset, YOffset).isCollide) {
+    Vector2 charCollisionScreenPos{XOffset > 0 ?  characterCollision.x + characterCollision.width : characterCollision.x,YOffset > 0 ? characterCollision.y + characterCollision.height : characterCollision.y};
+    Vector2 playerWorldPos = Vector2Subtract(charCollisionScreenPos, mapPos);
+    int tileX = (int)(playerWorldPos.x + XOffset)/16/1.5; // x*16*1.5 + mapPos.x -- -mapPos.x/16/1.5
+    int tileY = (int)(playerWorldPos.y + YOffset)/16/1.5;
+    if (dataArray[tileY][tileX] == 79732) {
             collision1.isCollide = true;
-            collision1.collider = data;
-            // std::cout << "aadd" << collision1.isCollide << "ssvv";
             return collision1;
-        };
-    };
-    // std::cout << "zzd" << collision1.isCollide << "zzz";
+        }
+    // for (std::vector<int> data: dataArray) {
+    //     if (checkIsCollide(characterCollision, data, mapPos, XOffset, YOffset).isCollide) {
+    //         collision1.isCollide = true;
+    //         collision1.collider = data;
+    //         return collision1;
+    //     };
+    // };
     return collision1;
 }
 CollisionProperty checkIsCollide (Boundary firstCollider, Boundary secondCollider, Vector2 mapPos, float XOffset, float YOffset) {
     CollisionProperty collision1 {false, {}};
     float secondColliderLocationX = secondCollider.x*16*1.5 + mapPos.x;
     float secondColliderLocationY = secondCollider.y*16*1.5 + mapPos.y;
-    if (firstCollider.x + XOffset + firstCollider.width > secondColliderLocationX && firstCollider.x + XOffset < secondColliderLocationX + secondCollider.width && 
-        firstCollider.y + YOffset + firstCollider.height > secondColliderLocationY && firstCollider.y + YOffset < secondColliderLocationY + secondCollider.height) {
+    if (firstCollider.x + XOffset + firstCollider.width > secondColliderLocationX && firstCollider.x + XOffset < secondColliderLocationX + 16 && 
+        firstCollider.y + YOffset + firstCollider.height > secondColliderLocationY && firstCollider.y + YOffset < secondColliderLocationY + 16) {
         collision1.isCollide = true;
         // std::cout << "uuuu" << firstCollider.x << "hhhh" << secondCollider.x*16*1.5 + mapPos.x << "colll" << collision1.isCollide;
     };
@@ -64,15 +80,15 @@ std::vector<int> collisionData = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 79732, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 79732, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 79732, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 79732, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 79732, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 79732, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 79732, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 79732, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 79732, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 79732, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 79732, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 79732, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 79732, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 79732, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 79732, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 79732, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 79732, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 79732, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 79732, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
