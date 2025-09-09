@@ -2,6 +2,7 @@
 #include <raymath.h>
 #include <iostream>
 #include "globalVar.h"
+#include "mapCollision.h"
 
 using namespace std;
 
@@ -25,19 +26,8 @@ class Character
         Texture2D characterTexture;
         Rectangle characterCollision;
     public:
-        Character (const char * imageTexture) {
-            width = 896/56;
-            height = 640/20;
-            maxCols = 6;
-            colIndex = 0;
-            rowIndex = 2;
-            speed = 2;
-            characterImg = LoadImage(imageTexture);
-            characterTexture = LoadTextureFromImage(characterImg);
-            characterRecDes = {screenPos.x, screenPos.y, width*scale_facter, height*scale_facter};
-            characterRecSrc = { colIndex*width, rowIndex*height, width, height};
-            characterCollision = {screenPos.x, screenPos.y, width*scale_facter, height*scale_facter};
-        }
+        virtual void tick (float deltaTime);
+        Character (const char * imageTexture);
         void updateAnimation (float deltaTime);
         void drawImage ();
         void updateCharacterProgess (float deltaTime) {
@@ -45,20 +35,15 @@ class Character
             updateAnimation(deltaTime);
         }
         Rectangle getCharacterCollision();
-        void tick (float deltaTime);
     };
-    class Player: public Character
-    {
+class Player: public Character
+{
     private:
-        Vector2 worldPos{0,0};
         Vector2 direction{0,0};
+        MapBoundary* boundary{};
     public:
-        Player (const char * imageTexture): Character(imageTexture) {
-            screenPos.x = SCREEN_WIDTH/2;
-            screenPos.y = SCREEN_HEIGHT/2;
-            characterRecDes = {screenPos.x, screenPos.y, width*scale_facter, height*scale_facter};
-            characterCollision = {screenPos.x, screenPos.y, width*scale_facter, height*scale_facter};
-        }
+        virtual void tick(float deltaTime) override;
+        Player (const char * imageTexture, MapBoundary* inputBoundary);
         void updateCharacterProgess (float deltaTime) {
             drawImage();
             updateAnimation(deltaTime);
@@ -68,18 +53,19 @@ class Character
         }
     };
     
-    class AIPlayer : public Character {
-        private:
-            
-        
-        public: 
-            AIPlayer (const char * imageTexture) : Character(imageTexture) {
-        }
-        void updateCharacterProgess (float deltaTime) {
-            drawImage();
-            updateAnimation(deltaTime);
-        }
-        void setAIPos (Vector2 mapPos) {
-            characterRecDes = {mapPos.x, mapPos.y, width*2, height*2};
-        }
-    };
+class AIPlayer : public Character {
+    private:
+    
+    
+    public: 
+        // virtual void tick(float deltaTime) override;
+        AIPlayer (const char * imageTexture) : Character(imageTexture) {
+    }
+    void updateCharacterProgess (float deltaTime) {
+        drawImage();
+        updateAnimation(deltaTime);
+    }
+    void setAIPos (Vector2 mapPos) {
+        characterRecDes = {mapPos.x, mapPos.y, width*2, height*2};
+    }
+};

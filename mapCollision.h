@@ -1,3 +1,6 @@
+#ifndef MAPCOLLISION_H
+#define MAPCOLLISION_H
+
 #include <vector>
 #include <iostream>
 #include "helpers.h"
@@ -16,3 +19,5 @@ class MapBoundary {
     void drawBoundary(float scale, Vector2 mapPos);
     CollisionProperty checkBoundaryCollision(Rectangle characterCollision, Vector2 mapPos, float XOffset, float YOffset);
 };
+
+#endif
