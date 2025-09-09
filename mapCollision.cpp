@@ -19,14 +19,6 @@ MapBoundary::MapBoundary(std::vector<int> inputDataArray, int inputMapWidth, int
         n++;
         dataArray.push_back(chunk);
     }
-    std::cout<< "lengthvvvv"<< dataArray.size();
-    std::cout<< "yyyyt"<< dataArray[5][35];
-    // for (int y = 0; y< (int)dataArray.size(); y++) {
-    //     // std::cout<< "ttttt";
-    //     for (int x = 0; x < inputMapWidth; x++) {
-    //         std::cout<< "bb" << dataArray[y][x];
-    //     }
-    // }
     mapWidth = inputMapWidth;
     mapHeight = inputMapHeight;
 }
@@ -55,13 +47,6 @@ CollisionProperty MapBoundary::checkBoundaryCollision (Boundary characterCollisi
             collision1.isCollide = true;
             return collision1;
         }
-    // for (std::vector<int> data: dataArray) {
-    //     if (checkIsCollide(characterCollision, data, mapPos, XOffset, YOffset).isCollide) {
-    //         collision1.isCollide = true;
-    //         collision1.collider = data;
-    //         return collision1;
-    //     };
-    // };
     return collision1;
 }
 CollisionProperty checkIsCollide (Boundary firstCollider, Boundary secondCollider, Vector2 mapPos, float XOffset, float YOffset) {
@@ -71,7 +56,6 @@ CollisionProperty checkIsCollide (Boundary firstCollider, Boundary secondCollide
     if (firstCollider.x + XOffset + firstCollider.width > secondColliderLocationX && firstCollider.x + XOffset < secondColliderLocationX + 16 && 
         firstCollider.y + YOffset + firstCollider.height > secondColliderLocationY && firstCollider.y + YOffset < secondColliderLocationY + 16) {
         collision1.isCollide = true;
-        // std::cout << "uuuu" << firstCollider.x << "hhhh" << secondCollider.x*16*1.5 + mapPos.x << "colll" << collision1.isCollide;
     };
     return collision1;
 }
