@@ -16,7 +16,7 @@ int main () {
     Image mapImg = LoadImage("resources/image/office_gang_map.png");
     Texture2D mapTexture = LoadTextureFromImage(mapImg);
     Player player1("resources/image/character/workingman2.png", &mapBoundary1);
-    AIPlayer character2("resources/image/character/workingman.png", player1.getWorldPos());
+    AIPlayer character2("resources/image/character/workingman.png", player1.getWorldPos(), &player1);
     
     while (WindowShouldClose() == false){
         float deltaTime = GetFrameTime();

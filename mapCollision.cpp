@@ -49,8 +49,11 @@ MapProp::MapProp (std::vector<int> inputDataArray, int inputMapWidth, int inputM
     for (int y = 0; y < (int)dataArray.size(); y++) {
         for (int x = 0; x < mapWidth; x++) {
             if (dataArray[y][x] == collisionCode) {
-                props.emplace_back("resources/image/Modern_UI_Style_1.png", x*16*1.5, y*16*1.5, 240/15, 688/21);
+                props.emplace_back("resources/image/Modern_UI_Style_1.png", x*16*1.5, y*16*1.5, 240/15, 688/21, 8, 10, 5);
             };
+            if (dataArray[y][x] == 79740) {
+                props.emplace_back("resources/image/Modern_UI_Style_1.png", x*16*1.5, y*16*1.5, 240/15, 688/21, 8, 10, 17);
+            }
         }
     };
 }
@@ -59,9 +62,12 @@ void MapProp::drawAllProps (float scale, Vector2 mapPos, float deltaTime) {
         prop.drawProp(mapPos, deltaTime);
     }
 }
-Prop::Prop (const char* inputPropTexture, float inputX, float inputY, float inputPropWidth, float inputPropHeight) {
+Prop::Prop (const char* inputPropTexture, float inputX, float inputY, float inputPropWidth, float inputPropHeight, float inputCol, float inputMaxCol, float inputRow) {
     // std::cout<<"ttt" << inputPropTexture;
+    initialCol = inputCol;
+    maxCol = inputMaxCol;
     propTexture = LoadTexture(inputPropTexture);
+    row = inputRow;
     x = inputX;
     y = inputY;
     propWidth = inputPropWidth;
@@ -75,5 +81,5 @@ void Prop::drawProp (Vector2 mapPos, float deltaTime) {
         updatePropTime = 0;
     }
     // std::cout << "innn"<< initialCol << "uuubbb" << x;
-    DrawTexturePro(propTexture, {initialCol* 240/15,5* 688/21, 240/15, 688/21}, {x + mapPos.x,y + mapPos.y, 240/15*1.5, 688/21*1.5}, {0,0}, 0, WHITE);
+    DrawTexturePro(propTexture, {initialCol* 240/15,row* 688/21, 240/15, 688/21}, {x + mapPos.x,y + mapPos.y, 240/15*1.5, 688/21*1.5}, {0,0}, 0, WHITE);
 }

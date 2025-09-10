@@ -30,8 +30,9 @@ class Prop {
     float maxCol{10};
     float propWidth{};
     float propHeight{};
+    float row{};
     float updatePropTime{0};
-    Prop (const char* inputPropTexture, float inputX, float inputY, float inputPropWidth, float inputPropHeight);
+    Prop (const char* inputPropTexture, float inputX, float inputY, float inputPropWidth, float inputPropHeight, float inputCol, float inputMaxCol, float inputRow);
     void drawProp (Vector2 mapPos, float deltaTime);
 };
 class MapProp: public MapBoundary {

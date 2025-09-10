@@ -56,10 +56,12 @@ class Player: public Character
 class AIPlayer : public Character {
     private:
         Vector2* playerWorldPos;
+        Player* target;
     public: 
-        AIPlayer (const char * imageTexture, Vector2* inputPlayerWorldPos);
+        AIPlayer (const char * imageTexture, Vector2* inputPlayerWorldPos, Player* inputTarget);
         virtual void tick(float deltaTime) override;
         AIPlayer (const char * imageTexture) : Character(imageTexture) {
     }
+    void appraochTarget () ;
     void setAIPos (Vector2 worldPos);
 };

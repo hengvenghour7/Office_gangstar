@@ -77,13 +77,21 @@ void Player::tick (float deltaTime) {
                 }
                 Character::tick(deltaTime);
             }
-AIPlayer::AIPlayer (const char * imageTexture, Vector2* inputPlayerWorldPos): Character(imageTexture) {
+AIPlayer::AIPlayer (const char * imageTexture, Vector2* inputPlayerWorldPos, Player* inputTarget): Character(imageTexture) {
     playerWorldPos = inputPlayerWorldPos;
+    target = inputTarget;
 }
 void AIPlayer::tick(float deltaTime) {
     setAIPos(Vector2Scale(*playerWorldPos, -1.f));
+    // appraochTarget();
     Character::tick(deltaTime);
 }
 void AIPlayer::setAIPos (Vector2 worldPos) {
         characterRecDes = {worldPos.x, worldPos.y, width*2, height*2};
+    }
+void AIPlayer::appraochTarget () {
+        Vector2 targetCollision = {target->getCharacterCollision().x, target->getCharacterCollision().y + target->getCharacterCollision().height};
+        Vector2 directionVector = Vector2Normalize(Vector2Add(Vector2Add(*target->getWorldPos(), targetCollision), {characterCollision.x, characterCollision.y})) ;
+        characterRecDes.x += directionVector.x*2;
+        characterRecDes.y += directionVector.y*2;
     }
