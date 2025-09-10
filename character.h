@@ -25,6 +25,8 @@ class Character
         Image characterImg;
         Texture2D characterTexture;
         Rectangle characterCollision;
+        bool isTakeDamage{false};
+        float takeDamageTimeCap = 0.f;
     public:
         virtual void tick (float deltaTime);
         Character (const char * imageTexture);
@@ -34,6 +36,8 @@ class Character
             updateAnimation(deltaTime);
             drawImage();
         }
+        void takeDamage (Character* secondCollider, Vector2 MapPos);
+        
         Rectangle getCharacterCollision();
     };
 class Player: public Character
