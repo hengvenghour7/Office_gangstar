@@ -71,7 +71,12 @@ void Player::tick (float deltaTime) {
                         if (direction.x != 0 || direction.y != 0) rowIndex = 2;
                     }
                     if(Vector2Length(direction) != 0 && !boundary->checkBoundaryCollision(characterCollision, worldPos, direction.x*speed, direction.y*speed).isCollide) {
-                                worldPos = Vector2Add(worldPos, Vector2Normalize(direction)*speed);
+                        // Vector2 worldPostNegative = Vector2Scale(Vector2Add(worldPos, Vector2Normalize(direction)*speed), -1);
+                        // if (!(worldPostNegative.x > 0 || worldPostNegative.y > 0)) {
+                            worldPos = Vector2Add(worldPos, Vector2Normalize(direction)*speed);
+                        // } else {
+                        //     screenPos = Vector2Add(screenPos, Vector2Normalize(direction)*speed);
+                        // }
                             }
                     direction = {0,0};
                 }
@@ -87,7 +92,7 @@ void AIPlayer::tick(float deltaTime) {
     Character::tick(deltaTime);
 }
 void AIPlayer::setAIPos (Vector2 worldPos) {
-        characterRecDes = {worldPos.x, worldPos.y, width*2, height*2};
+        characterRecDes = {worldPos.x+ 200, worldPos.y+ 200, width*2, height*2};
     }
 void AIPlayer::appraochTarget () {
         Vector2 targetCollision = {target->getCharacterCollision().x, target->getCharacterCollision().y + target->getCharacterCollision().height};
