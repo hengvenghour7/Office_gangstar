@@ -12,9 +12,9 @@ Character::Character (const char * imageTexture) {
             speed = 2;
             characterImg = LoadImage(imageTexture);
             characterTexture = LoadTextureFromImage(characterImg);
-            characterRecDes = {screenPos.x, screenPos.y, width*scale_facter, height*scale_facter};
+            characterRecDes = {screenPos.x, screenPos.y, width*scale_factor, height*scale_factor};
             characterRecSrc = { colIndex*width, rowIndex*height, width, height};
-            characterCollision = {screenPos.x, screenPos.y, width*scale_facter, height*scale_facter};
+            characterCollision = {screenPos.x, (*(&screenPos)).y, width*scale_factor, height*scale_factor};
         }
 void Character::takeDamage (Character* secondCollider, Vector2 MapPos) {
             if (checkIsCollide(getCharacterCollision(), secondCollider->getCharacterCollision(), MapPos, 0, 0).isCollide) {
@@ -34,11 +34,20 @@ void Character::updateAnimation (float deltaTime) {
                 characterRecSrc = { colIndex*width, rowIndex*height, width, height};
             }
         }
+void Character::setCharacterPos(Vector2 inputWorldPos, Vector2 playerPos) {
+        worldPos = inputWorldPos;
+        screenPos = Vector2Subtract(worldPos, playerPos);
+        characterRecDes = {screenPos.x, screenPos.y, width*scale_factor, height*scale_factor};
+        characterCollision = {characterRecDes.x, characterRecDes.y+12, width*scale_factor, (height-6)*scale_factor};
+    }
 void Character::drawImage () {
-            characterCollision = {characterRecDes.x, characterRecDes.y+12, width*scale_facter, (height-6)*scale_facter};
+            // characterCollision = {characterRecDes.x, characterRecDes.y+12, width*scale_factor, (height-6)*scale_factor};
             // DrawRectangle(characterCollision.x, characterCollision.y, characterCollision.width, characterCollision.height, YELLOW);
             DrawTexturePro(characterTexture, characterRecSrc, characterRecDes, {0,0}, 0, WHITE);
         }
+Vector2* Character::getWorldPosPointer () {
+    return &worldPos;
+}
 void Character::tick (float deltaTime) {
             updateAnimation(deltaTime);
             drawImage();
@@ -50,8 +59,9 @@ Player::Player (const char * imageTexture, MapBoundary* inputBoundary): Characte
             boundary = inputBoundary;
             screenPos.x = SCREEN_WIDTH/2;
             screenPos.y = SCREEN_HEIGHT/2;
-            characterRecDes = {screenPos.x, screenPos.y, width*scale_facter, height*scale_facter};
-            characterCollision = {screenPos.x, screenPos.y+12, width*scale_facter, (height-6)*scale_facter};
+            worldPos = {-100, 0};
+            characterRecDes = {screenPos.x, screenPos.y, width*scale_factor, height*scale_factor};
+            characterCollision = {screenPos.x, screenPos.y+12, width*scale_factor, (height-6)*scale_factor};
         }
 void Player::tick (float deltaTime) {
             if (isTakeDamage) rowIndex = 19;
@@ -82,21 +92,21 @@ void Player::tick (float deltaTime) {
                 }
                 Character::tick(deltaTime);
             }
-AIPlayer::AIPlayer (const char * imageTexture, Vector2* inputPlayerWorldPos, Player* inputTarget): Character(imageTexture) {
-    playerWorldPos = inputPlayerWorldPos;
-    target = inputTarget;
+Vector2 Player::getWorldPos () {
+            return worldPos;
+        }
+Vector2 Player::getScreenPos () {
+            return screenPos;
+        };
+AIPlayer::AIPlayer (const char * imageTexture, Player* inputPlayer): Character(imageTexture) {
+    player = inputPlayer;
 }
 void AIPlayer::tick(float deltaTime) {
-    setAIPos(Vector2Scale(*playerWorldPos, -1.f));
-    // appraochTarget();
+    appraochTarget();
     Character::tick(deltaTime);
 }
-void AIPlayer::setAIPos (Vector2 worldPos) {
-        characterRecDes = {worldPos.x+ 200, worldPos.y+ 200, width*2, height*2};
-    }
 void AIPlayer::appraochTarget () {
-        Vector2 targetCollision = {target->getCharacterCollision().x, target->getCharacterCollision().y + target->getCharacterCollision().height};
-        Vector2 directionVector = Vector2Normalize(Vector2Add(Vector2Add(*target->getWorldPos(), targetCollision), {characterCollision.x, characterCollision.y})) ;
-        characterRecDes.x += directionVector.x*2;
-        characterRecDes.y += directionVector.y*2;
+    Vector2 direction = Vector2Normalize(Vector2Subtract(player->getScreenPos(), screenPos)) ;
+    worldPos = Vector2Add(worldPos,direction);
+    setCharacterPos(worldPos, player->getWorldPos());
     }

@@ -1,3 +1,6 @@
+#ifndef CHARACTER_H
+#define CHARACTER_H
+
 #include <raylib.h>
 #include <raymath.h>
 #include <iostream>
@@ -18,7 +21,7 @@ class Character
         int maxCols;
         int colIndex;
         int rowIndex;
-        float scale_facter{2.f};
+        float scale_factor{2.f};
         float updateAnimationTime = 0;
         Rectangle characterRecDes;
         Rectangle characterRecSrc;
@@ -37,7 +40,8 @@ class Character
             drawImage();
         }
         void takeDamage (Character* secondCollider, Vector2 MapPos);
-        
+        void setCharacterPos (Vector2 inputWorldPos, Vector2 playerPos);
+        Vector2* getWorldPosPointer ();
         Rectangle getCharacterCollision();
     };
 class Player: public Character
@@ -48,20 +52,17 @@ class Player: public Character
     public:
         Player (const char * imageTexture, MapBoundary* inputBoundary);
         virtual void tick(float deltaTime) override;
-        Vector2* getWorldPos () {
-            return &worldPos;
-        }
+        Vector2 getWorldPos ();
+        Vector2 getScreenPos ();
     };
     
 class AIPlayer : public Character {
     private:
-        Vector2* playerWorldPos;
-        Player* target;
+        Player* player;
     public: 
-        AIPlayer (const char * imageTexture, Vector2* inputPlayerWorldPos, Player* inputTarget);
+        AIPlayer (const char * imageTexture, Player* inputTarget);
         virtual void tick(float deltaTime) override;
-        AIPlayer (const char * imageTexture) : Character(imageTexture) {
-    }
     void appraochTarget () ;
-    void setAIPos (Vector2 worldPos);
 };
+
+#endif

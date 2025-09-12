@@ -18,6 +18,7 @@ class MapBoundary {
     int getWidth ();
     std::vector<std::vector<int>> getCollisionBoundary();
     void drawBoundary(float scale, Vector2 mapPos);
+    CollisionProperty checkInteractionBoundary (Rectangle characterCollision, Vector2 worldPos, float XOffset, float YOffset, int colorCode);
     CollisionProperty checkBoundaryCollision(Rectangle characterCollision, Vector2 mapPos, float XOffset, float YOffset);
 };
 class Prop {
@@ -41,5 +42,21 @@ class MapProp: public MapBoundary {
     public:
     MapProp (std::vector<int> inputDataArray, int inputMapWidth, int inputMapHeight, int inputTileSize, int inputCollisionCode);
     void drawAllProps (float scale, Vector2 mapPos, float deltaTime);
+    CollisionProperty checkInteraction (Rectangle characterCollision, Vector2 worldPos, float XOffset, float YOffset);
+};
+struct Map {
+    Texture2D mapTexture;
+};
+class MapHandler {
+    private:
+        Texture2D outsideMap{LoadTexture("resources/image/office_gang_map.png")};
+        Texture2D shopInteriorMap{LoadTexture("resources/image/shop_interior.png")};
+        Texture2D drawTexture{};
+        Vector2* mapPos{};
+        float scale;
+    public:
+        MapHandler(Vector2* inputMapPos, float inputScale);
+        void drawMap(Vector2 mapPos);
+        void changeMap (Map inputMap);
 };
 #endif
