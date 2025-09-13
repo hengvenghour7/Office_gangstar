@@ -2,8 +2,23 @@
 #include "mapCollision.h"
 #include "helpers.h"
 
-
-Character::Character (const char * imageTexture) {
+HealthComponent::HealthComponent (float inputMaxHealth) {
+    maxHealth = inputMaxHealth;
+    currentHealth = maxHealth;
+    healthDes = {0, 0};
+};
+void HealthComponent::takeDamage(float damage) {
+    // cout<< "take damage current health is" << currentHealth;
+    currentHealth-= damage;
+    // DrawRectangle(healthDes.x, healthDes.y, currentHealth, 10, GREEN);
+};
+void HealthComponent::heal(float healAmount) {
+    currentHealth+= healAmount;
+};
+void HealthComponent::drawHealth () {
+    DrawRectangle(healthDes.x, healthDes.y, currentHealth, 10, GREEN);
+}
+Character::Character (const char * imageTexture) : characterHealth(300) {
             width = 896/56;
             height = 640/20;
             maxCols = 6;
@@ -18,6 +33,7 @@ Character::Character (const char * imageTexture) {
         }
 void Character::takeDamage (Character* secondCollider, Vector2 MapPos) {
             if (checkIsCollide(getCharacterCollision(), secondCollider->getCharacterCollision(), MapPos, 0, 0).isCollide) {
+                characterHealth.takeDamage(20);
                 takeDamageTimeCap = 0;
                 isTakeDamage = true;
                 return;
@@ -40,6 +56,9 @@ void Character::setCharacterPos(Vector2 inputWorldPos, Vector2 playerPos) {
         characterRecDes = {screenPos.x, screenPos.y, width*scale_factor, height*scale_factor};
         characterCollision = {characterRecDes.x, characterRecDes.y+12, width*scale_factor, (height-6)*scale_factor};
     }
+void Character::drawHealth () {
+    characterHealth.drawHealth();
+}
 void Character::drawImage () {
             // characterCollision = {characterRecDes.x, characterRecDes.y+12, width*scale_factor, (height-6)*scale_factor};
             // DrawRectangle(characterCollision.x, characterCollision.y, characterCollision.width, characterCollision.height, YELLOW);
@@ -64,10 +83,14 @@ Player::Player (const char * imageTexture, MapBoundary* inputBoundary): Characte
             characterCollision = {screenPos.x, screenPos.y+12, width*scale_factor, (height-6)*scale_factor};
         }
 void Player::tick (float deltaTime) {
-            if (isTakeDamage) rowIndex = 19;
+            if (isTakeDamage) {
+                rowIndex = 19;
+            } 
             else {
 
-                    if (direction.x == 0 && direction.y == 0) rowIndex = 1;
+                    if (direction.x == 0 && direction.y == 0) 
+                    // characterHealth.takeDamage(20);
+                    rowIndex = 1;
                     if (IsKeyDown(KEY_K)) rowIndex = 13;
                     else {
                         if (IsKeyDown(KEY_A)) {

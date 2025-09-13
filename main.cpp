@@ -16,6 +16,9 @@ int main () {
     Map interiorMap = {
         LoadTexture("resources/image/shop_interior.png")
     };
+    Map officeInteriorMap = {
+        LoadTexture("resources/image/office_interior.png")
+    };
     // Image mapImg = LoadImage("resources/image/office_gang_map.png");
     // Texture2D mapTexture = LoadTextureFromImage(mapImg);
     Player player1("resources/image/character/workingman2.png", &mapBoundary1);
@@ -32,12 +35,18 @@ int main () {
             map1.changeMap(interiorMap);
 
     }
+        if (IsKeyPressed(KEY_I) && arrowProp.checkInteractionBoundary(player1.getCharacterCollision(), player1.getWorldPos(),0,0, 79738).isCollide) {
+            // cout<< "enter available";
+            map1.changeMap(officeInteriorMap);
+
+    }
         // DrawTextureEx(mapTexture, mapPos, 0,MAP_SCALE,WHITE);
         map1.drawMap(mapPos);
         arrowProp.drawAllProps(MAP_SCALE, mapPos, deltaTime);
         // mapBoundary1.drawBoundary(MAP_SCALE, mapPos);
         player1.tick(deltaTime);
         player1.takeDamage(&character2, mapPos);
+        player1.drawHealth();
         character2.tick(deltaTime);
         EndDrawing();
     }

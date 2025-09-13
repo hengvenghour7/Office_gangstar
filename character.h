@@ -9,6 +9,17 @@
 
 using namespace std;
 
+class HealthComponent {
+    protected:
+        float maxHealth{};
+        float currentHealth{};
+        Vector2 healthDes;
+    public:
+        HealthComponent (float inputMaxHealth);
+        void takeDamage(float damage);
+        void heal(float healAmount);
+        void drawHealth();
+};
 class Character
     {
     protected:
@@ -21,7 +32,7 @@ class Character
         int maxCols;
         int colIndex;
         int rowIndex;
-        float scale_factor{2.f};
+        float scale_factor{1.5f};
         float updateAnimationTime = 0;
         Rectangle characterRecDes;
         Rectangle characterRecSrc;
@@ -30,6 +41,7 @@ class Character
         Rectangle characterCollision;
         bool isTakeDamage{false};
         float takeDamageTimeCap = 0.f;
+        HealthComponent characterHealth;
     public:
         virtual void tick (float deltaTime);
         Character (const char * imageTexture);
@@ -39,6 +51,7 @@ class Character
             updateAnimation(deltaTime);
             drawImage();
         }
+        void drawHealth ();
         void takeDamage (Character* secondCollider, Vector2 MapPos);
         void setCharacterPos (Vector2 inputWorldPos, Vector2 playerPos);
         Vector2* getWorldPosPointer ();

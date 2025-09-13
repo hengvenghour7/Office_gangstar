@@ -38,10 +38,12 @@ CollisionProperty MapBoundary::checkBoundaryCollision (Rectangle characterCollis
     Vector2 playerWorldPos = Vector2Add(charCollisionScreenPos, worldPos);
     int tileX = (int)(playerWorldPos.x + XOffset)/16/1.5; // x*16*1.5 + mapPos.x -- -mapPos.x/16/1.5
     int tileY = (int)(playerWorldPos.y + YOffset)/16/1.5;
-    if (dataArray[tileY][tileX] == 79742) {
-            collision1.isCollide = true;
-            return collision1;
-        }
+    if (tileY < dataArray.size()) {
+        if (dataArray[tileY][tileX] == 79742) {
+                collision1.isCollide = true;
+                return collision1;
+            }
+    }
     return collision1;
 }
 CollisionProperty MapBoundary::checkInteractionBoundary (Rectangle characterCollision, Vector2 worldPos, float XOffset, float YOffset, int colorCode) {
