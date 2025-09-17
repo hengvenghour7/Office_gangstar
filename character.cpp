@@ -15,9 +15,12 @@ void HealthComponent::takeDamage(float damage) {
 void HealthComponent::heal(float healAmount) {
     currentHealth+= healAmount;
 };
-void HealthComponent::drawHealth () {
-    DrawRectangle(healthDes.x, healthDes.y, currentHealth, 10, GREEN);
-}
+void HealthComponent::drawHealth(float locationX, float locationY, float width, float height, Color inputColor){
+    DrawRectangle(locationX, locationY, width, height, inputColor);
+};
+// void HealthComponent::drawHealth (int locationX, int locationY, float width, float height) {
+//     DrawRectangle(locationX, locationY, width, height, GREEN);
+// };
 Character::Character (const char * imageTexture) : characterHealth(300) {
             width = 896/56;
             height = 640/20;
@@ -31,15 +34,21 @@ Character::Character (const char * imageTexture) : characterHealth(300) {
             characterRecSrc = { colIndex*width, rowIndex*height, width, height};
             characterCollision = {screenPos.x, (*(&screenPos)).y, width*scale_factor, height*scale_factor};
         }
-void Character::takeDamage (Character* secondCollider, Vector2 MapPos) {
-            if (checkIsCollide(getCharacterCollision(), secondCollider->getCharacterCollision(), MapPos, 0, 0).isCollide) {
+void Character::takeDamage (Character* secondCollider, Vector2 MapPos, float deltaTime) {
+            if (checkIsCollide(getCharacterCollision(), secondCollider->getCharacterCollision(), MapPos, 0, 0).isCollide && takeDamageTimeCap >= 1.5f) {
                 characterHealth.takeDamage(20);
                 takeDamageTimeCap = 0;
+                takeDamageAnimationTime = 0;
                 isTakeDamage = true;
                 return;
             }
-            isTakeDamage = false
-            ;
+            // if (isTakeDamage) {
+            // }
+            takeDamageTimeCap += deltaTime;
+            takeDamageAnimationTime += deltaTime;
+            if (takeDamageAnimationTime > 0.5) {
+                isTakeDamage = false;
+            }
         }
 void Character::updateAnimation (float deltaTime) {
             updateAnimationTime += deltaTime;
@@ -57,7 +66,7 @@ void Character::setCharacterPos(Vector2 inputWorldPos, Vector2 playerPos) {
         characterCollision = {characterRecDes.x, characterRecDes.y+12, width*scale_factor, (height-6)*scale_factor};
     }
 void Character::drawHealth () {
-    characterHealth.drawHealth();
+    characterHealth.drawHealth(characterHealth.healthDes.x, characterHealth.healthDes.y, characterHealth.currentHealth, 10, GREEN);
 }
 void Character::drawImage () {
             // characterCollision = {characterRecDes.x, characterRecDes.y+12, width*scale_factor, (height-6)*scale_factor};
@@ -127,6 +136,10 @@ AIPlayer::AIPlayer (const char * imageTexture, Player* inputPlayer): Character(i
 void AIPlayer::tick(float deltaTime) {
     appraochTarget();
     Character::tick(deltaTime);
+}
+void AIPlayer::drawHealth() {
+    characterHealth.healthDes = {characterCollision.x, characterCollision.y};
+    characterHealth.drawHealth(characterHealth.healthDes.x, characterHealth.healthDes.y - 20, characterHealth.currentHealth/4, 10, RED);
 }
 void AIPlayer::appraochTarget () {
     Vector2 direction = Vector2Normalize(Vector2Subtract(player->getScreenPos(), screenPos)) ;

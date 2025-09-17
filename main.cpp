@@ -45,9 +45,10 @@ int main () {
         arrowProp.drawAllProps(MAP_SCALE, mapPos, deltaTime);
         // mapBoundary1.drawBoundary(MAP_SCALE, mapPos);
         player1.tick(deltaTime);
-        player1.takeDamage(&character2, mapPos);
+        player1.takeDamage(&character2, mapPos, deltaTime);
         player1.drawHealth();
         character2.tick(deltaTime);
+        character2.drawHealth();
         EndDrawing();
     }
     CloseWindow();
