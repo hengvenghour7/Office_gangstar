@@ -39,7 +39,9 @@ class Character
         Image characterImg;
         Texture2D characterTexture;
         Rectangle characterCollision;
+        Rectangle characterHitBox;
         bool isTakeDamage{false};
+        bool isAttacking{false};
         float takeDamageTimeCap{1.f};
         float takeDamageAnimationTime{0.5f};
         HealthComponent characterHealth;
@@ -54,9 +56,11 @@ class Character
         }
         void drawHealth ();
         void takeDamage (Character* secondCollider, Vector2 MapPos, float deltaTime);
+        void takeDamage2 (Character* secondCollider, Vector2 MapPos, float deltaTime);
         void setCharacterPos (Vector2 inputWorldPos, Vector2 playerPos);
         Vector2* getWorldPosPointer ();
         Rectangle getCharacterCollision();
+        Rectangle getCharacterHitBox();
     };
 class Player: public Character
 {
