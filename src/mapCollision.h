@@ -50,8 +50,8 @@ struct Map {
 };
 class MapHandler {
     private:
-        Texture2D outsideMap{LoadTexture("../resources/image/office_gang_map.png")};
-        Texture2D shopInteriorMap{LoadTexture("../resources/image/shop_interior.png")};
+        Texture2D outsideMap{LoadTexture("resources/image/office_gang_map.png")};
+        Texture2D shopInteriorMap{LoadTexture("resources/image/shop_interior.png")};
         Texture2D drawTexture{};
         Vector2* mapPos{};
         std::vector<int>* mapCollisionData;

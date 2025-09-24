@@ -15,10 +15,10 @@ file(REMOVE_RECURSE
   "CMakeFiles/main.dir/src/mapCollision.cpp.obj.d"
   "CMakeFiles/main.dir/src/multiPlayer/client.cpp.obj"
   "CMakeFiles/main.dir/src/multiPlayer/client.cpp.obj.d"
+  "D:/Working Environment/Web Design/For job application/C++ games/Office_gangstar/main.exe"
+  "D:/Working Environment/Web Design/For job application/C++ games/Office_gangstar/main.exe.manifest"
+  "D:/Working Environment/Web Design/For job application/C++ games/Office_gangstar/main.pdb"
   "libmain.dll.a"
-  "main.exe"
-  "main.exe.manifest"
-  "main.pdb"
 )
 
 # Per-language clean rules from dependency scanning.

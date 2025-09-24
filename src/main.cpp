@@ -17,15 +17,15 @@ int main () {
     MapBoundary mapBoundary1(collisionData, 60, 40, 16, 79732);
     MapProp arrowProp(arrowLocationData, 60, 40, 16, 79738);
     Map interiorMap = {
-        LoadTexture("../resources/image/shop_interior.png")
+        LoadTexture("resources/image/shop_interior.png")
     };
     Map officeInteriorMap = {
-        LoadTexture("../resources/image/office_interior.png")
+        LoadTexture("resources/image/office_interior.png")
     };
     // Image mapImg = LoadImage("resources/image/office_gang_map.png");
     // Texture2D mapTexture = LoadTextureFromImage(mapImg);
-    Player player1("../resources/image/character/workingman2.png", &mapBoundary1);
-    AIPlayer character2("../resources/image/character/workingman.png", &player1);
+    Player player1("resources/image/character/workingman2.png", &mapBoundary1);
+    AIPlayer character2("resources/image/character/workingman.png", &player1);
     MapHandler map1(player1.getWorldPosPointer(), MAP_SCALE, &collisionData);
     if (!isMultiPlayer) {
         while (WindowShouldClose() == false){

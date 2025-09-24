@@ -76,13 +76,13 @@ MapProp::MapProp (std::vector<int> inputDataArray, int inputMapWidth, int inputM
     for (int y = 0; y < (int)dataArray.size(); y++) {
         for (int x = 0; x < mapWidth; x++) {
             if (dataArray[y][x] == collisionCode) {
-                props.emplace_back("../resources/image/Modern_UI_Style_1.png", x*16*1.5, y*16*1.5, 240/15, 688/21, 8, 10, 5);
+                props.emplace_back("resources/image/Modern_UI_Style_1.png", x*16*1.5, y*16*1.5, 240/15, 688/21, 8, 10, 5);
             };
             if (dataArray[y][x] == 79740) {
-                props.emplace_back("../resources/image/Modern_UI_Style_1.png", x*16*1.5, y*16*1.5, 240/15, 688/21, 8, 10, 17);
+                props.emplace_back("resources/image/Modern_UI_Style_1.png", x*16*1.5, y*16*1.5, 240/15, 688/21, 8, 10, 17);
             }
             if (dataArray[y][x] == 79730) {
-                props.emplace_back("../resources/image/Modern_UI_Style_1.png", x*16*1.5, y*16*1.5, 240/15, 688/21, 8, 10, 3);
+                props.emplace_back("resources/image/Modern_UI_Style_1.png", x*16*1.5, y*16*1.5, 240/15, 688/21, 8, 10, 3);
             }
         }
     };
