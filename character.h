@@ -11,14 +11,14 @@ using namespace std;
 
 class HealthComponent {
     protected:
+    public:
         float maxHealth{};
         float currentHealth{};
         Vector2 healthDes;
-    public:
         HealthComponent (float inputMaxHealth);
         void takeDamage(float damage);
         void heal(float healAmount);
-        void drawHealth();
+        void drawHealth(float locationX, float locationY, float width, float height, Color inputColor);
 };
 class Character
     {
@@ -39,8 +39,11 @@ class Character
         Image characterImg;
         Texture2D characterTexture;
         Rectangle characterCollision;
+        Rectangle characterHitBox;
         bool isTakeDamage{false};
-        float takeDamageTimeCap = 0.f;
+        bool isAttacking{false};
+        float takeDamageTimeCap{1.f};
+        float takeDamageAnimationTime{0.5f};
         HealthComponent characterHealth;
     public:
         virtual void tick (float deltaTime);
@@ -52,10 +55,12 @@ class Character
             drawImage();
         }
         void drawHealth ();
-        void takeDamage (Character* secondCollider, Vector2 MapPos);
+        void takeDamage (Character* secondCollider, Vector2 MapPos, float deltaTime);
+        void takeDamage2 (Character* secondCollider, Vector2 MapPos, float deltaTime);
         void setCharacterPos (Vector2 inputWorldPos, Vector2 playerPos);
         Vector2* getWorldPosPointer ();
         Rectangle getCharacterCollision();
+        Rectangle getCharacterHitBox();
     };
 class Player: public Character
 {
@@ -76,6 +81,7 @@ class AIPlayer : public Character {
         AIPlayer (const char * imageTexture, Player* inputTarget);
         virtual void tick(float deltaTime) override;
     void appraochTarget () ;
+    void drawHealth() ;
 };
 
 #endif
