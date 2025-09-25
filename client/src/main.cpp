@@ -52,6 +52,8 @@ int main () {
             player1.takeDamage(&character2, mapPos, deltaTime);
             player1.drawHealth();
             character2.tick(deltaTime);
+            character2.drawHealth();
+            character2.takeDamage2(&player1, mapPos, deltaTime);
             mapBoundary1.drawBoundary(MAP_SCALE, mapPos);
             EndDrawing();
         }
