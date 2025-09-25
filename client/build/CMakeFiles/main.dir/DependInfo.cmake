@@ -8,14 +8,14 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "D:/Working Environment/Web Design/For job application/C++ games/Office_gangstar/src/character.cpp" "CMakeFiles/main.dir/src/character.cpp.obj" "gcc" "CMakeFiles/main.dir/src/character.cpp.obj.d"
-  "D:/Working Environment/Web Design/For job application/C++ games/Office_gangstar/src/collisionData.cpp" "CMakeFiles/main.dir/src/collisionData.cpp.obj" "gcc" "CMakeFiles/main.dir/src/collisionData.cpp.obj.d"
-  "D:/Working Environment/Web Design/For job application/C++ games/Office_gangstar/src/game.cpp" "CMakeFiles/main.dir/src/game.cpp.obj" "gcc" "CMakeFiles/main.dir/src/game.cpp.obj.d"
-  "D:/Working Environment/Web Design/For job application/C++ games/Office_gangstar/src/globalVar.cpp" "CMakeFiles/main.dir/src/globalVar.cpp.obj" "gcc" "CMakeFiles/main.dir/src/globalVar.cpp.obj.d"
-  "D:/Working Environment/Web Design/For job application/C++ games/Office_gangstar/src/helpers.cpp" "CMakeFiles/main.dir/src/helpers.cpp.obj" "gcc" "CMakeFiles/main.dir/src/helpers.cpp.obj.d"
-  "D:/Working Environment/Web Design/For job application/C++ games/Office_gangstar/src/main.cpp" "CMakeFiles/main.dir/src/main.cpp.obj" "gcc" "CMakeFiles/main.dir/src/main.cpp.obj.d"
-  "D:/Working Environment/Web Design/For job application/C++ games/Office_gangstar/src/mapCollision.cpp" "CMakeFiles/main.dir/src/mapCollision.cpp.obj" "gcc" "CMakeFiles/main.dir/src/mapCollision.cpp.obj.d"
-  "D:/Working Environment/Web Design/For job application/C++ games/Office_gangstar/src/multiPlayer/client.cpp" "CMakeFiles/main.dir/src/multiPlayer/client.cpp.obj" "gcc" "CMakeFiles/main.dir/src/multiPlayer/client.cpp.obj.d"
+  "D:/Working Environment/Web Design/For job application/C++ games/Office_gangstar/client/src/character.cpp" "CMakeFiles/main.dir/src/character.cpp.obj" "gcc" "CMakeFiles/main.dir/src/character.cpp.obj.d"
+  "D:/Working Environment/Web Design/For job application/C++ games/Office_gangstar/client/src/collisionData.cpp" "CMakeFiles/main.dir/src/collisionData.cpp.obj" "gcc" "CMakeFiles/main.dir/src/collisionData.cpp.obj.d"
+  "D:/Working Environment/Web Design/For job application/C++ games/Office_gangstar/client/src/game.cpp" "CMakeFiles/main.dir/src/game.cpp.obj" "gcc" "CMakeFiles/main.dir/src/game.cpp.obj.d"
+  "D:/Working Environment/Web Design/For job application/C++ games/Office_gangstar/client/src/globalVar.cpp" "CMakeFiles/main.dir/src/globalVar.cpp.obj" "gcc" "CMakeFiles/main.dir/src/globalVar.cpp.obj.d"
+  "D:/Working Environment/Web Design/For job application/C++ games/Office_gangstar/client/src/helpers.cpp" "CMakeFiles/main.dir/src/helpers.cpp.obj" "gcc" "CMakeFiles/main.dir/src/helpers.cpp.obj.d"
+  "D:/Working Environment/Web Design/For job application/C++ games/Office_gangstar/client/src/main.cpp" "CMakeFiles/main.dir/src/main.cpp.obj" "gcc" "CMakeFiles/main.dir/src/main.cpp.obj.d"
+  "D:/Working Environment/Web Design/For job application/C++ games/Office_gangstar/client/src/mapCollision.cpp" "CMakeFiles/main.dir/src/mapCollision.cpp.obj" "gcc" "CMakeFiles/main.dir/src/mapCollision.cpp.obj.d"
+  "D:/Working Environment/Web Design/For job application/C++ games/Office_gangstar/client/src/multiPlayer/client.cpp" "CMakeFiles/main.dir/src/multiPlayer/client.cpp.obj" "gcc" "CMakeFiles/main.dir/src/multiPlayer/client.cpp.obj.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

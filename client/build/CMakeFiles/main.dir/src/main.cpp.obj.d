@@ -1,5 +1,5 @@
 CMakeFiles/main.dir/src/main.cpp.obj: \
- D:\Working\ Environment\Web\ Design\For\ job\ application\C++\ games\Office_gangstar\src\main.cpp \
+ D:\Working\ Environment\Web\ Design\For\ job\ application\C++\ games\Office_gangstar\client\src\main.cpp \
  C:/msys64/mingw64/include/c++/15.2.0/iostream \
  C:/msys64/mingw64/include/c++/15.2.0/bits/requires_hosted.h \
  C:/msys64/mingw64/include/c++/15.2.0/x86_64-w64-mingw32/bits/c++config.h \
@@ -162,14 +162,14 @@ CMakeFiles/main.dir/src/main.cpp.obj: \
  C:/msys64/mingw64/include/c++/15.2.0/tr1/poly_hermite.tcc \
  C:/msys64/mingw64/include/c++/15.2.0/tr1/poly_laguerre.tcc \
  C:/msys64/mingw64/include/c++/15.2.0/tr1/riemann_zeta.tcc \
- D:\Working\ Environment\Web\ Design\For\ job\ application\C++\ games\Office_gangstar\src\mapCollision.h \
+ D:\Working\ Environment\Web\ Design\For\ job\ application\C++\ games\Office_gangstar\client\src\mapCollision.h \
  C:/msys64/mingw64/include/c++/15.2.0/vector \
  C:/msys64/mingw64/include/c++/15.2.0/bits/stl_uninitialized.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/stl_vector.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/stl_bvector.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/vector.tcc \
- D:\Working\ Environment\Web\ Design\For\ job\ application\C++\ games\Office_gangstar\src\helpers.h \
- D:\Working\ Environment\Web\ Design\For\ job\ application\C++\ games\Office_gangstar\src\character.h \
- D:\Working\ Environment\Web\ Design\For\ job\ application\C++\ games\Office_gangstar\src\globalVar.h \
- D:\Working\ Environment\Web\ Design\For\ job\ application\C++\ games\Office_gangstar\src\collisionData.h \
- D:\Working\ Environment\Web\ Design\For\ job\ application\C++\ games\Office_gangstar\src\multiPlayer/client.h
+ D:\Working\ Environment\Web\ Design\For\ job\ application\C++\ games\Office_gangstar\client\src\helpers.h \
+ D:\Working\ Environment\Web\ Design\For\ job\ application\C++\ games\Office_gangstar\client\src\character.h \
+ D:\Working\ Environment\Web\ Design\For\ job\ application\C++\ games\Office_gangstar\client\src\globalVar.h \
+ D:\Working\ Environment\Web\ Design\For\ job\ application\C++\ games\Office_gangstar\client\src\collisionData.h \
+ D:\Working\ Environment\Web\ Design\For\ job\ application\C++\ games\Office_gangstar\client\src\multiPlayer/client.h

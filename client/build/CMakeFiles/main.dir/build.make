@@ -52,10 +52,10 @@ RM = C:\msys64\mingw64\bin\cmake.exe -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar"
+CMAKE_SOURCE_DIR = "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\client"
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\build"
+CMAKE_BINARY_DIR = "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\client\build"
 
 # Include any dependencies generated for this target.
 include CMakeFiles/main.dir/depend.make
@@ -73,123 +73,123 @@ CMakeFiles/main.dir/codegen:
 
 CMakeFiles/main.dir/src/character.cpp.obj: CMakeFiles/main.dir/flags.make
 CMakeFiles/main.dir/src/character.cpp.obj: CMakeFiles/main.dir/includes_CXX.rsp
-CMakeFiles/main.dir/src/character.cpp.obj: D:/Working\ Environment/Web\ Design/For\ job\ application/C++\ games/Office_gangstar/src/character.cpp
+CMakeFiles/main.dir/src/character.cpp.obj: D:/Working\ Environment/Web\ Design/For\ job\ application/C++\ games/Office_gangstar/client/src/character.cpp
 CMakeFiles/main.dir/src/character.cpp.obj: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\build\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/main.dir/src/character.cpp.obj"
-	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/character.cpp.obj -MF CMakeFiles\main.dir\src\character.cpp.obj.d -o CMakeFiles\main.dir\src\character.cpp.obj -c "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\src\character.cpp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\client\build\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/main.dir/src/character.cpp.obj"
+	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/character.cpp.obj -MF CMakeFiles\main.dir\src\character.cpp.obj.d -o CMakeFiles\main.dir\src\character.cpp.obj -c "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\client\src\character.cpp"
 
 CMakeFiles/main.dir/src/character.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/main.dir/src/character.cpp.i"
-	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\src\character.cpp" > CMakeFiles\main.dir\src\character.cpp.i
+	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\client\src\character.cpp" > CMakeFiles\main.dir\src\character.cpp.i
 
 CMakeFiles/main.dir/src/character.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/main.dir/src/character.cpp.s"
-	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\src\character.cpp" -o CMakeFiles\main.dir\src\character.cpp.s
+	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\client\src\character.cpp" -o CMakeFiles\main.dir\src\character.cpp.s
 
 CMakeFiles/main.dir/src/collisionData.cpp.obj: CMakeFiles/main.dir/flags.make
 CMakeFiles/main.dir/src/collisionData.cpp.obj: CMakeFiles/main.dir/includes_CXX.rsp
-CMakeFiles/main.dir/src/collisionData.cpp.obj: D:/Working\ Environment/Web\ Design/For\ job\ application/C++\ games/Office_gangstar/src/collisionData.cpp
+CMakeFiles/main.dir/src/collisionData.cpp.obj: D:/Working\ Environment/Web\ Design/For\ job\ application/C++\ games/Office_gangstar/client/src/collisionData.cpp
 CMakeFiles/main.dir/src/collisionData.cpp.obj: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\build\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/main.dir/src/collisionData.cpp.obj"
-	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/collisionData.cpp.obj -MF CMakeFiles\main.dir\src\collisionData.cpp.obj.d -o CMakeFiles\main.dir\src\collisionData.cpp.obj -c "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\src\collisionData.cpp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\client\build\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/main.dir/src/collisionData.cpp.obj"
+	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/collisionData.cpp.obj -MF CMakeFiles\main.dir\src\collisionData.cpp.obj.d -o CMakeFiles\main.dir\src\collisionData.cpp.obj -c "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\client\src\collisionData.cpp"
 
 CMakeFiles/main.dir/src/collisionData.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/main.dir/src/collisionData.cpp.i"
-	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\src\collisionData.cpp" > CMakeFiles\main.dir\src\collisionData.cpp.i
+	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\client\src\collisionData.cpp" > CMakeFiles\main.dir\src\collisionData.cpp.i
 
 CMakeFiles/main.dir/src/collisionData.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/main.dir/src/collisionData.cpp.s"
-	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\src\collisionData.cpp" -o CMakeFiles\main.dir\src\collisionData.cpp.s
+	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\client\src\collisionData.cpp" -o CMakeFiles\main.dir\src\collisionData.cpp.s
 
 CMakeFiles/main.dir/src/game.cpp.obj: CMakeFiles/main.dir/flags.make
 CMakeFiles/main.dir/src/game.cpp.obj: CMakeFiles/main.dir/includes_CXX.rsp
-CMakeFiles/main.dir/src/game.cpp.obj: D:/Working\ Environment/Web\ Design/For\ job\ application/C++\ games/Office_gangstar/src/game.cpp
+CMakeFiles/main.dir/src/game.cpp.obj: D:/Working\ Environment/Web\ Design/For\ job\ application/C++\ games/Office_gangstar/client/src/game.cpp
 CMakeFiles/main.dir/src/game.cpp.obj: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\build\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/main.dir/src/game.cpp.obj"
-	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/game.cpp.obj -MF CMakeFiles\main.dir\src\game.cpp.obj.d -o CMakeFiles\main.dir\src\game.cpp.obj -c "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\src\game.cpp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\client\build\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/main.dir/src/game.cpp.obj"
+	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/game.cpp.obj -MF CMakeFiles\main.dir\src\game.cpp.obj.d -o CMakeFiles\main.dir\src\game.cpp.obj -c "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\client\src\game.cpp"
 
 CMakeFiles/main.dir/src/game.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/main.dir/src/game.cpp.i"
-	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\src\game.cpp" > CMakeFiles\main.dir\src\game.cpp.i
+	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\client\src\game.cpp" > CMakeFiles\main.dir\src\game.cpp.i
 
 CMakeFiles/main.dir/src/game.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/main.dir/src/game.cpp.s"
-	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\src\game.cpp" -o CMakeFiles\main.dir\src\game.cpp.s
+	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\client\src\game.cpp" -o CMakeFiles\main.dir\src\game.cpp.s
 
 CMakeFiles/main.dir/src/globalVar.cpp.obj: CMakeFiles/main.dir/flags.make
 CMakeFiles/main.dir/src/globalVar.cpp.obj: CMakeFiles/main.dir/includes_CXX.rsp
-CMakeFiles/main.dir/src/globalVar.cpp.obj: D:/Working\ Environment/Web\ Design/For\ job\ application/C++\ games/Office_gangstar/src/globalVar.cpp
+CMakeFiles/main.dir/src/globalVar.cpp.obj: D:/Working\ Environment/Web\ Design/For\ job\ application/C++\ games/Office_gangstar/client/src/globalVar.cpp
 CMakeFiles/main.dir/src/globalVar.cpp.obj: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\build\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/main.dir/src/globalVar.cpp.obj"
-	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/globalVar.cpp.obj -MF CMakeFiles\main.dir\src\globalVar.cpp.obj.d -o CMakeFiles\main.dir\src\globalVar.cpp.obj -c "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\src\globalVar.cpp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\client\build\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/main.dir/src/globalVar.cpp.obj"
+	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/globalVar.cpp.obj -MF CMakeFiles\main.dir\src\globalVar.cpp.obj.d -o CMakeFiles\main.dir\src\globalVar.cpp.obj -c "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\client\src\globalVar.cpp"
 
 CMakeFiles/main.dir/src/globalVar.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/main.dir/src/globalVar.cpp.i"
-	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\src\globalVar.cpp" > CMakeFiles\main.dir\src\globalVar.cpp.i
+	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\client\src\globalVar.cpp" > CMakeFiles\main.dir\src\globalVar.cpp.i
 
 CMakeFiles/main.dir/src/globalVar.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/main.dir/src/globalVar.cpp.s"
-	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\src\globalVar.cpp" -o CMakeFiles\main.dir\src\globalVar.cpp.s
+	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\client\src\globalVar.cpp" -o CMakeFiles\main.dir\src\globalVar.cpp.s
 
 CMakeFiles/main.dir/src/helpers.cpp.obj: CMakeFiles/main.dir/flags.make
 CMakeFiles/main.dir/src/helpers.cpp.obj: CMakeFiles/main.dir/includes_CXX.rsp
-CMakeFiles/main.dir/src/helpers.cpp.obj: D:/Working\ Environment/Web\ Design/For\ job\ application/C++\ games/Office_gangstar/src/helpers.cpp
+CMakeFiles/main.dir/src/helpers.cpp.obj: D:/Working\ Environment/Web\ Design/For\ job\ application/C++\ games/Office_gangstar/client/src/helpers.cpp
 CMakeFiles/main.dir/src/helpers.cpp.obj: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\build\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/main.dir/src/helpers.cpp.obj"
-	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/helpers.cpp.obj -MF CMakeFiles\main.dir\src\helpers.cpp.obj.d -o CMakeFiles\main.dir\src\helpers.cpp.obj -c "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\src\helpers.cpp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\client\build\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/main.dir/src/helpers.cpp.obj"
+	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/helpers.cpp.obj -MF CMakeFiles\main.dir\src\helpers.cpp.obj.d -o CMakeFiles\main.dir\src\helpers.cpp.obj -c "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\client\src\helpers.cpp"
 
 CMakeFiles/main.dir/src/helpers.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/main.dir/src/helpers.cpp.i"
-	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\src\helpers.cpp" > CMakeFiles\main.dir\src\helpers.cpp.i
+	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\client\src\helpers.cpp" > CMakeFiles\main.dir\src\helpers.cpp.i
 
 CMakeFiles/main.dir/src/helpers.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/main.dir/src/helpers.cpp.s"
-	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\src\helpers.cpp" -o CMakeFiles\main.dir\src\helpers.cpp.s
+	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\client\src\helpers.cpp" -o CMakeFiles\main.dir\src\helpers.cpp.s
 
 CMakeFiles/main.dir/src/main.cpp.obj: CMakeFiles/main.dir/flags.make
 CMakeFiles/main.dir/src/main.cpp.obj: CMakeFiles/main.dir/includes_CXX.rsp
-CMakeFiles/main.dir/src/main.cpp.obj: D:/Working\ Environment/Web\ Design/For\ job\ application/C++\ games/Office_gangstar/src/main.cpp
+CMakeFiles/main.dir/src/main.cpp.obj: D:/Working\ Environment/Web\ Design/For\ job\ application/C++\ games/Office_gangstar/client/src/main.cpp
 CMakeFiles/main.dir/src/main.cpp.obj: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\build\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/main.dir/src/main.cpp.obj"
-	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/main.cpp.obj -MF CMakeFiles\main.dir\src\main.cpp.obj.d -o CMakeFiles\main.dir\src\main.cpp.obj -c "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\src\main.cpp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\client\build\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/main.dir/src/main.cpp.obj"
+	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/main.cpp.obj -MF CMakeFiles\main.dir\src\main.cpp.obj.d -o CMakeFiles\main.dir\src\main.cpp.obj -c "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\client\src\main.cpp"
 
 CMakeFiles/main.dir/src/main.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/main.dir/src/main.cpp.i"
-	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\src\main.cpp" > CMakeFiles\main.dir\src\main.cpp.i
+	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\client\src\main.cpp" > CMakeFiles\main.dir\src\main.cpp.i
 
 CMakeFiles/main.dir/src/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/main.dir/src/main.cpp.s"
-	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\src\main.cpp" -o CMakeFiles\main.dir\src\main.cpp.s
+	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\client\src\main.cpp" -o CMakeFiles\main.dir\src\main.cpp.s
 
 CMakeFiles/main.dir/src/mapCollision.cpp.obj: CMakeFiles/main.dir/flags.make
 CMakeFiles/main.dir/src/mapCollision.cpp.obj: CMakeFiles/main.dir/includes_CXX.rsp
-CMakeFiles/main.dir/src/mapCollision.cpp.obj: D:/Working\ Environment/Web\ Design/For\ job\ application/C++\ games/Office_gangstar/src/mapCollision.cpp
+CMakeFiles/main.dir/src/mapCollision.cpp.obj: D:/Working\ Environment/Web\ Design/For\ job\ application/C++\ games/Office_gangstar/client/src/mapCollision.cpp
 CMakeFiles/main.dir/src/mapCollision.cpp.obj: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\build\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/main.dir/src/mapCollision.cpp.obj"
-	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/mapCollision.cpp.obj -MF CMakeFiles\main.dir\src\mapCollision.cpp.obj.d -o CMakeFiles\main.dir\src\mapCollision.cpp.obj -c "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\src\mapCollision.cpp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\client\build\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/main.dir/src/mapCollision.cpp.obj"
+	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/mapCollision.cpp.obj -MF CMakeFiles\main.dir\src\mapCollision.cpp.obj.d -o CMakeFiles\main.dir\src\mapCollision.cpp.obj -c "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\client\src\mapCollision.cpp"
 
 CMakeFiles/main.dir/src/mapCollision.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/main.dir/src/mapCollision.cpp.i"
-	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\src\mapCollision.cpp" > CMakeFiles\main.dir\src\mapCollision.cpp.i
+	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\client\src\mapCollision.cpp" > CMakeFiles\main.dir\src\mapCollision.cpp.i
 
 CMakeFiles/main.dir/src/mapCollision.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/main.dir/src/mapCollision.cpp.s"
-	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\src\mapCollision.cpp" -o CMakeFiles\main.dir\src\mapCollision.cpp.s
+	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\client\src\mapCollision.cpp" -o CMakeFiles\main.dir\src\mapCollision.cpp.s
 
 CMakeFiles/main.dir/src/multiPlayer/client.cpp.obj: CMakeFiles/main.dir/flags.make
 CMakeFiles/main.dir/src/multiPlayer/client.cpp.obj: CMakeFiles/main.dir/includes_CXX.rsp
-CMakeFiles/main.dir/src/multiPlayer/client.cpp.obj: D:/Working\ Environment/Web\ Design/For\ job\ application/C++\ games/Office_gangstar/src/multiPlayer/client.cpp
+CMakeFiles/main.dir/src/multiPlayer/client.cpp.obj: D:/Working\ Environment/Web\ Design/For\ job\ application/C++\ games/Office_gangstar/client/src/multiPlayer/client.cpp
 CMakeFiles/main.dir/src/multiPlayer/client.cpp.obj: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\build\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/main.dir/src/multiPlayer/client.cpp.obj"
-	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/multiPlayer/client.cpp.obj -MF CMakeFiles\main.dir\src\multiPlayer\client.cpp.obj.d -o CMakeFiles\main.dir\src\multiPlayer\client.cpp.obj -c "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\src\multiPlayer\client.cpp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\client\build\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/main.dir/src/multiPlayer/client.cpp.obj"
+	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/src/multiPlayer/client.cpp.obj -MF CMakeFiles\main.dir\src\multiPlayer\client.cpp.obj.d -o CMakeFiles\main.dir\src\multiPlayer\client.cpp.obj -c "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\client\src\multiPlayer\client.cpp"
 
 CMakeFiles/main.dir/src/multiPlayer/client.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/main.dir/src/multiPlayer/client.cpp.i"
-	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\src\multiPlayer\client.cpp" > CMakeFiles\main.dir\src\multiPlayer\client.cpp.i
+	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\client\src\multiPlayer\client.cpp" > CMakeFiles\main.dir\src\multiPlayer\client.cpp.i
 
 CMakeFiles/main.dir/src/multiPlayer/client.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/main.dir/src/multiPlayer/client.cpp.s"
-	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\src\multiPlayer\client.cpp" -o CMakeFiles\main.dir\src\multiPlayer\client.cpp.s
+	g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\client\src\multiPlayer\client.cpp" -o CMakeFiles\main.dir\src\multiPlayer\client.cpp.s
 
 # Object files for target main
 main_OBJECTS = \
@@ -205,23 +205,23 @@ main_OBJECTS = \
 # External object files for target main
 main_EXTERNAL_OBJECTS =
 
-D:/Working\ Environment/Web\ Design/For\ job\ application/C++\ games/Office_gangstar/main.exe: CMakeFiles/main.dir/src/character.cpp.obj
-D:/Working\ Environment/Web\ Design/For\ job\ application/C++\ games/Office_gangstar/main.exe: CMakeFiles/main.dir/src/collisionData.cpp.obj
-D:/Working\ Environment/Web\ Design/For\ job\ application/C++\ games/Office_gangstar/main.exe: CMakeFiles/main.dir/src/game.cpp.obj
-D:/Working\ Environment/Web\ Design/For\ job\ application/C++\ games/Office_gangstar/main.exe: CMakeFiles/main.dir/src/globalVar.cpp.obj
-D:/Working\ Environment/Web\ Design/For\ job\ application/C++\ games/Office_gangstar/main.exe: CMakeFiles/main.dir/src/helpers.cpp.obj
-D:/Working\ Environment/Web\ Design/For\ job\ application/C++\ games/Office_gangstar/main.exe: CMakeFiles/main.dir/src/main.cpp.obj
-D:/Working\ Environment/Web\ Design/For\ job\ application/C++\ games/Office_gangstar/main.exe: CMakeFiles/main.dir/src/mapCollision.cpp.obj
-D:/Working\ Environment/Web\ Design/For\ job\ application/C++\ games/Office_gangstar/main.exe: CMakeFiles/main.dir/src/multiPlayer/client.cpp.obj
-D:/Working\ Environment/Web\ Design/For\ job\ application/C++\ games/Office_gangstar/main.exe: CMakeFiles/main.dir/build.make
-D:/Working\ Environment/Web\ Design/For\ job\ application/C++\ games/Office_gangstar/main.exe: CMakeFiles/main.dir/linkLibs.rsp
-D:/Working\ Environment/Web\ Design/For\ job\ application/C++\ games/Office_gangstar/main.exe: CMakeFiles/main.dir/objects1.rsp
-D:/Working\ Environment/Web\ Design/For\ job\ application/C++\ games/Office_gangstar/main.exe: CMakeFiles/main.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir="D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\build\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_9) "Linking CXX executable \"D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\main.exe\""
+D:/Working\ Environment/Web\ Design/For\ job\ application/C++\ games/Office_gangstar/client/main.exe: CMakeFiles/main.dir/src/character.cpp.obj
+D:/Working\ Environment/Web\ Design/For\ job\ application/C++\ games/Office_gangstar/client/main.exe: CMakeFiles/main.dir/src/collisionData.cpp.obj
+D:/Working\ Environment/Web\ Design/For\ job\ application/C++\ games/Office_gangstar/client/main.exe: CMakeFiles/main.dir/src/game.cpp.obj
+D:/Working\ Environment/Web\ Design/For\ job\ application/C++\ games/Office_gangstar/client/main.exe: CMakeFiles/main.dir/src/globalVar.cpp.obj
+D:/Working\ Environment/Web\ Design/For\ job\ application/C++\ games/Office_gangstar/client/main.exe: CMakeFiles/main.dir/src/helpers.cpp.obj
+D:/Working\ Environment/Web\ Design/For\ job\ application/C++\ games/Office_gangstar/client/main.exe: CMakeFiles/main.dir/src/main.cpp.obj
+D:/Working\ Environment/Web\ Design/For\ job\ application/C++\ games/Office_gangstar/client/main.exe: CMakeFiles/main.dir/src/mapCollision.cpp.obj
+D:/Working\ Environment/Web\ Design/For\ job\ application/C++\ games/Office_gangstar/client/main.exe: CMakeFiles/main.dir/src/multiPlayer/client.cpp.obj
+D:/Working\ Environment/Web\ Design/For\ job\ application/C++\ games/Office_gangstar/client/main.exe: CMakeFiles/main.dir/build.make
+D:/Working\ Environment/Web\ Design/For\ job\ application/C++\ games/Office_gangstar/client/main.exe: CMakeFiles/main.dir/linkLibs.rsp
+D:/Working\ Environment/Web\ Design/For\ job\ application/C++\ games/Office_gangstar/client/main.exe: CMakeFiles/main.dir/objects1.rsp
+D:/Working\ Environment/Web\ Design/For\ job\ application/C++\ games/Office_gangstar/client/main.exe: CMakeFiles/main.dir/link.txt
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir="D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\client\build\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_9) "Linking CXX executable \"D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\client\main.exe\""
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\main.dir\link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
-CMakeFiles/main.dir/build: D:/Working\ Environment/Web\ Design/For\ job\ application/C++\ games/Office_gangstar/main.exe
+CMakeFiles/main.dir/build: D:/Working\ Environment/Web\ Design/For\ job\ application/C++\ games/Office_gangstar/client/main.exe
 .PHONY : CMakeFiles/main.dir/build
 
 CMakeFiles/main.dir/clean:
@@ -229,6 +229,6 @@ CMakeFiles/main.dir/clean:
 .PHONY : CMakeFiles/main.dir/clean
 
 CMakeFiles/main.dir/depend:
-	$(CMAKE_COMMAND) -E cmake_depends "MinGW Makefiles" "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar" "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar" "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\build" "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\build" "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\build\CMakeFiles\main.dir\DependInfo.cmake" "--color=$(COLOR)"
+	$(CMAKE_COMMAND) -E cmake_depends "MinGW Makefiles" "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\client" "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\client" "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\client\build" "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\client\build" "D:\Working Environment\Web Design\For job application\C++ games\Office_gangstar\client\build\CMakeFiles\main.dir\DependInfo.cmake" "--color=$(COLOR)"
 .PHONY : CMakeFiles/main.dir/depend
 

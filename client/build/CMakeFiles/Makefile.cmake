@@ -65,7 +65,7 @@ set(CMAKE_MAKEFILE_DEPENDS
   "C:/msys64/mingw64/share/cmake/Modules/Platform/Windows-windres.cmake"
   "C:/msys64/mingw64/share/cmake/Modules/Platform/Windows.cmake"
   "C:/msys64/mingw64/share/cmake/Modules/Platform/WindowsPaths.cmake"
-  "D:/Working Environment/Web Design/For job application/C++ games/Office_gangstar/CMakeLists.txt"
+  "D:/Working Environment/Web Design/For job application/C++ games/Office_gangstar/client/CMakeLists.txt"
   "CMakeFiles/4.1.1/CMakeCXXCompiler.cmake"
   "CMakeFiles/4.1.1/CMakeRCCompiler.cmake"
   "CMakeFiles/4.1.1/CMakeSystem.cmake"

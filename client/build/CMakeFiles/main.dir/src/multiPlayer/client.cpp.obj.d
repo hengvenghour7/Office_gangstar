@@ -1,5 +1,5 @@
 CMakeFiles/main.dir/src/multiPlayer/client.cpp.obj: \
- D:\Working\ Environment\Web\ Design\For\ job\ application\C++\ games\Office_gangstar\src\multiPlayer\client.cpp \
+ D:\Working\ Environment\Web\ Design\For\ job\ application\C++\ games\Office_gangstar\client\src\multiPlayer\client.cpp \
  C:/raylib/raylib/src/raylib.h \
  C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stdarg.h \
  C:/msys64/mingw64/include/stdarg.h \
@@ -964,4 +964,4 @@ CMakeFiles/main.dir/src/multiPlayer/client.cpp.obj: \
  C:/msys64/mingw64/include/boost/asio/write_at.hpp \
  C:/msys64/mingw64/include/boost/asio/impl/write_at.hpp \
  C:/msys64/mingw64/include/c++/15.2.0/iostream \
- D:\Working\ Environment\Web\ Design\For\ job\ application\C++\ games\Office_gangstar\src\multiPlayer\client.h
+ D:\Working\ Environment\Web\ Design\For\ job\ application\C++\ games\Office_gangstar\client\src\multiPlayer\client.h

@@ -1,6 +1,6 @@
 CMakeFiles/main.dir/src/character.cpp.obj: \
- D:\Working\ Environment\Web\ Design\For\ job\ application\C++\ games\Office_gangstar\src\character.cpp \
- D:\Working\ Environment\Web\ Design\For\ job\ application\C++\ games\Office_gangstar\src\character.h \
+ D:\Working\ Environment\Web\ Design\For\ job\ application\C++\ games\Office_gangstar\client\src\character.cpp \
+ D:\Working\ Environment\Web\ Design\For\ job\ application\C++\ games\Office_gangstar\client\src\character.h \
  C:/raylib/raylib/src/raylib.h \
  C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stdarg.h \
  C:/msys64/mingw64/include/stdarg.h \
@@ -166,11 +166,11 @@ CMakeFiles/main.dir/src/character.cpp.obj: \
  C:/msys64/mingw64/include/c++/15.2.0/bits/ostream.tcc \
  C:/msys64/mingw64/include/c++/15.2.0/istream \
  C:/msys64/mingw64/include/c++/15.2.0/bits/istream.tcc \
- D:\Working\ Environment\Web\ Design\For\ job\ application\C++\ games\Office_gangstar\src\globalVar.h \
- D:\Working\ Environment\Web\ Design\For\ job\ application\C++\ games\Office_gangstar\src\mapCollision.h \
+ D:\Working\ Environment\Web\ Design\For\ job\ application\C++\ games\Office_gangstar\client\src\globalVar.h \
+ D:\Working\ Environment\Web\ Design\For\ job\ application\C++\ games\Office_gangstar\client\src\mapCollision.h \
  C:/msys64/mingw64/include/c++/15.2.0/vector \
  C:/msys64/mingw64/include/c++/15.2.0/bits/stl_uninitialized.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/stl_vector.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/stl_bvector.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/vector.tcc \
- D:\Working\ Environment\Web\ Design\For\ job\ application\C++\ games\Office_gangstar\src\helpers.h
+ D:\Working\ Environment\Web\ Design\For\ job\ application\C++\ games\Office_gangstar\client\src\helpers.h

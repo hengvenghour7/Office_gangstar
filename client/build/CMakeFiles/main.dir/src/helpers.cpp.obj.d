@@ -1,5 +1,5 @@
 CMakeFiles/main.dir/src/helpers.cpp.obj: \
- D:\Working\ Environment\Web\ Design\For\ job\ application\C++\ games\Office_gangstar\src\helpers.cpp \
+ D:\Working\ Environment\Web\ Design\For\ job\ application\C++\ games\Office_gangstar\client\src\helpers.cpp \
  C:/raylib/raylib/src/raylib.h \
  C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stdarg.h \
  C:/msys64/mingw64/include/stdarg.h \
@@ -8,7 +8,7 @@ CMakeFiles/main.dir/src/helpers.cpp.obj: \
  C:/msys64/mingw64/include/_mingw_mac.h \
  C:/msys64/mingw64/include/_mingw_secapi.h \
  C:/msys64/mingw64/include/sdks/_mingw_ddk.h \
- D:\Working\ Environment\Web\ Design\For\ job\ application\C++\ games\Office_gangstar\src\helpers.h \
+ D:\Working\ Environment\Web\ Design\For\ job\ application\C++\ games\Office_gangstar\client\src\helpers.h \
  C:/msys64/mingw64/include/c++/15.2.0/iostream \
  C:/msys64/mingw64/include/c++/15.2.0/bits/requires_hosted.h \
  C:/msys64/mingw64/include/c++/15.2.0/x86_64-w64-mingw32/bits/c++config.h \

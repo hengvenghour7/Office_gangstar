@@ -1,5 +1,5 @@
 CMakeFiles/main.dir/src/collisionData.cpp.obj: \
- D:\Working\ Environment\Web\ Design\For\ job\ application\C++\ games\Office_gangstar\src\collisionData.cpp \
+ D:\Working\ Environment\Web\ Design\For\ job\ application\C++\ games\Office_gangstar\client\src\collisionData.cpp \
  C:/msys64/mingw64/include/c++/15.2.0/vector \
  C:/msys64/mingw64/include/c++/15.2.0/bits/requires_hosted.h \
  C:/msys64/mingw64/include/c++/15.2.0/x86_64-w64-mingw32/bits/c++config.h \
@@ -60,4 +60,4 @@ CMakeFiles/main.dir/src/collisionData.cpp.obj: \
  C:/msys64/mingw64/include/c++/15.2.0/bits/uses_allocator.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/uses_allocator_args.h \
  C:/msys64/mingw64/include/c++/15.2.0/tuple \
- D:\Working\ Environment\Web\ Design\For\ job\ application\C++\ games\Office_gangstar\src\collisionData.h
+ D:\Working\ Environment\Web\ Design\For\ job\ application\C++\ games\Office_gangstar\client\src\collisionData.h

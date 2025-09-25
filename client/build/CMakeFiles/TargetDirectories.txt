@@ -1,3 +1,3 @@
-D:/Working Environment/Web Design/For job application/C++ games/Office_gangstar/build/CMakeFiles/main.dir
-D:/Working Environment/Web Design/For job application/C++ games/Office_gangstar/build/CMakeFiles/edit_cache.dir
-D:/Working Environment/Web Design/For job application/C++ games/Office_gangstar/build/CMakeFiles/rebuild_cache.dir
+D:/Working Environment/Web Design/For job application/C++ games/Office_gangstar/client/build/CMakeFiles/main.dir
+D:/Working Environment/Web Design/For job application/C++ games/Office_gangstar/client/build/CMakeFiles/edit_cache.dir
+D:/Working Environment/Web Design/For job application/C++ games/Office_gangstar/client/build/CMakeFiles/rebuild_cache.dir
