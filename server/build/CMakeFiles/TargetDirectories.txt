@@ -1,3 +1,0 @@
-D:/Working Environment/Web Design/For job application/multiplayer testing/testing 4/server/build/CMakeFiles/server.dir
-D:/Working Environment/Web Design/For job application/multiplayer testing/testing 4/server/build/CMakeFiles/edit_cache.dir
-D:/Working Environment/Web Design/For job application/multiplayer testing/testing 4/server/build/CMakeFiles/rebuild_cache.dir
