@@ -113,7 +113,7 @@ Player::Player (const char * imageTexture, MapBoundary* inputBoundary): Characte
             boundary = inputBoundary;
             screenPos.x = SCREEN_WIDTH/2;
             screenPos.y = SCREEN_HEIGHT/2;
-            worldPos = {-100, 0};
+            worldPos = {-100, 2000};
             characterRecDes = {screenPos.x, screenPos.y, width*scale_factor, height*scale_factor};
             characterCollision = {screenPos.x, screenPos.y+12, width*scale_factor, (height-6)*scale_factor};
             characterHitBox = {screenPos.x + 30, screenPos.y, width*scale_factor, height*scale_factor};

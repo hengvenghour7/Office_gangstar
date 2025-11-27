@@ -6,7 +6,16 @@
 #include <raylib.h>
 #include "helpers.h"
 
-
+struct PropDrawCondition {
+    int collisionCode;
+    const char* imagePath;
+    int startCol;
+    int startRow;
+    int maxCols;
+    int maxRows;
+    float width;
+    float height;
+};
 class MapBoundary {
     protected:
     std::vector<std::vector<int>> dataArray {};
@@ -29,19 +38,23 @@ class Prop {
     float x;
     float y;
     float initialCol{8};
+    int startCol{};
     float maxCol{10};
     float propWidth{};
     float propHeight{};
     float row{};
     float updatePropTime{0};
-    Prop (const char* inputPropTexture, float inputX, float inputY, float inputPropWidth, float inputPropHeight, float inputCol, float inputMaxCol, float inputRow);
+    float scale;
+    Prop (const char* inputPropTexture, float inputX, float inputY, float inputPropWidth, float inputPropHeight, float inputCol, float inputRow, float inputMaxCol, float scale);
     void drawProp (Vector2 mapPos, float deltaTime);
 };
 class MapProp: public MapBoundary {
     protected:
     std::vector<Prop> props{};
+    std::vector<PropDrawCondition> PropDrawConditions;
+    float scale;
     public:
-    MapProp (std::vector<int> inputDataArray, int inputMapWidth, int inputMapHeight, int inputTileSize, int inputCollisionCode);
+    MapProp (std::vector<int> inputDataArray, int inputMapWidth, int inputMapHeight, int inputTileSize, std::vector<PropDrawCondition> propCollisionConditions, float scale);
     void drawAllProps (float scale, Vector2 mapPos, float deltaTime);
     CollisionProperty checkInteraction (Rectangle characterCollision, Vector2 worldPos, float XOffset, float YOffset);
 };

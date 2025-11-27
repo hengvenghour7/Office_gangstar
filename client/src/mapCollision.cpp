@@ -26,7 +26,7 @@ std::vector<std::vector<int>> MapBoundary::getCollisionBoundary() {
 void MapBoundary::drawBoundary(float scale, Vector2 mapPos) {
     for (int y = 0; y < (int)dataArray.size(); y++) {
         for (int x = 0; x < mapWidth; x++) {
-            if (dataArray[y][x] == 79742 || dataArray[y][x] == 9841) {
+            if (dataArray[y][x] == collisionCode) {
                 DrawRectangle (x*16*scale + mapPos.x,y*16*scale + mapPos.y, 16*scale, 16*scale, GREEN);
             }
         }
@@ -39,7 +39,7 @@ CollisionProperty MapBoundary::checkBoundaryCollision (Rectangle characterCollis
     int tileX = (int)(playerWorldPos.x + XOffset)/16/1.5; // x*16*1.5 + mapPos.x -- -mapPos.x/16/1.5
     int tileY = (int)(playerWorldPos.y + YOffset)/16/1.5;
     if (tileY < dataArray.size() && tileX < mapWidth) {
-        if (dataArray[tileY][tileX] == 79742 || dataArray[tileY][tileX] == 9841) {
+        if (dataArray[tileY][tileX] == collisionCode) {
                 collision1.isCollide = true;
                 return collision1;
             }
@@ -71,19 +71,32 @@ void MapBoundary::setCollisionData(std::vector<int>* mapCollisionData, int mapWi
     }
     std::cout<< "this width" << this->mapWidth << "height" << this->mapHeight;
 };
-MapProp::MapProp (std::vector<int> inputDataArray, int inputMapWidth, int inputMapHeight, int inputTileSize, int inputCollisionCode) : MapBoundary (inputDataArray,inputMapWidth, inputMapHeight, inputTileSize, inputCollisionCode)
+MapProp::MapProp (std::vector<int> inputDataArray, int inputMapWidth, int inputMapHeight, int inputTileSize, std::vector<PropDrawCondition> PropDrawConditions, float scale) : MapBoundary (inputDataArray,inputMapWidth, inputMapHeight, inputTileSize, 99),
+PropDrawConditions(PropDrawConditions), scale(scale)
  {
+    const int MAP_TILE_SIZE(16);
     for (int y = 0; y < (int)dataArray.size(); y++) {
         for (int x = 0; x < mapWidth; x++) {
-            if (dataArray[y][x] == collisionCode) {
-                props.emplace_back("resources/image/Modern_UI_Style_1.png", x*16*1.5, y*16*1.5, 240/15, 688/21, 8, 10, 5);
-            };
-            if (dataArray[y][x] == 79740) {
-                props.emplace_back("resources/image/Modern_UI_Style_1.png", x*16*1.5, y*16*1.5, 240/15, 688/21, 8, 10, 17);
+            for (PropDrawCondition condition : this->PropDrawConditions) {
+                if (dataArray[y][x] == condition.collisionCode) {
+                    props.emplace_back(condition.imagePath, x*MAP_TILE_SIZE*this->scale, y*MAP_TILE_SIZE*this->scale, condition.width, condition.height, condition.startCol, condition.startRow, condition.maxCols, scale);
+                }
             }
-            if (dataArray[y][x] == 79730) {
-                props.emplace_back("resources/image/Modern_UI_Style_1.png", x*16*1.5, y*16*1.5, 240/15, 688/21, 8, 10, 3);
-            }
+            // if (dataArray[y][x] == collisionCode) {
+            //     props.emplace_back("resources/image/Modern_UI_Style_1.png", x*16*1.5, y*16*1.5, 240/15, 688/21, 8, 10, 5);
+            // };
+            // if (dataArray[y][x] == 79740) {
+            //     props.emplace_back("resources/image/Modern_UI_Style_1.png", x*16*1.5, y*16*1.5, 240/15, 688/21, 8, 10, 17);
+            // }
+            // if (dataArray[y][x] == 79730) {
+            //     props.emplace_back("resources/image/Modern_UI_Style_1.png", x*16*1.5, y*16*1.5, 240/15, 64, 8, 10, 3);
+            // }
+            // if (dataArray[y][x] == 79735) {
+            //     props.emplace_back("resources/image/Fishing_Boat_left.png", x*16*1.5, y*16*1.5, 768/8, 688/21, 8, 10, 3);
+            // }
+            // if (dataArray[y][x] == 79736) {
+            //     props.emplace_back("resources/image/Fishing_Boat_left_2.png", x*16*1.5, y*16*1.5, 240/15, 688/21, 8, 10, 3);
+            // }
         }
     };
 }
@@ -105,8 +118,9 @@ CollisionProperty MapProp::checkInteraction (Rectangle characterCollision, Vecto
         }
     return collision1;
 }
-Prop::Prop (const char* inputPropTexture, float inputX, float inputY, float inputPropWidth, float inputPropHeight, float inputCol, float inputMaxCol, float inputRow) {
+Prop::Prop (const char* inputPropTexture, float inputX, float inputY, float inputPropWidth, float inputPropHeight, float inputCol, float inputRow, float inputMaxCol, float scale): scale(scale) {
     // std::cout<<"ttt" << inputPropTexture;
+    startCol = inputCol;
     initialCol = inputCol;
     maxCol = inputMaxCol;
     propTexture = LoadTexture(inputPropTexture);
@@ -115,15 +129,16 @@ Prop::Prop (const char* inputPropTexture, float inputX, float inputY, float inpu
     y = inputY;
     propWidth = inputPropWidth;
     propHeight = inputPropHeight;
+    std::cout<< "ffff" << inputPropTexture << ", " << x << " " << y << " iiii";
 };
 void Prop::drawProp (Vector2 mapPos, float deltaTime) {
     updatePropTime += deltaTime;
     if (updatePropTime > 0.2) {
-        if (initialCol > maxCol) initialCol = 8;
+        if (initialCol > maxCol) initialCol = startCol;
         initialCol++;
         updatePropTime = 0;
     }
-    DrawTexturePro(propTexture, {initialCol* 240/15,row* 688/21, 240/15, 688/21}, {x + mapPos.x,y + mapPos.y, 240/15*1.5, 688/21*1.5}, {0,0}, 0, WHITE);
+    DrawTexturePro(propTexture, {initialCol* propWidth,row* propHeight, propWidth, propHeight}, {x + mapPos.x,y + mapPos.y, propWidth*scale, propHeight*scale}, {0,0}, 0, WHITE);
 }
 MapHandler::MapHandler (Vector2* inputMapPos, float inputScale, std::vector<int>* mapCollisionData) {
     drawTexture = outsideMap;
