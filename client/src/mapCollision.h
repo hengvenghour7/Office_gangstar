@@ -29,7 +29,7 @@ class MapBoundary {
     void drawBoundary(float scale, Vector2 mapPos);
     CollisionProperty checkInteractionBoundary (Rectangle characterCollision, Vector2 worldPos, float XOffset, float YOffset, int colorCode);
     CollisionProperty checkBoundaryCollision(Rectangle characterCollision, Vector2 mapPos, float XOffset, float YOffset);
-    void setCollisionData(std::vector<int>* mapCollisionData, int mapWidth, int mapHeight);
+    void setCollisionData(std::vector<int>* mapCollisionData, int mapWidth, int mapHeight, int collisionCode);
 };
 class Prop {
     private:
@@ -46,7 +46,7 @@ class Prop {
     float updatePropTime{0};
     float scale;
     Prop (const char* inputPropTexture, float inputX, float inputY, float inputPropWidth, float inputPropHeight, float inputCol, float inputRow, float inputMaxCol, float scale);
-    void drawProp (Vector2 mapPos, float deltaTime);
+    void drawProp (Vector2 mapPos, float deltaTime, bool isBackward = false, bool isPauseAfterAnimated = false);
 };
 class MapProp: public MapBoundary {
     protected:
@@ -55,11 +55,19 @@ class MapProp: public MapBoundary {
     float scale;
     public:
     MapProp (std::vector<int> inputDataArray, int inputMapWidth, int inputMapHeight, int inputTileSize, std::vector<PropDrawCondition> propCollisionConditions, float scale);
-    void drawAllProps (float scale, Vector2 mapPos, float deltaTime);
+    virtual void drawAllProps (float scale, Vector2 mapPos, float deltaTime);
     CollisionProperty checkInteraction (Rectangle characterCollision, Vector2 worldPos, float XOffset, float YOffset);
+    void moveProps (float speedX, float speedY);
 };
 struct Map {
     Texture2D mapTexture;
+};
+class InteractableProp: public MapProp {
+    protected:
+    bool isOn{};
+    public:
+    InteractableProp (std::vector<int> inputDataArray, int inputMapWidth, int inputMapHeight, int inputTileSize, std::vector<PropDrawCondition> propCollisionConditions, float scale);
+    virtual void drawAllProps (float scale, Vector2 mapPos, float deltaTime) override;
 };
 class MapHandler {
     private:

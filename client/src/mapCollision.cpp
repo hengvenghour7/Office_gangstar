@@ -39,7 +39,7 @@ CollisionProperty MapBoundary::checkBoundaryCollision (Rectangle characterCollis
     int tileX = (int)(playerWorldPos.x + XOffset)/16/1.5; // x*16*1.5 + mapPos.x -- -mapPos.x/16/1.5
     int tileY = (int)(playerWorldPos.y + YOffset)/16/1.5;
     if (tileY < dataArray.size() && tileX < mapWidth) {
-        if (dataArray[tileY][tileX] == collisionCode) {
+        if (dataArray[tileY][tileX] == collisionCode || dataArray[tileY][tileX] == 79733) {
                 collision1.isCollide = true;
                 return collision1;
             }
@@ -58,7 +58,8 @@ CollisionProperty MapBoundary::checkInteractionBoundary (Rectangle characterColl
         }
     return collision1;
 }
-void MapBoundary::setCollisionData(std::vector<int>* mapCollisionData, int mapWidth, int mapHeight) {
+void MapBoundary::setCollisionData(std::vector<int>* mapCollisionData, int mapWidth, int mapHeight, int collisionCode) {
+    this->collisionCode = collisionCode;
     this->mapWidth = mapWidth;
     this->mapHeight = mapHeight;
     dataArray = {};
@@ -82,23 +83,13 @@ PropDrawConditions(PropDrawConditions), scale(scale)
                     props.emplace_back(condition.imagePath, x*MAP_TILE_SIZE*this->scale, y*MAP_TILE_SIZE*this->scale, condition.width, condition.height, condition.startCol, condition.startRow, condition.maxCols, scale);
                 }
             }
-            // if (dataArray[y][x] == collisionCode) {
-            //     props.emplace_back("resources/image/Modern_UI_Style_1.png", x*16*1.5, y*16*1.5, 240/15, 688/21, 8, 10, 5);
-            // };
-            // if (dataArray[y][x] == 79740) {
-            //     props.emplace_back("resources/image/Modern_UI_Style_1.png", x*16*1.5, y*16*1.5, 240/15, 688/21, 8, 10, 17);
-            // }
-            // if (dataArray[y][x] == 79730) {
-            //     props.emplace_back("resources/image/Modern_UI_Style_1.png", x*16*1.5, y*16*1.5, 240/15, 64, 8, 10, 3);
-            // }
-            // if (dataArray[y][x] == 79735) {
-            //     props.emplace_back("resources/image/Fishing_Boat_left.png", x*16*1.5, y*16*1.5, 768/8, 688/21, 8, 10, 3);
-            // }
-            // if (dataArray[y][x] == 79736) {
-            //     props.emplace_back("resources/image/Fishing_Boat_left_2.png", x*16*1.5, y*16*1.5, 240/15, 688/21, 8, 10, 3);
-            // }
         }
     };
+}
+void MapProp::moveProps (float speedX, float speedY) {
+    for (Prop &prop : props) {
+        prop.x += speedX;
+    }
 }
 void MapProp::drawAllProps (float scale, Vector2 mapPos, float deltaTime) {
     for (Prop &prop: props) {
@@ -129,9 +120,8 @@ Prop::Prop (const char* inputPropTexture, float inputX, float inputY, float inpu
     y = inputY;
     propWidth = inputPropWidth;
     propHeight = inputPropHeight;
-    std::cout<< "ffff" << inputPropTexture << ", " << x << " " << y << " iiii";
 };
-void Prop::drawProp (Vector2 mapPos, float deltaTime) {
+void Prop::drawProp (Vector2 mapPos, float deltaTime, bool isBackward, bool isPauseisPauseAfterAnimated) {
     updatePropTime += deltaTime;
     if (updatePropTime > 0.2) {
         if (initialCol > maxCol) initialCol = startCol;
@@ -151,4 +141,9 @@ void MapHandler::drawMap (Vector2 mapPos) {
 }
 void MapHandler::changeMap (Map inputMap) {
     drawTexture = inputMap.mapTexture;
+}
+InteractableProp::InteractableProp (std::vector<int> inputDataArray, int inputMapWidth, int inputMapHeight, int inputTileSize, std::vector<PropDrawCondition> propCollisionConditions, float scale)
+: MapProp (inputDataArray, inputMapWidth, inputMapHeight, inputTileSize, propCollisionConditions, scale), isOn(false) {};
+void InteractableProp::drawAllProps(float scale, Vector2 mapPos, float deltaTime) {
+
 }

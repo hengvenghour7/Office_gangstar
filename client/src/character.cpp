@@ -93,7 +93,7 @@ void Character::drawHealth () {
 }
 void Character::drawImage () {
             // characterCollision = {characterRecDes.x, characterRecDes.y+12, width*scale_factor, (height-6)*scale_factor};
-            DrawRectangle(characterHitBox.x, characterHitBox.y, characterHitBox.width, characterHitBox.height, YELLOW);
+            // DrawRectangle(characterHitBox.x, characterHitBox.y, characterHitBox.width, characterHitBox.height, YELLOW);
             DrawTexturePro(characterTexture, characterRecSrc, characterRecDes, {0,0}, 0, WHITE);
         }
 Vector2* Character::getWorldPosPointer () {
@@ -113,7 +113,7 @@ Player::Player (const char * imageTexture, MapBoundary* inputBoundary): Characte
             boundary = inputBoundary;
             screenPos.x = SCREEN_WIDTH/2;
             screenPos.y = SCREEN_HEIGHT/2;
-            worldPos = {-100, 2000};
+            worldPos = {-100, 1500};
             characterRecDes = {screenPos.x, screenPos.y, width*scale_factor, height*scale_factor};
             characterCollision = {screenPos.x, screenPos.y+12, width*scale_factor, (height-6)*scale_factor};
             characterHitBox = {screenPos.x + 30, screenPos.y, width*scale_factor, height*scale_factor};
