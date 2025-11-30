@@ -197,7 +197,9 @@ void checkPath (std::vector<std::vector<int>>* tileArray, Vector2 actorPos, Vect
                 direction->y = 1;
                 direction->x = 0;
                 return;
-            } 
+            }
+            direction->x = -1;
+            direction->y = 0;
         }
         if (direction->y > 0) {
             if ((*tileArray)[tileY+1][tileX] == colorCode) {
