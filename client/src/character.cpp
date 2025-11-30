@@ -171,6 +171,6 @@ void AIPlayer::drawHealth() {
 }
 void AIPlayer::appraochTarget () {
     Vector2 direction = Vector2Normalize(Vector2Subtract(player->getScreenPos(), screenPos)) ;
-    if(!isTakeDamage) worldPos = Vector2Add(worldPos,direction);
+    if(!isTakeDamage) worldPos = Vector2Add(worldPos,direction*AISpeed);
     setCharacterPos(worldPos, player->getWorldPos());
     }

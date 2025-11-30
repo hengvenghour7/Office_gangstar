@@ -6,6 +6,8 @@
 #include <iostream>
 #include "globalVar.h"
 #include "mapCollision.h"
+#include <cstdlib>
+#include <ctime>
 
 using namespace std;
 
@@ -25,10 +27,12 @@ class Character
     protected:
         float width;
         float height;
-        Vector2 worldPos{0,0};
+        // int r = rand() % 10;
+        Vector2 worldPos{static_cast<float>((rand() % 100) + 100), static_cast<float>((rand() % 200) + 100)};
         Vector2 screenPos{0,0};
         Vector2 direction{0,0};
         float speed{1};
+        float AISpeed{static_cast<float>(rand() % 2 + 0.5)};
         int maxCols;
         int colIndex;
         int rowIndex;

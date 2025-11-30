@@ -6,6 +6,8 @@
 #include "collisionData.h"
 #include "multiPlayer/client.h"
 #include <vector>
+#include <cstdlib>
+#include <ctime>
 
 using namespace std;
 std::vector<PropDrawCondition> arrowPropCondition{
@@ -26,7 +28,11 @@ std::vector<PropDrawCondition> interactablePropCondition{
     {79737, "resources/image/Beach_Umbreall_Open.png", 0, 0, 7, 0, 384/8, 304/4.5}
 };
 int main () {
+    srand(time(0));
     bool isMultiPlayer = false;
+    bool isGameOver = false;
+    std::vector<AIPlayer> allEnemies {};
+    
     Vector2 mapPos = {0,0};
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Office Gang");
     SetTargetFPS(60);
@@ -48,6 +54,12 @@ int main () {
     // Texture2D mapTexture = LoadTextureFromImage(mapImg);
     Player player1("resources/image/character/workingman2.png", &mapBoundary1);
     AIPlayer character2("resources/image/character/workingman.png", &player1);
+    AIPlayer character3("resources/image/character/workingman.png", &player1);
+
+    for (int i = 0; i < 8; i++) {
+        allEnemies.emplace_back("resources/image/character/workingman.png", &player1);
+    }
+    std::cout<<"all enemies" << allEnemies.size();
     MapHandler map1(player1.getWorldPosPointer(), MAP_SCALE, &collisionData);
     if (!isMultiPlayer) {
         while (WindowShouldClose() == false){
@@ -66,6 +78,9 @@ int main () {
             map1.changeMap(officeInteriorMap);
 
     }
+    if (IsKeyPressed(KEY_I) && interactableProp.checkInteractionBoundary(player1.getCharacterCollision(), player1.getWorldPos(),0,0, 79737).isCollide) {
+        interactableProp.toggleIsOn();
+    }
             if (IsKeyPressed(KEY_I) && arrowProp.checkInteractionBoundary(player1.getCharacterCollision(), player1.getWorldPos(),0,0, 79730).isCollide) {
                 // cout<< "enter available";
                 map1.changeMap(superMarketMap);
@@ -77,7 +92,9 @@ int main () {
             arrowProp.drawAllProps(MAP_SCALE, mapPos, deltaTime);
             boatProp.drawAllProps(MAP_SCALE, mapPos, deltaTime);
             characterProp.drawAllProps(MAP_SCALE, mapPos, deltaTime);
-            interactableProp.drawAllProps(MAP_SCALE, mapPos, deltaTime);
+            characterProp.moveProps2(1,0, 79731);
+            interactableProp.toggleDraw(MAP_SCALE, mapPos, deltaTime);
+            // interactableProp.drawAllProps(MAP_SCALE, mapPos, deltaTime);
             carProp.drawAllProps(MAP_SCALE, mapPos, deltaTime);
             carProp.moveProps(1, 1);
             // mapBoundary1.drawBoundary(MAP_SCALE, mapPos);
@@ -87,6 +104,14 @@ int main () {
             character2.tick(deltaTime);
             character2.drawHealth();
             character2.takeDamage2(&player1, mapPos, deltaTime);
+            character3.tick(deltaTime);
+            character3.drawHealth();
+            character3.takeDamage2(&player1, mapPos, deltaTime);
+            for (AIPlayer &enemy: allEnemies) {
+                enemy.tick(deltaTime);
+                enemy.drawHealth();
+                enemy.takeDamage2(&player1, mapPos, deltaTime);
+            }
             // mapBoundary1.drawBoundary(MAP_SCALE, mapPos);
             EndDrawing();
         }

@@ -37,6 +37,7 @@ class Prop {
     Texture2D propTexture{};
     float x;
     float y;
+    Vector2 direction{0,0};
     float initialCol{8};
     int startCol{};
     float maxCol{10};
@@ -45,8 +46,10 @@ class Prop {
     float row{};
     float updatePropTime{0};
     float scale;
+    bool isFirstAction{};
     Prop (const char* inputPropTexture, float inputX, float inputY, float inputPropWidth, float inputPropHeight, float inputCol, float inputRow, float inputMaxCol, float scale);
     void drawProp (Vector2 mapPos, float deltaTime, bool isBackward = false, bool isPauseAfterAnimated = false);
+    void setIsFirstAction(bool isFirstACtion);
 };
 class MapProp: public MapBoundary {
     protected:
@@ -55,9 +58,10 @@ class MapProp: public MapBoundary {
     float scale;
     public:
     MapProp (std::vector<int> inputDataArray, int inputMapWidth, int inputMapHeight, int inputTileSize, std::vector<PropDrawCondition> propCollisionConditions, float scale);
-    virtual void drawAllProps (float scale, Vector2 mapPos, float deltaTime);
+    virtual void drawAllProps (float scale, Vector2 mapPos, float deltaTime, bool isBackward = false , bool isPauseisPauseAfterAnimated = false);
     CollisionProperty checkInteraction (Rectangle characterCollision, Vector2 worldPos, float XOffset, float YOffset);
     void moveProps (float speedX, float speedY);
+    void moveProps2 (float speedX, float speedY, int colorCode);
 };
 struct Map {
     Texture2D mapTexture;
@@ -67,7 +71,8 @@ class InteractableProp: public MapProp {
     bool isOn{};
     public:
     InteractableProp (std::vector<int> inputDataArray, int inputMapWidth, int inputMapHeight, int inputTileSize, std::vector<PropDrawCondition> propCollisionConditions, float scale);
-    virtual void drawAllProps (float scale, Vector2 mapPos, float deltaTime) override;
+    void toggleDraw (float scale, Vector2 mapPos, float deltaTime);
+    void toggleIsOn();
 };
 class MapHandler {
     private:
@@ -82,4 +87,5 @@ class MapHandler {
         void drawMap(Vector2 mapPos);
         void changeMap (Map inputMap);
 };
+void checkPath (std::vector<std::vector<int>>* tileArray, Vector2 actorPos, Vector2* direction, int colorCode);
 #endif
