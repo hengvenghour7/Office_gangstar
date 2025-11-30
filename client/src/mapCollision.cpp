@@ -177,47 +177,55 @@ void InteractableProp::toggleIsOn() {
     isOn = !isOn;
 }
 void checkPath (std::vector<std::vector<int>>* tileArray, Vector2 actorPos, Vector2* direction, int colorCode) {
-    int tileX = (int)(actorPos.x)/16/1.5; // x*16*1.5 + mapPos.x -- -mapPos.x/16/1.5
-    int tileY = (int)(actorPos.y)/16/1.5;
+    int tileX = (int)((actorPos.x)/16/1.5); // x*16*1.5 + mapPos.x -- -mapPos.x/16/1.5
+    int tileY = (int)((actorPos.y)/16/1.5);
     // std::cout<<"y"<< (*tileArray)[tileY+1][tileX + 2];
     Vector2 nextDirection{0,0};
     if (direction->x >= 0 && tileX >= 0 && tileY >= 0) {
-        if ((*tileArray)[tileY+1][tileX + 2] == colorCode) {
+        if ((*tileArray)[tileY][tileX + 1] == colorCode) {
             direction->x = 1;
             direction->y = 0;
             return;
         }
-        if (direction->y >= 0) {
-            if ((*tileArray)[tileY-2][tileX + 1] == colorCode) {
-                direction->y = 1;
+        if (direction->y <= 0) {
+            if ((*tileArray)[tileY-1][tileX] == colorCode) {
+                direction->y = -1;
                 direction->x = 0;
                 return;
             }
-            if ((*tileArray)[tileY][tileX + 1] == colorCode) {
-                std::cout<<"false hope";
-            direction->x = -1;
-            direction->y = 0;
-            return;
-        }
-        if ((*tileArray)[tileY-1][tileX + 1] == colorCode) {
-                std::cout<< "this line hit";
-                direction->y = -1;
+            if ((*tileArray)[tileY + 2][tileX] == colorCode) {
+                direction->y = 1;
                 direction->x = 0;
                 return;
             } 
         }
-    }
-    if (direction->y < 0) {
-        if ((*tileArray)[tileY-1][tileX + 1] == colorCode) {
-            direction->y = -1;
-            direction->x = 0;
+        if (direction->y > 0) {
+            if ((*tileArray)[tileY+1][tileX] == colorCode) {
+                direction->y = 1;
+                direction->x = 0;
+                return;
+            }
+            if ((*tileArray)[tileY][tileX - 1] == colorCode) {
+            direction->x = -1;
+            std::cout<< "this line hit";
+            direction->y = 0;
             return;
-        } 
+            }
+            if ((*tileArray)[tileY-1][tileX] == colorCode) {
+                direction->y = -1;
+                direction->x = 0;
+                return;
+            }
+        }
         
-        if ((*tileArray)[tileY + 2][tileX + 1] == colorCode) {
-            direction->y = 1;
-            direction->x = 0;
+    }
+    if (direction->x < 0 && tileX >= 0 && tileY >= 0) {
+        if ((*tileArray)[tileY][tileX - 1] == colorCode && tileX - 1 >= 0) {
+            direction->x = -1;
+            direction->y = 0;
             return;
-        } 
+        }
+        direction->x = 1;
+        direction->y = 0;
     }
 }
