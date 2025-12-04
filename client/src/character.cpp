@@ -290,13 +290,23 @@ void AIPlayer::drawHealth() {
     characterHealth.healthDes = {characterCollision.x, characterCollision.y};
     characterHealth.drawHealth(characterHealth.healthDes.x, characterHealth.healthDes.y - 20, characterHealth.currentHealth/4, 10, RED);
 }
+void AIPlayer::doDamage() {
+    playerState = Attacking;
+    isAttacking = true;
+}
 void AIPlayer::appraochTarget (std::vector<AIPlayer>* allAIPlayer) {
+    if (checkIsCollide(characterHitBox, player->getCharacterCollision(), {0,0}, 0, 0).isCollide) {
+        doDamage();
+    } else {
+        playerState = Running;
+        isAttacking = false;
+    }
     if (!isNeedToMoveBack) {
         direction = Vector2Normalize(Vector2Subtract(player->getScreenPos(), screenPos));
         updateDirectionState(direction);
         for (AIPlayer &enemy : *allAIPlayer) {
             if (enemy.id != id) {
-                CollisionProperty collisionProperty = checkIsCollide(characterCollision, enemy.getCharacterHitBox(), {0,0}, 0, 0);
+                CollisionProperty collisionProperty = checkIsCollide(characterCollision, enemy.getCharacterCollision(), {0,0}, 0, 0);
                 if (collisionProperty.isCollide) {
                     if (characterCollision.x < collisionProperty.collider.x) direction.x = -1;
                     if (characterCollision.x >= collisionProperty.collider.x) direction.x = 1;

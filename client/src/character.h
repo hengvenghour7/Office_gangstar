@@ -91,8 +91,9 @@ class AIPlayer : public Character {
         Vector2 direction;
         Rectangle collider{};
         // Vector2 currentDirection {0,0};
-    public: 
+    public:
         AIPlayer (const char * imageTexture, Player* inputTarget, int id, float speed);
+        void doDamage ();
         void AITick(float deltaTime, std::vector<AIPlayer>* allAIPlayer);
     void appraochTarget (std::vector<AIPlayer>* allAIPlayer) ;
     void drawHealth() ;

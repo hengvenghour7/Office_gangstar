@@ -37,6 +37,7 @@ void Game::tick (float deltaTime) {
         enemy.AITick(deltaTime, &enemies);
         enemy.drawImage();
         enemy.drawHealth();
+        player.takeDamage2(&enemy, mapPos, deltaTime );
     }
     enemies.erase(
     std::remove_if(enemies.begin(), enemies.end(), [](AIPlayer &enemy) {
