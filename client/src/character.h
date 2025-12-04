@@ -28,7 +28,7 @@ class Character
         float width;
         float height;
         // int r = rand() % 10;
-        Vector2 worldPos{static_cast<float>((rand() % 100) + 100), static_cast<float>((rand() % 200) + 100)};
+        Vector2 worldPos{static_cast<float>((rand() % 500) + 10), static_cast<float>((rand() % 200) + 100)};
         Vector2 screenPos{0,0};
         Vector2 direction{0,0};
         float speed{1};
@@ -81,10 +81,13 @@ class Player: public Character
 class AIPlayer : public Character {
     private:
         Player* player;
+        int id;
+        bool needToMoveBack{false};
+        // Vector2 currentDirection {0,0};
     public: 
-        AIPlayer (const char * imageTexture, Player* inputTarget);
-        virtual void tick(float deltaTime) override;
-    void appraochTarget () ;
+        AIPlayer (const char * imageTexture, Player* inputTarget, int id);
+        void AITick(float deltaTime, std::vector<AIPlayer>* allAIPlayer);
+    void appraochTarget (std::vector<AIPlayer>* allAIPlayer) ;
     void drawHealth() ;
 };
 

@@ -113,7 +113,7 @@ Player::Player (const char * imageTexture, MapBoundary* inputBoundary): Characte
             boundary = inputBoundary;
             screenPos.x = SCREEN_WIDTH/2;
             screenPos.y = SCREEN_HEIGHT/2;
-            worldPos = {-100, 1500};
+            worldPos = {-100, 100};
             characterRecDes = {screenPos.x, screenPos.y, width*scale_factor, height*scale_factor};
             characterCollision = {screenPos.x, screenPos.y+12, width*scale_factor, (height-6)*scale_factor};
             characterHitBox = {screenPos.x + 30, screenPos.y, width*scale_factor, height*scale_factor};
@@ -158,19 +158,28 @@ Vector2 Player::getWorldPos () {
 Vector2 Player::getScreenPos () {
             return screenPos;
         };
-AIPlayer::AIPlayer (const char * imageTexture, Player* inputPlayer): Character(imageTexture) {
+AIPlayer::AIPlayer (const char * imageTexture, Player* inputPlayer, int id): Character(imageTexture), id(id) {
     player = inputPlayer;
 }
-void AIPlayer::tick(float deltaTime) {
-    appraochTarget();
+void AIPlayer::AITick(float deltaTime, std::vector<AIPlayer>* allAIPlayer) {
+    appraochTarget(allAIPlayer);
     Character::tick(deltaTime);
 }
 void AIPlayer::drawHealth() {
     characterHealth.healthDes = {characterCollision.x, characterCollision.y};
     characterHealth.drawHealth(characterHealth.healthDes.x, characterHealth.healthDes.y - 20, characterHealth.currentHealth/4, 10, RED);
 }
-void AIPlayer::appraochTarget () {
+void AIPlayer::appraochTarget (std::vector<AIPlayer>* allAIPlayer) {
     Vector2 direction = Vector2Normalize(Vector2Subtract(player->getScreenPos(), screenPos)) ;
+    for (AIPlayer &enemies : *allAIPlayer) {
+        if (enemies.id != id) {
+            if (checkIsCollide(getCharacterHitBox(), enemies.getCharacterHitBox(), {0,0}, 0, 0).isCollide) {
+                direction.x = -1;
+                // std::cout<<"same id";
+            }
+            
+        }
+    }
     if(!isTakeDamage) worldPos = Vector2Add(worldPos,direction*AISpeed);
     setCharacterPos(worldPos, player->getWorldPos());
     }

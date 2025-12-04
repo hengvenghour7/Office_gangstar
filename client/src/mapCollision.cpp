@@ -179,7 +179,6 @@ void InteractableProp::toggleIsOn() {
 void checkPath (std::vector<std::vector<int>>* tileArray, Vector2 actorPos, Vector2* direction, int colorCode) {
     int tileX = (int)((actorPos.x)/16/1.5); // x*16*1.5 + mapPos.x -- -mapPos.x/16/1.5
     int tileY = (int)((actorPos.y)/16/1.5);
-    // std::cout<<"y"<< (*tileArray)[tileY+1][tileX + 2];
     Vector2 nextDirection{0,0};
     if (direction->x >= 0 && tileX >= 0 && tileY >= 0) {
         if ((*tileArray)[tileY][tileX + 1] == colorCode) {
@@ -209,7 +208,6 @@ void checkPath (std::vector<std::vector<int>>* tileArray, Vector2 actorPos, Vect
             }
             if ((*tileArray)[tileY][tileX - 1] == colorCode) {
             direction->x = -1;
-            std::cout<< "this line hit";
             direction->y = 0;
             return;
             }

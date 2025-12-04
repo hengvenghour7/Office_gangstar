@@ -53,11 +53,11 @@ int main () {
     // Image mapImg = LoadImage("resources/image/office_gang_map.png");
     // Texture2D mapTexture = LoadTextureFromImage(mapImg);
     Player player1("resources/image/character/workingman2.png", &mapBoundary1);
-    AIPlayer character2("resources/image/character/workingman.png", &player1);
-    AIPlayer character3("resources/image/character/workingman.png", &player1);
+    AIPlayer character2("resources/image/character/workingman.png", &player1, 10);
+    AIPlayer character3("resources/image/character/workingman.png", &player1, 11);
 
-    for (int i = 0; i < 8; i++) {
-        allEnemies.emplace_back("resources/image/character/workingman.png", &player1);
+    for (int i = 0; i < 5; i++) {
+        allEnemies.emplace_back("resources/image/character/workingman.png", &player1, i);
     }
     std::cout<<"all enemies" << allEnemies.size();
     MapHandler map1(player1.getWorldPosPointer(), MAP_SCALE, &collisionData);
@@ -108,7 +108,7 @@ int main () {
             character3.drawHealth();
             character3.takeDamage2(&player1, mapPos, deltaTime);
             for (AIPlayer &enemy: allEnemies) {
-                enemy.tick(deltaTime);
+                enemy.AITick(deltaTime, &allEnemies);
                 enemy.drawHealth();
                 enemy.takeDamage2(&player1, mapPos, deltaTime);
             }
