@@ -32,32 +32,6 @@ void MapBoundary::drawBoundary(float scale, Vector2 mapPos) {
         }
     };
 }
-CollisionProperty MapBoundary::checkBoundaryCollision (Rectangle characterCollision, Vector2 worldPos, float XOffset, float YOffset) {
-    CollisionProperty collision1 {false, {}};
-    Vector2 charCollisionScreenPos{XOffset > 0 ?  characterCollision.x + characterCollision.width : characterCollision.x,YOffset > 0 ? characterCollision.y + characterCollision.height : characterCollision.y + 8};
-    Vector2 playerWorldPos = Vector2Add(charCollisionScreenPos, worldPos);
-    int tileX = (int)(playerWorldPos.x + XOffset)/16/1.5; // x*16*1.5 + mapPos.x -- -mapPos.x/16/1.5
-    int tileY = (int)(playerWorldPos.y + YOffset)/16/1.5;
-    if (tileY < dataArray.size() && tileX < mapWidth) {
-        if (dataArray[tileY][tileX] == collisionCode || dataArray[tileY][tileX] == 79733) {
-                collision1.isCollide = true;
-                return collision1;
-            }
-    }
-    return collision1;
-}
-CollisionProperty MapBoundary::checkInteractionBoundary (Rectangle characterCollision, Vector2 worldPos, float XOffset, float YOffset, int colorCode) {
-    CollisionProperty collision1 {false, {}};
-    Vector2 charCollisionScreenPos{XOffset > 0 ?  characterCollision.x + characterCollision.width : characterCollision.x,YOffset > 0 ? characterCollision.y + characterCollision.height : characterCollision.y + 8};
-    Vector2 playerWorldPos = Vector2Add(charCollisionScreenPos, worldPos);
-    int tileX = (int)(playerWorldPos.x + XOffset)/16/1.5; // x*16*1.5 + mapPos.x -- -mapPos.x/16/1.5
-    int tileY = (int)(playerWorldPos.y + YOffset)/16/1.5;
-    if (dataArray[tileY][tileX] == colorCode) {
-            collision1.isCollide = true;
-            return collision1;
-        }
-    return collision1;
-}
 void MapBoundary::setCollisionData(std::vector<int>* mapCollisionData, int mapWidth, int mapHeight, int collisionCode) {
     this->collisionCode = collisionCode;
     this->mapWidth = mapWidth;
@@ -93,7 +67,6 @@ void MapProp::moveProps (float speedX, float speedY) {
 }
 void MapProp::moveProps2 (float speedX, float speedY, int colorCode) {
     for (Prop &prop : props) {
-        checkPath(&dataArray, {prop.x, prop.y}, &prop.direction, colorCode);
         prop.x += prop.direction.x;
         prop.y += prop.direction.y;
     }
@@ -111,13 +84,11 @@ CollisionProperty MapProp::checkInteraction (Rectangle characterCollision, Vecto
     int tileY = (int)(playerWorldPos.y + YOffset)/16/1.5;
     if (dataArray[tileY][tileX] == 79742) {
             collision1.isCollide = true;
-            // std::cout<< "color collll";
             return collision1;
         }
     return collision1;
 }
 Prop::Prop (const char* inputPropTexture, float inputX, float inputY, float inputPropWidth, float inputPropHeight, float inputCol, float inputRow, float inputMaxCol, float scale): scale(scale), isFirstAction(true) {
-    // std::cout<<"ttt" << inputPropTexture;
     startCol = inputCol;
     initialCol = inputCol;
     maxCol = inputMaxCol;
@@ -141,7 +112,6 @@ void Prop::drawProp (Vector2 mapPos, float deltaTime, bool isBackward, bool isPa
                 updatePropTime = 0;
             };
         } else {
-                // if (isPauseisPauseAfterAnimated && initialCol == startCol) return;
                 if (initialCol > maxCol) initialCol = startCol;
                 initialCol++;
                 updatePropTime = 0;
@@ -175,57 +145,4 @@ void InteractableProp::toggleDraw(float scale, Vector2 mapPos, float deltaTime) 
 }
 void InteractableProp::toggleIsOn() {
     isOn = !isOn;
-}
-void checkPath (std::vector<std::vector<int>>* tileArray, Vector2 actorPos, Vector2* direction, int colorCode) {
-    int tileX = (int)((actorPos.x)/16/1.5); // x*16*1.5 + mapPos.x -- -mapPos.x/16/1.5
-    int tileY = (int)((actorPos.y)/16/1.5);
-    Vector2 nextDirection{0,0};
-    if (direction->x >= 0 && tileX >= 0 && tileY >= 0) {
-        if ((*tileArray)[tileY][tileX + 1] == colorCode) {
-            direction->x = 1;
-            direction->y = 0;
-            return;
-        }
-        if (direction->y <= 0) {
-            if ((*tileArray)[tileY-1][tileX] == colorCode) {
-                direction->y = -1;
-                direction->x = 0;
-                return;
-            }
-            if ((*tileArray)[tileY + 2][tileX] == colorCode) {
-                direction->y = 1;
-                direction->x = 0;
-                return;
-            }
-            direction->x = -1;
-            direction->y = 0;
-        }
-        if (direction->y > 0) {
-            if ((*tileArray)[tileY+1][tileX] == colorCode) {
-                direction->y = 1;
-                direction->x = 0;
-                return;
-            }
-            if ((*tileArray)[tileY][tileX - 1] == colorCode) {
-            direction->x = -1;
-            direction->y = 0;
-            return;
-            }
-            if ((*tileArray)[tileY-1][tileX] == colorCode) {
-                direction->y = -1;
-                direction->x = 0;
-                return;
-            }
-        }
-        
-    }
-    if (direction->x < 0 && tileX >= 0 && tileY >= 0) {
-        if ((*tileArray)[tileY][tileX - 1] == colorCode && tileX - 1 >= 0) {
-            direction->x = -1;
-            direction->y = 0;
-            return;
-        }
-        direction->x = 1;
-        direction->y = 0;
-    }
 }

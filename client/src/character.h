@@ -8,6 +8,7 @@
 #include "mapCollision.h"
 #include <cstdlib>
 #include <ctime>
+#include "helpers.h"
 
 using namespace std;
 
@@ -27,12 +28,12 @@ class Character
     protected:
         float width;
         float height;
-        // int r = rand() % 10;
         Vector2 worldPos{static_cast<float>((rand() % 500) + 10), static_cast<float>((rand() % 200) + 100)};
         Vector2 screenPos{0,0};
         Vector2 direction{0,0};
         float speed{1};
         float AISpeed{static_cast<float>(rand() % 2 + 0.5)};
+        int startCols{0};
         int maxCols;
         int colIndex;
         int rowIndex;
@@ -49,6 +50,10 @@ class Character
         float takeDamageTimeCap{1.f};
         float takeDamageAnimationTime{0.5f};
         HealthComponent characterHealth;
+        enum PlayerState playerState{Idle};
+        enum PlayerDirection directionState;
+        enum PlayerDirection oldDirectionState;
+        bool isNeedResetCols{false};
     public:
         virtual void tick (float deltaTime);
         Character (const char * imageTexture);
@@ -62,6 +67,7 @@ class Character
         void takeDamage (Character* secondCollider, Vector2 MapPos, float deltaTime);
         void takeDamage2 (Character* secondCollider, Vector2 MapPos, float deltaTime);
         void setCharacterPos (Vector2 inputWorldPos, Vector2 playerPos);
+        void updateDirectionState (Vector2 newDirection);
         Vector2* getWorldPosPointer ();
         Rectangle getCharacterCollision();
         Rectangle getCharacterHitBox();

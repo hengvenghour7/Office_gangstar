@@ -5,6 +5,7 @@
 #include <iostream>
 #include <raylib.h>
 #include "helpers.h"
+#include <raymath.h>
 
 struct PropDrawCondition {
     int collisionCode;
@@ -87,5 +88,4 @@ class MapHandler {
         void drawMap(Vector2 mapPos);
         void changeMap (Map inputMap);
 };
-void checkPath (std::vector<std::vector<int>>* tileArray, Vector2 actorPos, Vector2* direction, int colorCode);
 #endif

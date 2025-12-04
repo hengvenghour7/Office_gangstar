@@ -4,20 +4,22 @@
             "name": "Win32",
             "includePath": [
                 "${workspaceFolder}/**",
-                "${vcpkgRoot}/x64-windows/include",
+
+                // MSYS2 MinGW core include directory
+                "C:/msys64/mingw64/include",
+
+                // GCC C++ standard library headers (required)
+                "C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include",
+
+                // Raylib
                 "C:/raylib/raylib/src",
-                "C:/raylib/raylib/src/external"  // optional if you use external headers
+                "C:/raylib/raylib/src/external"
             ],
-            "defines": [
-                "_DEBUG",
-                "UNICODE",
-                "_UNICODE"
-            ],
-            "windowsSdkVersion": "10.0.26100.0",
-            "compilerPath": "cl.exe",
+            "defines": [],
+            "compilerPath": "C:/msys64/mingw64/bin/g++.exe",
             "cStandard": "c17",
             "cppStandard": "c++17",
-            "intelliSenseMode": "windows-msvc-x64"
+            "intelliSenseMode": "windows-gcc-x64"
         }
     ],
     "version": 4
