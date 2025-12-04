@@ -8,6 +8,7 @@ CollisionProperty checkIsCollide (Rectangle firstCollider, Rectangle secondColli
     CollisionProperty collision1 {false, {}};
     if (firstCollider.x + XOffset < secondCollider.x + secondCollider.width && firstCollider.x + firstCollider.width > secondCollider.x && firstCollider.y < secondCollider.y + secondCollider.height && firstCollider.y + firstCollider.height > secondCollider.y) {
             collision1.isCollide = true;
+            collision1.collider = secondCollider;
     };
     return collision1;
 }

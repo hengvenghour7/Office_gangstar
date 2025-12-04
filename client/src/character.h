@@ -6,8 +6,6 @@
 #include <iostream>
 #include "globalVar.h"
 #include "mapCollision.h"
-#include <cstdlib>
-#include <ctime>
 #include "helpers.h"
 
 using namespace std;
@@ -31,8 +29,7 @@ class Character
         Vector2 worldPos{static_cast<float>((rand() % 500) + 10), static_cast<float>((rand() % 200) + 100)};
         Vector2 screenPos{0,0};
         Vector2 direction{0,0};
-        float speed{1};
-        float AISpeed{static_cast<float>(rand() % 2 + 0.5)};
+        float speed;
         int startCols{0};
         int maxCols;
         int colIndex;
@@ -56,7 +53,7 @@ class Character
         bool isNeedResetCols{false};
     public:
         virtual void tick (float deltaTime);
-        Character (const char * imageTexture);
+        Character (const char * imageTexture, float speed);
         void updateAnimation (float deltaTime);
         void drawImage ();
         void updateCharacterProgess (float deltaTime) {
@@ -71,6 +68,7 @@ class Character
         Vector2* getWorldPosPointer ();
         Rectangle getCharacterCollision();
         Rectangle getCharacterHitBox();
+        HealthComponent getHealthComponent();
     };
 class Player: public Character
 {
@@ -78,8 +76,9 @@ class Player: public Character
         Vector2 direction{0,0};
         MapBoundary* boundary{};
     public:
-        Player (const char * imageTexture, MapBoundary* inputBoundary);
+        Player (const char * imageTexture, MapBoundary* inputBoundary, float speed);
         virtual void tick(float deltaTime) override;
+        void drawHealth(int x, int y);
         Vector2 getWorldPos ();
         Vector2 getScreenPos ();
     };
@@ -88,10 +87,12 @@ class AIPlayer : public Character {
     private:
         Player* player;
         int id;
-        bool needToMoveBack{false};
+        bool isNeedToMoveBack{false};
+        Vector2 direction;
+        Rectangle collider{};
         // Vector2 currentDirection {0,0};
     public: 
-        AIPlayer (const char * imageTexture, Player* inputTarget, int id);
+        AIPlayer (const char * imageTexture, Player* inputTarget, int id, float speed);
         void AITick(float deltaTime, std::vector<AIPlayer>* allAIPlayer);
     void appraochTarget (std::vector<AIPlayer>* allAIPlayer) ;
     void drawHealth() ;

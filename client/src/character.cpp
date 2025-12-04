@@ -16,13 +16,12 @@ void HealthComponent::heal(float healAmount) {
 void HealthComponent::drawHealth(float locationX, float locationY, float width, float height, Color inputColor){
     DrawRectangle(locationX, locationY, width, height, inputColor);
 };
-Character::Character (const char * imageTexture) : characterHealth(300) {
+Character::Character (const char * imageTexture, float speed) : characterHealth(300), speed(speed) {
             width = 896/56;
             height = 640/20;
             maxCols = 6;
             colIndex = startCols;
             rowIndex = 2;
-            speed = 2;
             characterImg = LoadImage(imageTexture);
             characterTexture = LoadTextureFromImage(characterImg);
             characterRecDes = {screenPos.x, screenPos.y, width*scale_factor, height*scale_factor};
@@ -35,6 +34,7 @@ void Character::takeDamage (Character* secondCollider, Vector2 MapPos, float del
                 characterHealth.takeDamage(20);
                 takeDamageTimeCap = 0;
                 takeDamageAnimationTime = 0;
+                playerState = Hurt;
                 isTakeDamage = true;
                 return;
             }
@@ -47,7 +47,7 @@ void Character::takeDamage (Character* secondCollider, Vector2 MapPos, float del
         }
 void Character::takeDamage2 (Character* secondCollider, Vector2 MapPos, float deltaTime) {
             if (checkIsCollide(getCharacterHitBox(), secondCollider->getCharacterHitBox(), MapPos, 0, 0).isCollide && takeDamageTimeCap >= 1.5f && secondCollider->isAttacking) {
-                characterHealth.takeDamage(20);
+                characterHealth.takeDamage(100);
                 takeDamageTimeCap = 0;
                 takeDamageAnimationTime = 0;
                 isTakeDamage = true;
@@ -67,58 +67,86 @@ void Character::takeDamage2 (Character* secondCollider, Vector2 MapPos, float de
         }
 void Character::updateAnimation (float deltaTime) {
             updateAnimationTime += deltaTime;
-            if (playerState != Idle) {
-                switch (directionState)
-                {
-                case Right:
-                    rowIndex = 2;
-                    startCols = 0;
-                    maxCols = 6;
-                    break;
-                case Left:
-                    rowIndex = 2;
-                    startCols = 12;
-                    maxCols = 18;
-                    break;
-                case Up:
-                    rowIndex = 2;
-                    startCols = 6;
-                    maxCols = 12;
-                    break;
-                case Down:
-                    rowIndex = 2;
-                    startCols = 18;
-                    maxCols = 24;
-                    break;
-                default:
-                    break;
+            if (playerState != Attacking) {
+                if (playerState != Idle) {
+                    switch (directionState)
+                    {
+                    case Right:
+                        rowIndex = 2;
+                        startCols = 0;
+                        maxCols = 6;
+                        break;
+                    case Left:
+                        rowIndex = 2;
+                        startCols = 12;
+                        maxCols = 18;
+                        break;
+                    case Up:
+                        rowIndex = 2;
+                        startCols = 6;
+                        maxCols = 12;
+                        break;
+                    case Down:
+                        rowIndex = 2;
+                        startCols = 18;
+                        maxCols = 24;
+                        break;
+                    default:
+                        break;
+                    }
+                } else {
+                    switch (directionState)
+                    {
+                    case Right:
+                        rowIndex = 1;
+                        startCols = 0;
+                        maxCols = 6;
+                        break;
+                    case Left:
+                        rowIndex = 1;
+                        startCols = 12;
+                        maxCols = 18;
+                        break;
+                    case Up:
+                        rowIndex = 1;
+                        startCols = 6;
+                        maxCols = 12;
+                        break;
+                    case Down:
+                        rowIndex = 1;
+                        startCols = 18;
+                        maxCols = 24;
+                        break;
+                    default:
+                        break;
+                    }
                 }
             } else {
                 switch (directionState)
-                {
-                case Right:
-                    rowIndex = 1;
-                    startCols = 0;
-                    maxCols = 6;
-                    break;
-                case Left:
-                    rowIndex = 1;
-                    startCols = 12;
-                    maxCols = 18;
-                    break;
-                case Up:
-                    rowIndex = 1;
-                    startCols = 6;
-                    maxCols = 12;
-                    break;
-                case Down:
-                    rowIndex = 1;
-                    startCols = 18;
-                    maxCols = 24;
-                    break;
-                default:
-                    break;
-                }
+                    {
+                    case Right:
+                        rowIndex = 14;
+                        startCols = 0;
+                        maxCols = 5;
+                        break;
+                    case Left:
+                        rowIndex = 14;
+                        startCols = 12;
+                        maxCols = 18;
+                        break;
+                    case Up:
+                        rowIndex = 14;
+                        startCols = 6;
+                        maxCols = 12;
+                        break;
+                    case Down:
+                        rowIndex = 14;
+                        startCols = 18;
+                        maxCols = 24;
+                        break;
+                    default:
+                        break;
+                    }
             }
             if (isNeedResetCols) {
                 isNeedResetCols = false;
@@ -148,26 +176,28 @@ Vector2* Character::getWorldPosPointer () {
     return &worldPos;
 }
 void Character::updateDirectionState (Vector2 newDirection) {
-    if (newDirection.x >= 0) {
-        playerState = Running;
-        directionState = Right;
-    };
-    if (newDirection.x < 0) {
-        playerState = Running;
-        directionState = Left;
-    };
-    if (newDirection.y >= 0) {
-        playerState = Running;
-        if (newDirection.x < 0.2) directionState = Down;
-    };
-    if (newDirection.y < 0) {
-        playerState = Running;
-        if (newDirection.x < 0.2) directionState = Up;
-    };
-    if (newDirection.x == 0 && direction.y == 0) playerState = Idle;
-    if (directionState != oldDirectionState) {
-        isNeedResetCols = true;
-        oldDirectionState = directionState;
+    if (playerState != Hurt && playerState != Attacking) {
+        if (newDirection.x >= 0) {
+            playerState = Running;
+            directionState = Right;
+        };
+        if (newDirection.x < 0) {
+            playerState = Running;
+            directionState = Left;
+        };
+        if (newDirection.y >= 0) {
+            playerState = Running;
+            if (newDirection.x < 0.2 && newDirection.x > -0.2) directionState = Down;
+        };
+        if (newDirection.y < 0) {
+            playerState = Running;
+            if (newDirection.x < 0.2 && newDirection.x > -0.2) directionState = Up;
+        };
+        if (newDirection.x == 0 && direction.y == 0) playerState = Idle;
+        if (directionState != oldDirectionState) {
+            isNeedResetCols = true;
+            oldDirectionState = directionState;
+        }
     }
 }
 void Character::tick (float deltaTime) {
@@ -180,7 +210,10 @@ void Character::tick (float deltaTime) {
         Rectangle Character::getCharacterHitBox ()  {
             return characterHitBox;
         };
-Player::Player (const char * imageTexture, MapBoundary* inputBoundary): Character(imageTexture) {
+HealthComponent Character::getHealthComponent () {
+    return characterHealth;
+}
+Player::Player (const char * imageTexture, MapBoundary* inputBoundary, float speed): Character(imageTexture, speed) {
             boundary = inputBoundary;
             screenPos.x = SCREEN_WIDTH/2;
             screenPos.y = SCREEN_HEIGHT/2;
@@ -192,13 +225,16 @@ Player::Player (const char * imageTexture, MapBoundary* inputBoundary): Characte
 void Player::tick (float deltaTime) {
             if (!isTakeDamage) {
                 if (direction.x == 0 && direction.y == 0) {
-                    isAttacking = false;
                 }
-                if (IsKeyDown(KEY_K)) {
-                    rowIndex = 13;
+                if (IsKeyPressed(KEY_K)) {
+                    playerState = Attacking;
                     isAttacking = true;
                 }
-                else {
+                if (IsKeyReleased(KEY_K)) {
+                    isAttacking = false;
+                    playerState = Idle;
+                }
+                if (playerState != Attacking) {
                     if (IsKeyPressed(KEY_A) || IsKeyPressed(KEY_W) || IsKeyPressed(KEY_D) || IsKeyPressed(KEY_S) ||
                         IsKeyReleased(KEY_A) || IsKeyReleased(KEY_W) || IsKeyReleased(KEY_D) || IsKeyReleased(KEY_S)) isNeedResetCols = true;
                     if (IsKeyDown(KEY_A)) {
@@ -220,25 +256,30 @@ void Player::tick (float deltaTime) {
                     if (direction.x != 0 || direction.y != 0) rowIndex = 2;
                     isAttacking = false;
                 }
-                if (direction.x != 0 || direction.y != 0) {
-                    playerState = Walking;
-                } else {
-                    playerState = Idle;
+                if (playerState != Attacking) {
+                    if (direction.x != 0 || direction.y != 0) {
+                        playerState = Walking;
+                    } else {
+                        playerState = Idle;
+                    }
                 }
                 if(Vector2Length(direction) != 0) {
                         worldPos = Vector2Add(worldPos, Vector2Normalize(direction)*speed);
-                        }
+                    }
                 direction = {0,0};
             } 
                 Character::tick(deltaTime);
             }
+void Player::drawHealth(int x, int y) {
+    characterHealth.drawHealth(x, y, characterHealth.currentHealth, 10, GREEN);
+}
 Vector2 Player::getWorldPos () {
             return worldPos;
         }
 Vector2 Player::getScreenPos () {
             return screenPos;
         };
-AIPlayer::AIPlayer (const char * imageTexture, Player* inputPlayer, int id): Character(imageTexture), id(id) {
+AIPlayer::AIPlayer (const char * imageTexture, Player* inputPlayer, int id, float speed): Character(imageTexture, speed), id(id) {
     player = inputPlayer;
 }
 void AIPlayer::AITick(float deltaTime, std::vector<AIPlayer>* allAIPlayer) {
@@ -250,15 +291,29 @@ void AIPlayer::drawHealth() {
     characterHealth.drawHealth(characterHealth.healthDes.x, characterHealth.healthDes.y - 20, characterHealth.currentHealth/4, 10, RED);
 }
 void AIPlayer::appraochTarget (std::vector<AIPlayer>* allAIPlayer) {
-    Vector2 direction = Vector2Normalize(Vector2Subtract(player->getScreenPos(), screenPos));
-    updateDirectionState(direction);
-    for (AIPlayer &enemies : *allAIPlayer) {
-        if (enemies.id != id) {
-            if (checkIsCollide(getCharacterHitBox(), enemies.getCharacterHitBox(), {0,0}, 0, 0).isCollide) {
-                direction.x = -1;
+    if (!isNeedToMoveBack) {
+        direction = Vector2Normalize(Vector2Subtract(player->getScreenPos(), screenPos));
+        updateDirectionState(direction);
+        for (AIPlayer &enemy : *allAIPlayer) {
+            if (enemy.id != id) {
+                CollisionProperty collisionProperty = checkIsCollide(characterCollision, enemy.getCharacterHitBox(), {0,0}, 0, 0);
+                if (collisionProperty.isCollide) {
+                    if (characterCollision.x < collisionProperty.collider.x) direction.x = -1;
+                    if (characterCollision.x >= collisionProperty.collider.x) direction.x = 1;
+                    if (characterCollision.y < collisionProperty.collider.y) direction.y = -1;
+                    if (characterCollision.y >= collisionProperty.collider.y) direction.y = 1;
+                    direction = Vector2Normalize(direction);
+                    isNeedToMoveBack = true;
+                    this->collider = collisionProperty.collider;
+                }
             }
+            if (isNeedToMoveBack) break;
+        }
+    } else {
+        if (std::abs(characterCollision.x - collider.x) > 50) {
+            isNeedToMoveBack = false;
         }
     }
-    if(!isTakeDamage) worldPos = Vector2Add(worldPos,direction*AISpeed);
+    if(!isTakeDamage) worldPos = Vector2Add(worldPos,direction*speed);
     setCharacterPos(worldPos, player->getWorldPos());
     }
