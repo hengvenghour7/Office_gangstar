@@ -264,7 +264,10 @@ void Player::tick (float deltaTime) {
                     }
                 }
                 if(Vector2Length(direction) != 0) {
-                        worldPos = Vector2Add(worldPos, Vector2Normalize(direction)*speed);
+                        direction = Vector2Normalize(direction)*speed*deltaTime*50;
+                        direction.x = (int)(std::round(direction.x)); 
+                        direction.y = (int)(std::round(direction.y)); 
+                        worldPos = Vector2Add(worldPos, direction);
                     }
                 direction = {0,0};
             } 

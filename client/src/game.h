@@ -1,16 +1,17 @@
 #include <vector>
 #include "character.h"
 #include "globalVar.h"
+#include "drawing.h"
 
 class Game {
     private:
         MapBoundary mapBoundary1;
-        MapHandler map;
         Player player;
         std::vector<AIPlayer> enemies{};
         AIPlayer NPC;
         std::vector<Prop> signProps{};
         std::vector<Prop> mapProps{};
+        std::vector<Drawing*> allDrawableObjects;
         Texture2D mapTexture = LoadTexture("resources/image/office_gang_map.png");
 
         std::vector<PropDrawCondition> arrowPropCondition{

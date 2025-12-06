@@ -6,8 +6,8 @@
 #include <algorithm>
 
 Game::Game(): mapBoundary1(collisionData, 150, 100, 16, 79732) , player("resources/image/character/workingman2.png", &mapBoundary1, 3)
-, NPC("resources/image/character/workingman.png", &player, 11, 1), map(player.getWorldPosPointer(), MAP_SCALE, &collisionData),
-arrowProp(arrowLocationData, 150, 100, 16, arrowPropCondition, MAP_SCALE), carProp(vehiclePath, 150, 100, 16, carPropCondition, MAP_SCALE),
+, NPC("resources/image/character/workingman.png", &player, 11, 1), arrowProp(arrowLocationData, 150, 100, 16, arrowPropCondition, MAP_SCALE),
+carProp(vehiclePath, 150, 100, 16, carPropCondition, MAP_SCALE),
 characterProp(characterPath, 150, 100, 16, characterPropCondition, MAP_SCALE),
 boatProp(animatedObjectLocation, 150, 100, 16, animatedObjectPropCondition, MAP_SCALE)
  {

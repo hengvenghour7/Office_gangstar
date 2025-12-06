@@ -29,5 +29,6 @@ void findPath (std::vector<std::vector<int>>* tileArray, Vector2 actorPos, Vecto
 std::vector<std::vector<int>> arrayTo2DArray (std::vector<int> arrayData, int mapWidth);
 CollisionProperty checkCollisionTile(std::vector<std::vector<int>>* tileArray, Rectangle characterCollision, Vector2 worldPos, float XOffset, float YOffset, int colorCode);
 CollisionProperty checkInteractionTile(std::vector<std::vector<int>>* tileArray, Rectangle characterCollision, Vector2 worldPos, float XOffset, float YOffset, int colorCode);
+Vector2 Vector2Round(Vector2 inputVector);
 
 #endif

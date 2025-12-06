@@ -6,7 +6,8 @@
 
 CollisionProperty checkIsCollide (Rectangle firstCollider, Rectangle secondCollider, Vector2 mapPos, float XOffset, float YOffset) {
     CollisionProperty collision1 {false, {}};
-    if (firstCollider.x + XOffset < secondCollider.x + secondCollider.width && firstCollider.x + firstCollider.width > secondCollider.x && firstCollider.y < secondCollider.y + secondCollider.height && firstCollider.y + firstCollider.height > secondCollider.y) {
+    if (firstCollider.x + XOffset < secondCollider.x + secondCollider.width && firstCollider.x + firstCollider.width > secondCollider.x && 
+        firstCollider.y < secondCollider.y + secondCollider.height && firstCollider.y + firstCollider.height > secondCollider.y) {
             collision1.isCollide = true;
             collision1.collider = secondCollider;
     };
@@ -108,4 +109,10 @@ CollisionProperty checkInteractionTile(std::vector<std::vector<int>>* tileArray,
             return collision1;
         }
     return collision1;
+};
+Vector2 Vector2Round(Vector2 inputVector) {
+    Vector2 newVector2 = inputVector;
+    newVector2.x = (int)(std::round(newVector2.x));
+    newVector2.y = (int)(std::round(newVector2.y));
+    return newVector2;
 };
