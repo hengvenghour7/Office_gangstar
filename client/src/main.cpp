@@ -15,23 +15,6 @@ int main () {
     if (!isMultiPlayer) {
         while (WindowShouldClose() == false){
             float deltaTime = GetFrameTime();
-            // BeginDrawing();
-            // ClearBackground(BLACK);
-            // Vector2 direction{0,0};
-            // if (IsKeyDown(KEY_A)) {
-            //     direction.x = -1;
-            // }
-            // if (IsKeyDown(KEY_D)) {
-            //     direction.x = 1;
-            // }
-            // if (IsKeyDown(KEY_S)) direction.y = 1;
-            // if (IsKeyDown(KEY_W)) direction.y = -1;
-            // direction = Vector2Normalize(direction)* deltaTime* 50;
-            // mapPos = Vector2Add(mapPos, direction);
-            // mapPos.x = (int)(std::round(mapPos.x));
-            // mapPos.y = (int)(std::round(mapPos.y));
-            // DrawTextureEx(mapTexture, mapPos, 0,MAP_SCALE,WHITE);
-            // EndDrawing();
             game.tick(deltaTime);
         }
     } else {

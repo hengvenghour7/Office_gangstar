@@ -1,3 +1,7 @@
+#ifndef DRAWING_H
+#define DRAWING_H
+#include <raylib.h>
+
 class Drawing {
     protected:
     float Y{};
@@ -6,5 +10,7 @@ class Drawing {
     Drawing();
     float getY();
     void setY(float Y);
-    virtual void draw();
+    virtual void draw(Vector2 des);
 };
+
+#endif

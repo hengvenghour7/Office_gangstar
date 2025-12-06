@@ -13,12 +13,12 @@ CollisionProperty checkIsCollide (Rectangle firstCollider, Rectangle secondColli
     };
     return collision1;
 }
-std::vector<std::vector<int>> arrayTo2DArray (std::vector<int> arrayData, int mapWidth) {
+std::vector<std::vector<int>> arrayTo2DArray (std::vector<int>* arrayData, int mapWidth) {
     std::vector<std::vector<int>> array2D {};
-    for (int j=0 ; j < (int)arrayData.size(); j+= mapWidth) {
+    for (int j=0 ; j < (int)arrayData->size(); j+= mapWidth) {
         std::vector<int> chunk{};
         for (int i = j; i< j + mapWidth; i++) {
-            chunk.push_back(arrayData[i]);
+            chunk.push_back((*arrayData)[i]);
         }
         array2D.push_back(chunk);
     }

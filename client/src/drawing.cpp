@@ -1,4 +1,5 @@
 #include "drawing.h"
+#include <raylib.h>
 
 Drawing::Drawing() : Y(0) {};
 
@@ -9,4 +10,4 @@ void Drawing::setY(float Y) {
     this->Y = Y;
 }
 
-void Drawing::draw() {};
+void Drawing::draw(Vector2 des) {};

@@ -2,6 +2,7 @@
 #include "character.h"
 #include "globalVar.h"
 #include "drawing.h"
+#include "map.h"
 
 class Game {
     private:
@@ -13,7 +14,8 @@ class Game {
         std::vector<Prop> mapProps{};
         std::vector<Drawing*> allDrawableObjects;
         Texture2D mapTexture = LoadTexture("resources/image/office_gang_map.png");
-
+        WorldDrawProperty worldDrawProperty;
+        WorldHandler worldHandler;
         std::vector<PropDrawCondition> arrowPropCondition{
         {79730, "resources/image/Modern_UI_Style_1.png", 8, 5, 10, 0, 240/15, 688/21}
         };
