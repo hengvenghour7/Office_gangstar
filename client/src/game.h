@@ -7,7 +7,6 @@
 class Game {
     private:
         MapBoundary mapBoundary1;
-        Player player;
         std::vector<AIPlayer> enemies{};
         AIPlayer NPC;
         std::vector<Prop> signProps{};
@@ -16,6 +15,7 @@ class Game {
         Texture2D mapTexture = LoadTexture("resources/image/office_gang_map.png");
         WorldDrawProperty worldDrawProperty;
         WorldHandler worldHandler;
+        Player player;
         std::vector<PropDrawCondition> arrowPropCondition{
         {79730, "resources/image/Modern_UI_Style_1.png", 8, 5, 10, 0, 240/15, 688/21}
         };

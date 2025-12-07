@@ -213,11 +213,10 @@ void Character::tick (float deltaTime) {
 HealthComponent Character::getHealthComponent () {
     return characterHealth;
 }
-Player::Player (const char * imageTexture, MapBoundary* inputBoundary, float speed): Character(imageTexture, speed) {
-            boundary = inputBoundary;
+Player::Player (const char * imageTexture, std::vector<std::vector<int>>* worldCollisionArray, float speed): Character(imageTexture, speed), worldCollisionArray(worldCollisionArray) {
             screenPos.x = SCREEN_WIDTH/2;
             screenPos.y = SCREEN_HEIGHT/2;
-            worldPos = {-100, 100};
+            worldPos = {200, 100};
             characterRecDes = {screenPos.x, screenPos.y, width*scale_factor, height*scale_factor};
             characterCollision = {screenPos.x, screenPos.y+12, width*scale_factor, (height-6)*scale_factor};
             characterHitBox = {screenPos.x + 30, screenPos.y, width*scale_factor, height*scale_factor};
@@ -264,10 +263,12 @@ void Player::tick (float deltaTime) {
                     }
                 }
                 if(Vector2Length(direction) != 0) {
-                        direction = Vector2Normalize(direction)*speed*deltaTime*50;
-                        direction.x = (int)(std::round(direction.x)); 
-                        direction.y = (int)(std::round(direction.y)); 
+                    direction = Vector2Normalize(direction)*speed*deltaTime*50;
+                    direction.x = (int)(std::round(direction.x)); 
+                    direction.y = (int)(std::round(direction.y));
+                    if (!checkPlayerCollisionTile(worldCollisionArray, characterCollision, worldPos, direction, 79732).isCollide) {
                         worldPos = Vector2Add(worldPos, direction);
+                        }
                     }
                 direction = {0,0};
             } 

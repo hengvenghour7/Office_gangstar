@@ -77,25 +77,36 @@ void findPath (std::vector<std::vector<int>>* tileArray, Vector2 actorPos, Vecto
         direction->y = 0;
     }
 };
-CollisionProperty checkCollisionTile(std::vector<std::vector<int>>* tileArray, Rectangle characterCollision, Vector2 worldPos, float XOffset, float YOffset, int colorCode) {
+CollisionProperty checkCollisionTile(std::vector<std::vector<int>>* tileArray, Rectangle characterCollision, Vector2 direction, int colorCode) {
     CollisionProperty collision {false, {}};
-    Vector2 charCollisionScreenPos{XOffset > 0 ?  characterCollision.x + characterCollision.width : characterCollision.x,YOffset > 0 ? characterCollision.y + characterCollision.height : characterCollision.y + 8};
+    Vector2 currentTile {(int)((characterCollision.x)/TILE_SIZE/MAP_SCALE), (int)((characterCollision.y)/TILE_SIZE/MAP_SCALE)};
+    Vector2 desTile {(int)((characterCollision.x + (direction.x > 0 ? characterCollision.width : 0) + direction.x)/TILE_SIZE/MAP_SCALE), 
+        (int)((characterCollision.y + (direction.y > 0 ? characterCollision.height : 0) + direction.y)/TILE_SIZE/MAP_SCALE)};
+
+    if (desTile.x < 0 || desTile.x >= (*tileArray)[0].size() || desTile.y < 0 || desTile.y >= (*tileArray).size()) {
+        collision.isCollide = true;
+    } else {
+        if ((*tileArray)[currentTile.y][desTile.x] == colorCode || (*tileArray)[desTile.y][currentTile.x] || (*tileArray)[currentTile.y][currentTile.x]) {
+            collision.isCollide = true;
+        }
+    }
+    return collision;
+}
+CollisionProperty checkPlayerCollisionTile(std::vector<std::vector<int>>* tileArray, Rectangle characterCollision, Vector2 worldPos, Vector2 direction, int colorCode) {
+
+    CollisionProperty collision {false, {}};
+    Vector2 charCollisionScreenPos{direction.x > 0 ?  characterCollision.x + characterCollision.width : characterCollision.x,direction.y > 0 ? characterCollision.y + characterCollision.height : characterCollision.y + 8};
     Vector2 playerWorldPos = Vector2Add(charCollisionScreenPos, worldPos);
     Vector2 currentTile {(int)((playerWorldPos.x)/TILE_SIZE/MAP_SCALE), (int)((playerWorldPos.y)/TILE_SIZE/MAP_SCALE)};
-    Vector2 frontTile {(int)((playerWorldPos.x + XOffset)/TILE_SIZE/MAP_SCALE), (int)((playerWorldPos.y + YOffset)/TILE_SIZE/MAP_SCALE)};
-    Vector2 topRightTile {currentTile.x + 1, currentTile.y -1};
-    Vector2 topLeftTile {currentTile.x - 1, currentTile.y -1};
-    Vector2 BottomLeftTile {currentTile.x -1 , currentTile.y + 1};
-    Vector2 BottomRightTile {currentTile.x + 1, currentTile.y + 1};
-
-    if ( (frontTile.y >= 0 && frontTile.y < tileArray->size() && (*tileArray)[frontTile.y][frontTile.x] == colorCode) ||
-        (topRightTile.y >= 0 && topRightTile.y < tileArray->size() && (*tileArray)[topRightTile.y][topRightTile.x])  ||
-        (topLeftTile.y >= 0 && topLeftTile.y < tileArray->size() && (*tileArray)[topLeftTile.y][topLeftTile.x])  ||
-        (BottomLeftTile.y >= 0 && BottomLeftTile.y < tileArray->size() && (*tileArray)[BottomLeftTile.y][BottomLeftTile.x])  ||
-        (BottomRightTile.y >= 0 && BottomRightTile.y < tileArray->size() && (*tileArray)[BottomRightTile.y][BottomRightTile.x])) {
+    Vector2 desTile {(int)((playerWorldPos.x + direction.x)/TILE_SIZE/MAP_SCALE), 
+        (int)((playerWorldPos.y + direction.y)/TILE_SIZE/MAP_SCALE)};
+    if (desTile.x < 0 || desTile.x >= (*tileArray)[0].size() || desTile.y < 0 || desTile.y >= (*tileArray).size()) {
+        collision.isCollide = true;
+    } else {
+        if ((*tileArray)[currentTile.y][desTile.x] == colorCode || (*tileArray)[desTile.y][currentTile.x] || (*tileArray)[currentTile.y][currentTile.x]) {
             collision.isCollide = true;
-            return collision;
         }
+    }
     return collision;
 }
 CollisionProperty checkInteractionTile(std::vector<std::vector<int>>* tileArray, Rectangle characterCollision, Vector2 worldPos, float XOffset, float YOffset, int colorCode) {

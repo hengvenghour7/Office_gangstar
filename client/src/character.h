@@ -74,9 +74,9 @@ class Player: public Character
 {
     private:
         Vector2 direction{0,0};
-        MapBoundary* boundary{};
+        std::vector<std::vector<int>>* worldCollisionArray;
     public:
-        Player (const char * imageTexture, MapBoundary* inputBoundary, float speed);
+        Player (const char * imageTexture, std::vector<std::vector<int>>* worldCollisionArray, float speed);
         virtual void tick(float deltaTime) override;
         void drawHealth(int x, int y);
         Vector2 getWorldPos ();

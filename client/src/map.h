@@ -23,6 +23,7 @@ class World : public Drawing {
     public:
     World(const char* inputTexture, WorldDrawProperty* drawProperty);
     void changeProperty(int width, int height, Vector2 des, std::vector<int>* collisionData);
+    std::vector<std::vector<int>>* getWorldCollisionArray ();
     virtual void draw(Vector2 des) override;
 };
 class WorldHandler {
@@ -31,6 +32,7 @@ class WorldHandler {
     World foreground;
     WorldHandler(const char* backgroundTexture, const char* foregroundTexture, WorldDrawProperty* drawProperty);
     void changeMap (const char* backgroundTexture, const char* foregroundTexture, int width, int height, Vector2 des, std::vector<int>* collisionData);
+    std::vector<std::vector<int>>* getWorldCollisionArray ();
 };
 
 #endif
