@@ -79,27 +79,16 @@ void findPath (std::vector<std::vector<int>>* tileArray, Vector2 actorPos, Vecto
 };
 CollisionProperty checkCollisionTile(std::vector<std::vector<int>>* tileArray, Rectangle characterCollision, Vector2 direction, int colorCode) {
     CollisionProperty collision {false, {}};
-    Vector2 currentTile {(int)((characterCollision.x)/TILE_SIZE/MAP_SCALE), (int)((characterCollision.y)/TILE_SIZE/MAP_SCALE)};
-    Vector2 desTile {(int)((characterCollision.x + (direction.x > 0 ? characterCollision.width : 0) + direction.x)/TILE_SIZE/MAP_SCALE), 
-        (int)((characterCollision.y + (direction.y > 0 ? characterCollision.height : 0) + direction.y)/TILE_SIZE/MAP_SCALE)};
-
-    if (desTile.x < 0 || desTile.x >= (*tileArray)[0].size() || desTile.y < 0 || desTile.y >= (*tileArray).size()) {
-        collision.isCollide = true;
-    } else {
-        if ((*tileArray)[currentTile.y][desTile.x] == colorCode || (*tileArray)[desTile.y][currentTile.x] || (*tileArray)[currentTile.y][currentTile.x]) {
-            collision.isCollide = true;
-        }
-    }
     return collision;
 }
 CollisionProperty checkPlayerCollisionTile(std::vector<std::vector<int>>* tileArray, Rectangle characterCollision, Vector2 worldPos, Vector2 direction, int colorCode) {
 
     CollisionProperty collision {false, {}};
-    Vector2 charCollisionScreenPos{direction.x > 0 ?  characterCollision.x + characterCollision.width : characterCollision.x,direction.y > 0 ? characterCollision.y + characterCollision.height : characterCollision.y + 8};
+    Vector2 charCollisionScreenPos{direction.x > 0 ?  characterCollision.x + characterCollision.width : characterCollision.x,direction.y > 0 ? characterCollision.y + characterCollision.height : characterCollision.y};
     Vector2 playerWorldPos = Vector2Add(charCollisionScreenPos, worldPos);
-    Vector2 currentTile {(int)((playerWorldPos.x)/TILE_SIZE/MAP_SCALE), (int)((playerWorldPos.y)/TILE_SIZE/MAP_SCALE)};
-    Vector2 desTile {(int)((playerWorldPos.x + direction.x)/TILE_SIZE/MAP_SCALE), 
-        (int)((playerWorldPos.y + direction.y)/TILE_SIZE/MAP_SCALE)};
+    Vector2 currentTile {(float)(int)((playerWorldPos.x)/TILE_SIZE/MAP_SCALE), (float)(int)((playerWorldPos.y)/TILE_SIZE/MAP_SCALE)};
+    Vector2 desTile {(float)(int)((playerWorldPos.x + direction.x)/TILE_SIZE/MAP_SCALE), 
+        (float)(int)((playerWorldPos.y + direction.y)/TILE_SIZE/MAP_SCALE)};
     if (desTile.x < 0 || desTile.x >= (*tileArray)[0].size() || desTile.y < 0 || desTile.y >= (*tileArray).size()) {
         collision.isCollide = true;
     } else {

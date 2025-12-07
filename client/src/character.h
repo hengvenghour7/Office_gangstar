@@ -7,6 +7,7 @@
 #include "globalVar.h"
 #include "mapCollision.h"
 #include "helpers.h"
+#include"drawing.h"
 
 using namespace std;
 
@@ -21,7 +22,7 @@ class HealthComponent {
         void heal(float healAmount);
         void drawHealth(float locationX, float locationY, float width, float height, Color inputColor);
 };
-class Character
+class Character : public Drawing
     {
     protected:
         float width;
@@ -55,10 +56,10 @@ class Character
         virtual void tick (float deltaTime);
         Character (const char * imageTexture, float speed);
         void updateAnimation (float deltaTime);
-        void drawImage ();
+        virtual void draw (Vector2 des) override;
         void updateCharacterProgess (float deltaTime) {
             updateAnimation(deltaTime);
-            drawImage();
+            draw({0,0});
         }
         void drawHealth ();
         void takeDamage (Character* secondCollider, Vector2 MapPos, float deltaTime);

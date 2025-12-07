@@ -14,7 +14,7 @@ carProp(vehiclePath, 150, 100, 16, carPropCondition, MAP_SCALE),
 characterProp(characterPath, 150, 100, 16, characterPropCondition, MAP_SCALE),
 boatProp(animatedObjectLocation, 150, 100, 16, animatedObjectPropCondition, MAP_SCALE),
 worldDrawProperty(150, 100, &collisionData),
-worldHandler("resources/image/office_gang_map.png", "", &worldDrawProperty),
+worldHandler("resources/image/office_gang_map.png", "resources/image/office_gang_map_3.png", &worldDrawProperty),
 player("resources/image/character/workingman2.png", worldHandler.getWorldCollisionArray(), 3)
 {
     // std::cout<<"sss"<< worldHandler.getWorldCollisionArray()->size();
@@ -29,15 +29,23 @@ player("resources/image/character/workingman2.png", worldHandler.getWorldCollisi
     for (int i = 0; i< 5; i++) {
         enemies.emplace_back("resources/image/character/workingman.png", &player, i, dis(gen)/4);
     }
+    worldHandler.foreground.setY(288);
     allDrawableObjects.push_back(&worldHandler.background);
+    allDrawableObjects.push_back(&worldHandler.foreground);
+    allDrawableObjects.push_back(&player);
 }
 void Game::tick (float deltaTime) {
     BeginDrawing();
     ClearBackground(BLACK);
     Vector2 mapPos = (Vector2Scale(player.getWorldPos(), -1.f));
-    // DrawTextureEx(mapTexture, mapPos, 0,MAP_SCALE,WHITE);
-    // worldHandler.background.draw(mapPos);
-    for (Drawing* obj : allDrawableObjects) {
+    std::vector<Drawing*> allDrawableObjects2 = allDrawableObjects;
+    for (Drawing &enemy : enemies) {
+        allDrawableObjects2.push_back(&enemy);
+    }
+    std::sort(allDrawableObjects2.begin(), allDrawableObjects2.end(), [](Drawing* a, Drawing* b) {
+        return a->getY() < b->getY();
+    });
+    for (Drawing* obj : allDrawableObjects2) {
         obj->draw(mapPos);
     }
     player.tick(deltaTime);
@@ -46,7 +54,7 @@ void Game::tick (float deltaTime) {
     for (AIPlayer &enemy : enemies) {
         enemy.takeDamage2(&player, mapPos, deltaTime);
         enemy.AITick(deltaTime, &enemies);
-        enemy.drawImage();
+        enemy.draw({0,0});
         enemy.drawHealth();
         player.takeDamage2(&enemy, mapPos, deltaTime );
     }

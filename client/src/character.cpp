@@ -169,7 +169,7 @@ void Character::setCharacterPos(Vector2 inputWorldPos, Vector2 playerPos) {
 void Character::drawHealth () {
     characterHealth.drawHealth(characterHealth.healthDes.x, characterHealth.healthDes.y, characterHealth.currentHealth, 10, GREEN);
 }
-void Character::drawImage () {
+void Character::draw (Vector2 des) {
             DrawTexturePro(characterTexture, characterRecSrc, characterRecDes, {0,0}, 0, WHITE);
         }
 Vector2* Character::getWorldPosPointer () {
@@ -202,7 +202,7 @@ void Character::updateDirectionState (Vector2 newDirection) {
 }
 void Character::tick (float deltaTime) {
             updateAnimation(deltaTime);
-            drawImage();
+            // draw({0,0});
         }
         Rectangle Character::getCharacterCollision ()  {
             return characterCollision;
@@ -268,6 +268,7 @@ void Player::tick (float deltaTime) {
                     direction.y = (int)(std::round(direction.y));
                     if (!checkPlayerCollisionTile(worldCollisionArray, characterCollision, worldPos, direction, 79732).isCollide) {
                         worldPos = Vector2Add(worldPos, direction);
+                        setY(worldPos.y + characterCollision.y + characterCollision.height);
                         }
                     }
                 direction = {0,0};
