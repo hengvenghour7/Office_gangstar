@@ -47,12 +47,14 @@ class Character : public Drawing
         float stunTimeCap;
         HealthComponent characterHealth;
         enum PlayerState playerState{Idle};
+        enum PlayerState playerState2{Idle};
         enum PlayerDirection directionState;
         enum PlayerDirection oldDirectionState;
         bool isNeedResetCols{false};
+        float damage;
     public:
         virtual void tick (float deltaTime);
-        Character (const char * imageTexture, float speed);
+        Character (const char * imageTexture, float speed, float damage);
         void updateAnimation (float deltaTime);
         virtual void draw (Vector2 des) override;
         void updateCharacterProgess (float deltaTime) {
@@ -60,7 +62,7 @@ class Character : public Drawing
         }
         void updateHitBox ();
         void drawHealth ();
-        void takeDamage (Character* secondCollider, Vector2 MapPos,float damage, float deltaTime);
+        void takeDamage (Character* secondCollider,float damage, float deltaTime);
         void setCharacterPos (Vector2 inputWorldPos, Vector2 playerPos);
         void updateDirectionState (Vector2 newDirection);
         void updatePlayerState (enum PlayerState state, bool specialUpdate = false);
@@ -68,8 +70,12 @@ class Character : public Drawing
         Rectangle getCharacterCollision();
         Rectangle getCharacterHitBox();
         void updateDirectionStateAI (Vector2 newDirection);
+        enum PlayerState getPlayerState2 ();
         enum PlayerState getPlayerState () {
             return playerState;
+        }
+        float getDamage () {
+            return damage;
         }
         HealthComponent getHealthComponent();
     };
@@ -79,7 +85,7 @@ class Player: public Character
         Vector2 direction{0,0};
         std::vector<std::vector<int>>* worldCollisionArray;
     public:
-        Player (const char * imageTexture, std::vector<std::vector<int>>* worldCollisionArray, float speed);
+        Player (const char * imageTexture, std::vector<std::vector<int>>* worldCollisionArray, float speed, float damage);
         virtual void tick(float deltaTime) override;
         void drawHealth(int x, int y);
         Vector2 getWorldPos ();
@@ -95,10 +101,10 @@ class AIPlayer : public Character {
         Rectangle collider{};
         // Vector2 currentDirection {0,0};
     public:
-        AIPlayer (const char * imageTexture, Player* inputTarget, int id, float speed);
+        AIPlayer (const char * imageTexture, Player* inputTarget, int id, float speed, float damage);
         void doDamage ();
         void AITick(float deltaTime, std::vector<AIPlayer>* allAIPlayer);
-    void appraochTarget (std::vector<AIPlayer>* allAIPlayer) ;
+    void appraochTarget (std::vector<AIPlayer>* allAIPlayer, float deltaTime) ;
     void drawHealth() ;
 };
 

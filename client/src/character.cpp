@@ -16,7 +16,7 @@ void HealthComponent::heal(float healAmount) {
 void HealthComponent::drawHealth(float locationX, float locationY, float width, float height, Color inputColor){
     DrawRectangle(locationX, locationY, width, height, inputColor);
 };
-Character::Character (const char * imageTexture, float speed) : characterHealth(300), speed(speed), takeDamageTimeCap(1.f), stunTimeCap(takeDamageTimeCap + 0.5f), directionState(Right) {
+Character::Character (const char * imageTexture, float speed, float damage) : characterHealth(300), speed(speed), takeDamageTimeCap(1.f), stunTimeCap(takeDamageTimeCap + 0.5f), directionState(Right), damage(damage) {
             width = 896/56;
             height = 640/20;
             maxCols = 6;
@@ -29,10 +29,9 @@ Character::Character (const char * imageTexture, float speed) : characterHealth(
             characterCollision = {screenPos.x, screenPos.y, width*scale_factor, height*scale_factor};
             characterHitBox = {screenPos.x + 20, screenPos.y, width*scale_factor, height*scale_factor};
         }
-void Character::takeDamage (Character* secondCollider, Vector2 MapPos, float damage, float deltaTime) {
-            const float TIME_CAP = 3.f;
-
-            if (checkIsCollide(getCharacterCollision(), secondCollider->getCharacterHitBox(), MapPos, 0, 0).isCollide && takeDamageTimeCap >= TIME_CAP) {
+void Character::takeDamage (Character* secondCollider, float damage, float deltaTime) {
+            const float TIME_CAP = 2.f;
+             if (checkIsCollide(getCharacterCollision(), secondCollider->getCharacterHitBox(), 0, 0).isCollide && secondCollider->getPlayerState2() == Attacking && takeDamageTimeCap >= TIME_CAP) {
                 characterHealth.takeDamage(damage);
                 takeDamageTimeCap = 0;
                 updatePlayerState(Hurt);
@@ -47,9 +46,9 @@ void Character::takeDamage (Character* secondCollider, Vector2 MapPos, float dam
 void Character::updatePlayerState (enum PlayerState state, bool specialUpdate) {
     if (!specialUpdate) {
         if (playerState == Hurt) {
-            playerState = Hurt;
             return;
         }
+        playerState2 = state;
         playerState = state;
         return;
     }
@@ -65,6 +64,9 @@ void Character::updateDirectionState (Vector2 newDirection) {
         if (newDirection.x == 0) directionState = Up;
     };
     
+}
+enum PlayerState Character::getPlayerState2 () {
+    return playerState2;
 }
 void Character::updateDirectionStateAI (Vector2 newDirection) {
     if (newDirection.x >= 0) {
@@ -263,9 +265,6 @@ void Character::updateAnimation (float deltaTime) {
             }
         }
 void Character::updateHitBox () {
-            // if (newDirection.x != 0 && (playerState == Right || playerState == Left)) {
-            // }
-            // Vector2 centerPos = {characterCollision.x + characterHitBox.width*0.5, characterCollision.y + characterHitBox.height*0.5};
             characterHitBox.x = characterCollision.x + (directionState == Right ? 20 : directionState == Left ? -20 : 0);
             characterHitBox.y = characterCollision.y + (directionState == Up ? -40 : directionState == Down ? 30 : 0);
             // DrawRectangle(characterHitBox.x, characterHitBox.y, characterHitBox.width, characterHitBox.height, RED);
@@ -299,7 +298,7 @@ Rectangle Character::getCharacterHitBox ()  {
 HealthComponent Character::getHealthComponent () {
     return characterHealth;
 }
-Player::Player (const char * imageTexture, std::vector<std::vector<int>>* worldCollisionArray, float speed): Character(imageTexture, speed), worldCollisionArray(worldCollisionArray) {
+Player::Player (const char * imageTexture, std::vector<std::vector<int>>* worldCollisionArray, float speed, float damage): Character(imageTexture, speed, damage), worldCollisionArray(worldCollisionArray) {
             screenPos.x = SCREEN_WIDTH/2;
             screenPos.y = SCREEN_HEIGHT/2;
             worldPos = {200, 100};
@@ -367,11 +366,11 @@ Vector2 Player::getWorldPos () {
 Vector2 Player::getScreenPos () {
             return screenPos;
         };
-AIPlayer::AIPlayer (const char * imageTexture, Player* inputPlayer, int id, float speed): Character(imageTexture, speed), id(id) {
+AIPlayer::AIPlayer (const char * imageTexture, Player* inputPlayer, int id, float speed, float damage): Character(imageTexture, speed, damage), id(id) {
     player = inputPlayer;
 }
 void AIPlayer::AITick(float deltaTime, std::vector<AIPlayer>* allAIPlayer) {
-    appraochTarget(allAIPlayer);
+    appraochTarget(allAIPlayer, deltaTime);
     Character::tick(deltaTime);
 }
 void AIPlayer::drawHealth() {
@@ -379,20 +378,20 @@ void AIPlayer::drawHealth() {
     characterHealth.drawHealth(characterHealth.healthDes.x, characterHealth.healthDes.y - 20, characterHealth.currentHealth/4, 10, RED);
 }
 void AIPlayer::doDamage() {
-    playerState = Attacking;
+    updatePlayerState(Attacking);
 }
-void AIPlayer::appraochTarget (std::vector<AIPlayer>* allAIPlayer) {
-    if (checkIsCollide(characterHitBox, player->getCharacterCollision(), {0,0}, 0, 0).isCollide) {
+void AIPlayer::appraochTarget (std::vector<AIPlayer>* allAIPlayer, float deltaTime) {
+    if (checkIsCollide(characterHitBox, player->getCharacterCollision(), 0, 0).isCollide) {
         doDamage();
-        updatePlayerState(Hurt);
-    } else {
-        updatePlayerState(Walking);
+        player->takeDamage(this, this->damage, deltaTime );
     }
+    takeDamage(player, player->getDamage(), deltaTime);
+    if (playerState != Hurt) {
         if (!isNeedToMoveBack) {
             direction = Vector2Normalize(Vector2Subtract(player->getScreenPos(), screenPos));
             for (AIPlayer &enemy : *allAIPlayer) {
                 if (enemy.id != id) {
-                    CollisionProperty collisionProperty = checkIsCollide(characterCollision, enemy.getCharacterCollision(), {0,0}, 0, 0);
+                    CollisionProperty collisionProperty = checkIsCollide(characterCollision, enemy.getCharacterCollision(), 0, 0);
                     if (collisionProperty.isCollide) {
                         if (characterCollision.x < collisionProperty.collider.x) direction.x = -1;
                         if (characterCollision.x >= collisionProperty.collider.x) direction.x = 1;
@@ -405,13 +404,14 @@ void AIPlayer::appraochTarget (std::vector<AIPlayer>* allAIPlayer) {
                 }
                 if (isNeedToMoveBack) break;
             }
-        } else {
-            if (std::abs(characterCollision.x - collider.x) > 50) {
-                isNeedToMoveBack = false;
+            } else {
+                if (std::abs(characterCollision.x - collider.x) > 50) {
+                    isNeedToMoveBack = false;
+                }
             }
-        }
-        
-        updateDirectionStateAI(direction);
-        worldPos = Vector2Add(worldPos,direction*speed);
+            updatePlayerState(Walking);
+            updateDirectionStateAI(direction);
+            worldPos = Vector2Add(worldPos,direction*speed);
+    }
     setCharacterPos(worldPos, player->getWorldPos());
     }

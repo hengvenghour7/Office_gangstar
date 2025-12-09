@@ -24,7 +24,7 @@ enum PlayerDirection {
     Left = 2,
     Up = 3    
 };
-CollisionProperty checkIsCollide (Rectangle firstCollider, Rectangle secondCollider, Vector2 mapPos, float XOffset, float YOffset);
+CollisionProperty checkIsCollide (Rectangle firstCollider, Rectangle secondCollider, float XOffset, float YOffset);
 void findPath (std::vector<std::vector<int>>* tileArray, Vector2 actorPos, Vector2* direction, int colorCode, int startTileColorCode);
 std::vector<std::vector<int>> arrayTo2DArray (std::vector<int>* arrayData, int mapWidth);
 CollisionProperty checkCollisionTile(std::vector<std::vector<int>>* tileArray, Rectangle characterCollision, Vector2 direction, int colorCode);

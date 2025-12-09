@@ -6,6 +6,7 @@
 
 class Game {
     private:
+        bool isGameOver;
         MapBoundary mapBoundary1;
         std::vector<AIPlayer> enemies{};
         AIPlayer NPC;
