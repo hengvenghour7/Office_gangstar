@@ -16,7 +16,7 @@ void HealthComponent::heal(float healAmount) {
 void HealthComponent::drawHealth(float locationX, float locationY, float width, float height, Color inputColor){
     DrawRectangle(locationX, locationY, width, height, inputColor);
 };
-Character::Character (const char * imageTexture, float speed) : characterHealth(300), speed(speed) {
+Character::Character (const char * imageTexture, float speed) : characterHealth(300), speed(speed), takeDamageTimeCap(1.f), stunTimeCap(takeDamageTimeCap + 0.5f), directionState(Right) {
             width = 896/56;
             height = 640/20;
             maxCols = 6;
@@ -29,124 +29,227 @@ Character::Character (const char * imageTexture, float speed) : characterHealth(
             characterCollision = {screenPos.x, screenPos.y, width*scale_factor, height*scale_factor};
             characterHitBox = {screenPos.x + 20, screenPos.y, width*scale_factor, height*scale_factor};
         }
-void Character::takeDamage (Character* secondCollider, Vector2 MapPos, float deltaTime) {
-            if (checkIsCollide(getCharacterCollision(), secondCollider->getCharacterCollision(), MapPos, 0, 0).isCollide && takeDamageTimeCap >= 1.5f) {
-                characterHealth.takeDamage(20);
+void Character::takeDamage (Character* secondCollider, Vector2 MapPos, float damage, float deltaTime) {
+            const float TIME_CAP = 3.f;
+
+            if (checkIsCollide(getCharacterCollision(), secondCollider->getCharacterHitBox(), MapPos, 0, 0).isCollide && takeDamageTimeCap >= TIME_CAP) {
+                characterHealth.takeDamage(damage);
                 takeDamageTimeCap = 0;
-                takeDamageAnimationTime = 0;
-                playerState = Hurt;
-                isTakeDamage = true;
+                updatePlayerState(Hurt);
+                isNeedResetCols = true;
                 return;
             }
             takeDamageTimeCap += deltaTime;
-            takeDamageAnimationTime += deltaTime;
-            if (takeDamageAnimationTime > 0.5) {
-                isTakeDamage = false;
-            }
-            if (isTakeDamage) rowIndex = 19;
-        }
-void Character::takeDamage2 (Character* secondCollider, Vector2 MapPos, float deltaTime) {
-            if (checkIsCollide(getCharacterHitBox(), secondCollider->getCharacterHitBox(), MapPos, 0, 0).isCollide && takeDamageTimeCap >= 1.5f && secondCollider->isAttacking) {
-                characterHealth.takeDamage(100);
-                takeDamageTimeCap = 0;
-                takeDamageAnimationTime = 0;
-                isTakeDamage = true;
-                return;
-            }
-            takeDamageTimeCap += deltaTime;
-            takeDamageAnimationTime += deltaTime;
-            if (takeDamageAnimationTime > 0.5) {
-                isTakeDamage = false;
-            }
-            if (isTakeDamage) {
-                rowIndex= 19;
-            } 
-            else {
-                rowIndex=2;
+            if (takeDamageTimeCap + 1.5 >= TIME_CAP) {
+                updatePlayerState(Idle, true);
             }
         }
+void Character::updatePlayerState (enum PlayerState state, bool specialUpdate) {
+    if (!specialUpdate) {
+        if (playerState == Hurt) {
+            playerState = Hurt;
+            return;
+        }
+        playerState = state;
+        return;
+    }
+    playerState = state;
+}
+void Character::updateDirectionState (Vector2 newDirection) {
+    if (newDirection.x > 0) directionState = Right;
+    if (newDirection.x < 0) directionState = Left;
+    if (newDirection.y > 0) {
+        if (newDirection.x == 0) directionState = Down;
+    };
+    if (newDirection.y < 0) {
+        if (newDirection.x == 0) directionState = Up;
+    };
+    
+}
+void Character::updateDirectionStateAI (Vector2 newDirection) {
+    if (newDirection.x >= 0) {
+        directionState = Right;
+    };
+    if (newDirection.x < 0) {
+        directionState = Left;
+    };
+    if (newDirection.y >= 0) {
+        if (newDirection.x < 0.2 && newDirection.x > -0.2) directionState = Down;
+    };
+    if (newDirection.y < 0) {
+        if (newDirection.x < 0.2 && newDirection.x > -0.2) directionState = Up;
+    };
+    if (newDirection.x == 0 && direction.y == 0) playerState = Idle;
+    if (directionState != oldDirectionState) {
+        isNeedResetCols = true;
+        oldDirectionState = directionState;
+    }
+}
 void Character::updateAnimation (float deltaTime) {
             updateAnimationTime += deltaTime;
-            if (playerState != Attacking) {
-                if (playerState != Idle) {
+            switch (playerState) {
+                case Attacking:
                     switch (directionState)
                     {
-                    case Right:
-                        rowIndex = 2;
-                        startCols = 0;
-                        maxCols = 6;
-                        break;
-                    case Left:
-                        rowIndex = 2;
-                        startCols = 12;
-                        maxCols = 18;
-                        break;
-                    case Up:
-                        rowIndex = 2;
-                        startCols = 6;
-                        maxCols = 12;
-                        break;
-                    case Down:
-                        rowIndex = 2;
-                        startCols = 18;
-                        maxCols = 24;
-                        break;
-                    default:
-                        break;
+                        case Right:
+                            rowIndex = 15;
+                            startCols = 0;
+                            maxCols = 6;
+                            break;
+                        case Left:
+                            rowIndex = 15;
+                            startCols = 12;
+                            maxCols = 18;
+                            break;
+                        case Up:
+                            rowIndex = 15;
+                            startCols = 6;
+                            maxCols = 12;
+                            break;
+                        case Down:
+                            rowIndex = 15;
+                            startCols = 18;
+                            maxCols = 24;
+                            break;
+                        default:
+                            break;
                     }
-                } else {
-                    switch (directionState)
-                    {
-                    case Right:
-                        rowIndex = 1;
-                        startCols = 0;
-                        maxCols = 6;
-                        break;
-                    case Left:
-                        rowIndex = 1;
-                        startCols = 12;
-                        maxCols = 18;
-                        break;
-                    case Up:
-                        rowIndex = 1;
-                        startCols = 6;
-                        maxCols = 12;
-                        break;
-                    case Down:
-                        rowIndex = 1;
-                        startCols = 18;
-                        maxCols = 24;
-                        break;
-                    default:
-                        break;
-                    }
-                }
-            } else {
+                    break;
+                case Hurt:
                 switch (directionState)
                     {
-                    case Right:
-                        rowIndex = 14;
-                        startCols = 0;
-                        maxCols = 5;
-                        break;
-                    case Left:
-                        rowIndex = 14;
-                        startCols = 12;
-                        maxCols = 18;
-                        break;
-                    case Up:
-                        rowIndex = 14;
-                        startCols = 6;
-                        maxCols = 12;
-                        break;
-                    case Down:
-                        rowIndex = 14;
-                        startCols = 18;
-                        maxCols = 24;
-                        break;
-                    default:
-                        break;
+                        case Right:
+                            rowIndex = 19;
+                            startCols = 0;
+                            maxCols = 2;
+                            break;
+                        case Left:
+                            rowIndex = 19;
+                            startCols = 6;
+                            maxCols = 8;
+                            break;
+                        case Up:
+                            rowIndex = 19;
+                            startCols = 3;
+                            maxCols = 5;
+                            break;
+                        case Down:
+                            rowIndex = 19;
+                            startCols = 9;
+                            maxCols = 11;
+                            break;
+                        default:
+                            break;
                     }
+                    break;
+                case Running:
+                    switch (directionState)
+                    {
+                        case Right:
+                            rowIndex = 8;
+                            startCols = 0;
+                            maxCols = 6;
+                            break;
+                        case Left:
+                            rowIndex = 8;
+                            startCols = 12;
+                            maxCols = 18;
+                            break;
+                        case Up:
+                            rowIndex = 8;
+                            startCols = 6;
+                            maxCols = 12;
+                            break;
+                        case Down:
+                            rowIndex = 8;
+                            startCols = 18;
+                            maxCols = 24;
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                case Idle: 
+                    switch (directionState)
+                    {
+                        case Right:
+                            rowIndex = 1;
+                            startCols = 0;
+                            maxCols = 5;
+                            break;
+                        case Left:
+                            rowIndex = 1;
+                            startCols = 12;
+                            maxCols = 17;
+                            break;
+                        case Up:
+                            rowIndex = 1;
+                            startCols = 6;
+                            maxCols = 11;
+                            break;
+                        case Down:
+                            rowIndex = 1;
+                            startCols = 18;
+                            maxCols = 23;
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                case Walking:
+                    switch (directionState)
+                    {
+                        case Right:
+                        rowIndex = 2;
+                        startCols = 0;
+                        maxCols = 6;
+                        break;
+                        case Left:
+                            rowIndex = 2;
+                            startCols = 12;
+                            maxCols = 18;
+                            break;
+                        case Up:
+                            rowIndex = 2;
+                            startCols = 6;
+                            maxCols = 12;
+                            break;
+                        case Down:
+                            rowIndex = 2;
+                            startCols = 18;
+                            maxCols = 24;
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                default:
+                    switch (directionState)
+                    {
+                        case Right:
+                            rowIndex = 2;
+                            startCols = 0;
+                            maxCols = 2;
+                            break;
+                        case Left:
+                            rowIndex = 2;
+                            startCols = 6;
+                            maxCols = 8;
+                            break;
+                        case Up:
+                            rowIndex = 2;
+                            startCols = 3;
+                            maxCols = 5;
+                            break;
+                        case Down:
+                            rowIndex = 2;
+                            startCols = 9;
+                            maxCols = 11;
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
             }
             if (isNeedResetCols) {
                 isNeedResetCols = false;
@@ -159,12 +262,20 @@ void Character::updateAnimation (float deltaTime) {
                 characterRecSrc = { colIndex*width, rowIndex*height, width, height};
             }
         }
+void Character::updateHitBox () {
+            // if (newDirection.x != 0 && (playerState == Right || playerState == Left)) {
+            // }
+            // Vector2 centerPos = {characterCollision.x + characterHitBox.width*0.5, characterCollision.y + characterHitBox.height*0.5};
+            characterHitBox.x = characterCollision.x + (directionState == Right ? 20 : directionState == Left ? -20 : 0);
+            characterHitBox.y = characterCollision.y + (directionState == Up ? -40 : directionState == Down ? 30 : 0);
+            // DrawRectangle(characterHitBox.x, characterHitBox.y, characterHitBox.width, characterHitBox.height, RED);
+        };
 void Character::setCharacterPos(Vector2 inputWorldPos, Vector2 playerPos) {
         worldPos = inputWorldPos;
         screenPos = Vector2Subtract(worldPos, playerPos);
         characterRecDes = {screenPos.x, screenPos.y, width*scale_factor, height*scale_factor};
         characterCollision = {characterRecDes.x, characterRecDes.y+12, width*scale_factor, (height-6)*scale_factor};
-        characterHitBox = {screenPos.x + 20, screenPos.y, width*scale_factor, height*scale_factor};
+        updateHitBox();
     }
 void Character::drawHealth () {
     characterHealth.drawHealth(characterHealth.healthDes.x, characterHealth.healthDes.y, characterHealth.currentHealth, 10, GREEN);
@@ -175,39 +286,14 @@ void Character::draw (Vector2 des) {
 Vector2* Character::getWorldPosPointer () {
     return &worldPos;
 }
-void Character::updateDirectionState (Vector2 newDirection) {
-    if (playerState != Hurt && playerState != Attacking) {
-        if (newDirection.x >= 0) {
-            playerState = Running;
-            directionState = Right;
-        };
-        if (newDirection.x < 0) {
-            playerState = Running;
-            directionState = Left;
-        };
-        if (newDirection.y >= 0) {
-            playerState = Running;
-            if (newDirection.x < 0.2 && newDirection.x > -0.2) directionState = Down;
-        };
-        if (newDirection.y < 0) {
-            playerState = Running;
-            if (newDirection.x < 0.2 && newDirection.x > -0.2) directionState = Up;
-        };
-        if (newDirection.x == 0 && direction.y == 0) playerState = Idle;
-        if (directionState != oldDirectionState) {
-            isNeedResetCols = true;
-            oldDirectionState = directionState;
-        }
-    }
-}
 void Character::tick (float deltaTime) {
             updateAnimation(deltaTime);
             // draw({0,0});
         }
-        Rectangle Character::getCharacterCollision ()  {
+Rectangle Character::getCharacterCollision ()  {
             return characterCollision;
         };
-        Rectangle Character::getCharacterHitBox ()  {
+Rectangle Character::getCharacterHitBox ()  {
             return characterHitBox;
         };
 HealthComponent Character::getHealthComponent () {
@@ -222,59 +308,56 @@ Player::Player (const char * imageTexture, std::vector<std::vector<int>>* worldC
             characterHitBox = {screenPos.x + 30, screenPos.y, width*scale_factor, height*scale_factor};
         }
 void Player::tick (float deltaTime) {
-            if (!isTakeDamage) {
-                if (direction.x == 0 && direction.y == 0) {
-                }
-                if (IsKeyPressed(KEY_K)) {
-                    playerState = Attacking;
-                    isAttacking = true;
-                }
-                if (IsKeyReleased(KEY_K)) {
-                    isAttacking = false;
-                    playerState = Idle;
-                }
-                if (playerState != Attacking) {
-                    if (IsKeyPressed(KEY_A) || IsKeyPressed(KEY_W) || IsKeyPressed(KEY_D) || IsKeyPressed(KEY_S) ||
-                        IsKeyReleased(KEY_A) || IsKeyReleased(KEY_W) || IsKeyReleased(KEY_D) || IsKeyReleased(KEY_S)) isNeedResetCols = true;
-                    if (IsKeyDown(KEY_A)) {
-                        directionState = Left;
-                        direction.x = -1;
-                    }
-                    if (IsKeyDown(KEY_D)) {
-                        directionState = Right;
-                        direction.x = 1;
-                    }
-                    if (IsKeyDown(KEY_W)) {
-                        if (direction.x == 0) directionState = Up;
-                        direction.y = -1;
-                    }
-                    if (IsKeyDown(KEY_S)) {
-                        if (direction.x == 0) directionState = Down;
-                        direction.y = 1;
-                    };
-                    if (direction.x != 0 || direction.y != 0) rowIndex = 2;
-                    isAttacking = false;
-                }
-                if (playerState != Attacking) {
-                    if (direction.x != 0 || direction.y != 0) {
-                        playerState = Walking;
-                    } else {
-                        playerState = Idle;
-                    }
-                }
-                if(Vector2Length(direction) != 0) {
-                    direction = Vector2Normalize(direction)*speed*deltaTime*50;
-                    direction.x = (int)(std::round(direction.x)); 
-                    direction.y = (int)(std::round(direction.y));
-                    if (!checkPlayerCollisionTile(worldCollisionArray, characterCollision, worldPos, direction, 79732).isCollide) {
-                        worldPos = Vector2Add(worldPos, direction);
-                        setY(worldPos.y + characterCollision.y + characterCollision.height);
-                        }
-                    }
-                direction = {0,0};
-            } 
-                Character::tick(deltaTime);
+    // DrawRectangle(characterHitBox.x, characterHitBox.y, characterHitBox.width, characterHitBox.height, GREEN);
+    if (playerState != Hurt) {
+        if (IsKeyDown(KEY_K)) {
+                updatePlayerState(Attacking);
             }
+        if (IsKeyReleased(KEY_K)) {
+            updatePlayerState(Idle);
+        }
+        if (playerState != Attacking) {
+            if (IsKeyPressed(KEY_A) || IsKeyPressed(KEY_W) || IsKeyPressed(KEY_D) || IsKeyPressed(KEY_S) ||
+                IsKeyReleased(KEY_A) || IsKeyReleased(KEY_W) || IsKeyReleased(KEY_D) || IsKeyReleased(KEY_S)) {
+                    isNeedResetCols = true;
+                };
+            if (IsKeyDown(KEY_A)) {
+                direction.x = -1;
+            }
+            if (IsKeyDown(KEY_D)) {
+                direction.x = 1;
+            }
+            if (IsKeyDown(KEY_W)) {
+                direction.y = -1;
+            }
+            if (IsKeyDown(KEY_S)) {
+                direction.y = 1;
+            };
+            if (direction.x != 0 || direction.y != 0) {
+                if (IsKeyDown(KEY_LEFT_SHIFT)) {
+                    updatePlayerState(Running);
+                } else {
+                    updatePlayerState(Walking);
+                }
+            } else {
+                updatePlayerState(Idle);
+            }
+            updateDirectionState(direction);
+            updateHitBox();
+        }
+        if(Vector2Length(direction) != 0) {
+            direction = Vector2Normalize(direction)*speed*deltaTime*50;
+            direction.x = (int)(std::round(direction.x)); 
+            direction.y = (int)(std::round(direction.y));
+            if (!checkPlayerCollisionTile(worldCollisionArray, characterCollision, worldPos, direction, 79732).isCollide) {
+                worldPos = Vector2Add(worldPos, direction);
+                setY(worldPos.y + characterCollision.y + characterCollision.height);
+                }
+            }
+        direction = {0,0};
+    } 
+        Character::tick(deltaTime);
+    }
 void Player::drawHealth(int x, int y) {
     characterHealth.drawHealth(x, y, characterHealth.currentHealth, 10, GREEN);
 }
@@ -297,38 +380,38 @@ void AIPlayer::drawHealth() {
 }
 void AIPlayer::doDamage() {
     playerState = Attacking;
-    isAttacking = true;
 }
 void AIPlayer::appraochTarget (std::vector<AIPlayer>* allAIPlayer) {
     if (checkIsCollide(characterHitBox, player->getCharacterCollision(), {0,0}, 0, 0).isCollide) {
         doDamage();
+        updatePlayerState(Hurt);
     } else {
-        playerState = Running;
-        isAttacking = false;
+        updatePlayerState(Walking);
     }
-    if (!isNeedToMoveBack) {
-        direction = Vector2Normalize(Vector2Subtract(player->getScreenPos(), screenPos));
-        updateDirectionState(direction);
-        for (AIPlayer &enemy : *allAIPlayer) {
-            if (enemy.id != id) {
-                CollisionProperty collisionProperty = checkIsCollide(characterCollision, enemy.getCharacterCollision(), {0,0}, 0, 0);
-                if (collisionProperty.isCollide) {
-                    if (characterCollision.x < collisionProperty.collider.x) direction.x = -1;
-                    if (characterCollision.x >= collisionProperty.collider.x) direction.x = 1;
-                    if (characterCollision.y < collisionProperty.collider.y) direction.y = -1;
-                    if (characterCollision.y >= collisionProperty.collider.y) direction.y = 1;
-                    direction = Vector2Normalize(direction);
-                    isNeedToMoveBack = true;
-                    this->collider = collisionProperty.collider;
+        if (!isNeedToMoveBack) {
+            direction = Vector2Normalize(Vector2Subtract(player->getScreenPos(), screenPos));
+            for (AIPlayer &enemy : *allAIPlayer) {
+                if (enemy.id != id) {
+                    CollisionProperty collisionProperty = checkIsCollide(characterCollision, enemy.getCharacterCollision(), {0,0}, 0, 0);
+                    if (collisionProperty.isCollide) {
+                        if (characterCollision.x < collisionProperty.collider.x) direction.x = -1;
+                        if (characterCollision.x >= collisionProperty.collider.x) direction.x = 1;
+                        if (characterCollision.y < collisionProperty.collider.y) direction.y = -1;
+                        if (characterCollision.y >= collisionProperty.collider.y) direction.y = 1;
+                        direction = Vector2Normalize(direction);
+                        isNeedToMoveBack = true;
+                        this->collider = collisionProperty.collider;
+                    }
                 }
+                if (isNeedToMoveBack) break;
             }
-            if (isNeedToMoveBack) break;
+        } else {
+            if (std::abs(characterCollision.x - collider.x) > 50) {
+                isNeedToMoveBack = false;
+            }
         }
-    } else {
-        if (std::abs(characterCollision.x - collider.x) > 50) {
-            isNeedToMoveBack = false;
-        }
-    }
-    if(!isTakeDamage) worldPos = Vector2Add(worldPos,direction*speed);
+        
+        updateDirectionStateAI(direction);
+        worldPos = Vector2Add(worldPos,direction*speed);
     setCharacterPos(worldPos, player->getWorldPos());
     }

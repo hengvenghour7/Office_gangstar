@@ -52,11 +52,14 @@ void Game::tick (float deltaTime) {
     player.drawHealth(0, 0);
     boatProp.drawAllProps(MAP_SCALE, mapPos, deltaTime);
     for (AIPlayer &enemy : enemies) {
-        enemy.takeDamage2(&player, mapPos, deltaTime);
+        enemy.takeDamage(&player, mapPos, 100, deltaTime);
         enemy.AITick(deltaTime, &enemies);
         enemy.draw({0,0});
         enemy.drawHealth();
-        player.takeDamage2(&enemy, mapPos, deltaTime );
+        player.takeDamage(&enemy, mapPos, 100, deltaTime );
+    }
+    if (enemies.size() == 0) {
+        player.updatePlayerState(Idle, true);
     }
     enemies.erase(
     std::remove_if(enemies.begin(), enemies.end(), [](AIPlayer &enemy) {

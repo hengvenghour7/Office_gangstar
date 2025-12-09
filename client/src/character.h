@@ -43,10 +43,8 @@ class Character : public Drawing
         Texture2D characterTexture;
         Rectangle characterCollision;
         Rectangle characterHitBox;
-        bool isTakeDamage{false};
-        bool isAttacking{false};
-        float takeDamageTimeCap{1.f};
-        float takeDamageAnimationTime{0.5f};
+        float takeDamageTimeCap;
+        float stunTimeCap;
         HealthComponent characterHealth;
         enum PlayerState playerState{Idle};
         enum PlayerDirection directionState;
@@ -59,16 +57,20 @@ class Character : public Drawing
         virtual void draw (Vector2 des) override;
         void updateCharacterProgess (float deltaTime) {
             updateAnimation(deltaTime);
-            draw({0,0});
         }
+        void updateHitBox ();
         void drawHealth ();
-        void takeDamage (Character* secondCollider, Vector2 MapPos, float deltaTime);
-        void takeDamage2 (Character* secondCollider, Vector2 MapPos, float deltaTime);
+        void takeDamage (Character* secondCollider, Vector2 MapPos,float damage, float deltaTime);
         void setCharacterPos (Vector2 inputWorldPos, Vector2 playerPos);
         void updateDirectionState (Vector2 newDirection);
+        void updatePlayerState (enum PlayerState state, bool specialUpdate = false);
         Vector2* getWorldPosPointer ();
         Rectangle getCharacterCollision();
         Rectangle getCharacterHitBox();
+        void updateDirectionStateAI (Vector2 newDirection);
+        enum PlayerState getPlayerState () {
+            return playerState;
+        }
         HealthComponent getHealthComponent();
     };
 class Player: public Character
