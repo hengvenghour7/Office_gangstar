@@ -5,6 +5,7 @@
 #include <iostream>
 #include <algorithm>
 #include "map.h"
+#include "globalVar.h"
 
 Game::Game(): 
 isGameOver(false),
@@ -30,7 +31,7 @@ player("resources/image/character/workingman2.png", worldHandler.getWorldCollisi
     for (int i = 0; i< 5; i++) {
         enemies.emplace_back("resources/image/character/workingman.png", &player, i, dis(gen)/4, dis(gen) + 20);
     }
-    worldHandler.foreground.setY(288);
+    worldHandler.foreground.setY(100*TILE_SIZE*MAP_SCALE);
     allDrawableObjects.push_back(&worldHandler.background);
     allDrawableObjects.push_back(&worldHandler.foreground);
     allDrawableObjects.push_back(&player);
