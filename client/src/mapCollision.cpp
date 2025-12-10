@@ -46,15 +46,15 @@ void MapBoundary::setCollisionData(std::vector<int>* mapCollisionData, int mapWi
     }
     std::cout<< "this width" << this->mapWidth << "height" << this->mapHeight;
 };
-MapProp::MapProp (std::vector<int> inputDataArray, int inputMapWidth, int inputMapHeight, int inputTileSize, std::vector<PropDrawCondition> PropDrawConditions, float scale) : MapBoundary (inputDataArray,inputMapWidth, inputMapHeight, inputTileSize, 99),
+MapProp::MapProp (std::vector<int> inputDataArray, int inputMapWidth, int inputMapHeight, int inputTileSize, std::vector<PropDrawCondition>* PropDrawConditions, float scale) : MapBoundary (inputDataArray,inputMapWidth, inputMapHeight, inputTileSize, 99),
 PropDrawConditions(PropDrawConditions), scale(scale)
  {
     const int MAP_TILE_SIZE(16);
     for (int y = 0; y < (int)dataArray.size(); y++) {
         for (int x = 0; x < mapWidth; x++) {
-            for (PropDrawCondition condition : this->PropDrawConditions) {
+            for (PropDrawCondition &condition : *PropDrawConditions) {
                 if (dataArray[y][x] == condition.collisionCode) {
-                    props.emplace_back(condition.imagePath, x*MAP_TILE_SIZE*this->scale, y*MAP_TILE_SIZE*this->scale, condition.width, condition.height, condition.startCol, condition.startRow, condition.maxCols, scale);
+                    props.emplace_back(&condition.imagePath, x*MAP_TILE_SIZE*this->scale, y*MAP_TILE_SIZE*this->scale, condition.width, condition.height, condition.startCol, condition.startRow, condition.maxCols, scale);
                 }
             }
         }
@@ -88,11 +88,10 @@ CollisionProperty MapProp::checkInteraction (Rectangle characterCollision, Vecto
         }
     return collision1;
 }
-Prop::Prop (const char* inputPropTexture, float inputX, float inputY, float inputPropWidth, float inputPropHeight, float inputCol, float inputRow, float inputMaxCol, float scale): scale(scale), isFirstAction(true) {
+Prop::Prop (Texture2D* inputPropTexture, float inputX, float inputY, float inputPropWidth, float inputPropHeight, float inputCol, float inputRow, float inputMaxCol, float scale): scale(scale), isFirstAction(true), propTexture(inputPropTexture) {
     startCol = inputCol;
     initialCol = inputCol;
     maxCol = inputMaxCol;
-    propTexture = LoadTexture(inputPropTexture);
     row = inputRow;
     x = inputX;
     y = inputY;
@@ -117,7 +116,7 @@ void Prop::drawProp (Vector2 mapPos, float deltaTime, bool isBackward, bool isPa
                 updatePropTime = 0;
         }
     }
-    DrawTexturePro(propTexture, {initialCol* propWidth,row* propHeight, propWidth, propHeight}, {x + mapPos.x,y + mapPos.y, propWidth*scale, propHeight*scale}, {0,0}, 0, WHITE);
+    DrawTexturePro(*propTexture, {initialCol* propWidth,row* propHeight, propWidth, propHeight}, {x + mapPos.x,y + mapPos.y, propWidth*scale, propHeight*scale}, {0,0}, 0, WHITE);
 }
 void Prop::setIsFirstAction(bool isFirstAction) {
     this->isFirstAction = isFirstAction;
@@ -134,7 +133,7 @@ void MapHandler::drawMap (Vector2 mapPos) {
 void MapHandler::changeMap (Map inputMap) {
     drawTexture = inputMap.mapTexture;
 }
-InteractableProp::InteractableProp (std::vector<int> inputDataArray, int inputMapWidth, int inputMapHeight, int inputTileSize, std::vector<PropDrawCondition> propCollisionConditions, float scale)
+InteractableProp::InteractableProp (std::vector<int> inputDataArray, int inputMapWidth, int inputMapHeight, int inputTileSize, std::vector<PropDrawCondition>* propCollisionConditions, float scale)
 : MapProp (inputDataArray, inputMapWidth, inputMapHeight, inputTileSize, propCollisionConditions, scale), isOn(false) {};
 void InteractableProp::toggleDraw(float scale, Vector2 mapPos, float deltaTime) {
     if (!isOn) {

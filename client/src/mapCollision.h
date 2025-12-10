@@ -9,7 +9,7 @@
 
 struct PropDrawCondition {
     int collisionCode;
-    const char* imagePath;
+    Texture2D imagePath;
     int startCol;
     int startRow;
     int maxCols;
@@ -35,7 +35,7 @@ class MapBoundary {
 class Prop {
     private:
     public:
-    Texture2D propTexture{};
+    Texture2D* propTexture;
     float x;
     float y;
     Vector2 direction{0,0};
@@ -48,17 +48,17 @@ class Prop {
     float updatePropTime{0};
     float scale;
     bool isFirstAction{};
-    Prop (const char* inputPropTexture, float inputX, float inputY, float inputPropWidth, float inputPropHeight, float inputCol, float inputRow, float inputMaxCol, float scale);
+    Prop (Texture2D* inputPropTexture, float inputX, float inputY, float inputPropWidth, float inputPropHeight, float inputCol, float inputRow, float inputMaxCol, float scale);
     void drawProp (Vector2 mapPos, float deltaTime, bool isBackward = false, bool isPauseAfterAnimated = false);
     void setIsFirstAction(bool isFirstACtion);
 };
 class MapProp: public MapBoundary {
     protected:
     std::vector<Prop> props{};
-    std::vector<PropDrawCondition> PropDrawConditions;
+    std::vector<PropDrawCondition>* PropDrawConditions;
     float scale;
     public:
-    MapProp (std::vector<int> inputDataArray, int inputMapWidth, int inputMapHeight, int inputTileSize, std::vector<PropDrawCondition> propCollisionConditions, float scale);
+    MapProp (std::vector<int> inputDataArray, int inputMapWidth, int inputMapHeight, int inputTileSize, std::vector<PropDrawCondition>* propCollisionConditions, float scale);
     virtual void drawAllProps (float scale, Vector2 mapPos, float deltaTime, bool isBackward = false , bool isPauseisPauseAfterAnimated = false);
     CollisionProperty checkInteraction (Rectangle characterCollision, Vector2 worldPos, float XOffset, float YOffset);
     void moveProps (float speedX, float speedY);
@@ -71,7 +71,7 @@ class InteractableProp: public MapProp {
     protected:
     bool isOn{};
     public:
-    InteractableProp (std::vector<int> inputDataArray, int inputMapWidth, int inputMapHeight, int inputTileSize, std::vector<PropDrawCondition> propCollisionConditions, float scale);
+    InteractableProp (std::vector<int> inputDataArray, int inputMapWidth, int inputMapHeight, int inputTileSize, std::vector<PropDrawCondition>* propCollisionConditions, float scale);
     void toggleDraw (float scale, Vector2 mapPos, float deltaTime);
     void toggleIsOn();
 };
