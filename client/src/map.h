@@ -37,6 +37,7 @@ class WorldSet {
     void changeMap (const char* backgroundTexture, const char* foregroundTexture, int width, int height, Vector2 des, std::vector<int>* collisionData);
     std::vector<std::vector<int>>* getWorldCollisionArray ();
     std::vector<Drawing*> getAllDrawableProps ();
+    void animateWorldProps (float deltaTime);
 };
 
 #endif

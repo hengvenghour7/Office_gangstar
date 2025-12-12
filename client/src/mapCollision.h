@@ -66,6 +66,7 @@ class MapProp: public Drawing {
     CollisionProperty checkInteraction (Rectangle characterCollision, Vector2 worldPos, float XOffset, float YOffset);
     void moveProps (float speedX, float speedY);
     void moveProps2 (float speedX, float speedY, int colorCode);
+    void updateAnimation(float deltaTime, bool isBackward = false, bool isPauseisPauseAfterAnimated = false);
 };
 struct Map {
     Texture2D mapTexture;

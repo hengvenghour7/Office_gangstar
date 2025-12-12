@@ -75,6 +75,11 @@ void MapProp::draw (Vector2 mapPos) {
         prop.draw(mapPos);
     }
 };
+void MapProp::updateAnimation(float deltaTime, bool isBackward, bool isPauseisPauseAfterAnimated) {
+    for (Prop &prop: props) {
+        prop.updateAnimation(deltaTime, isBackward, isPauseisPauseAfterAnimated);
+    }
+};
 CollisionProperty MapProp::checkInteraction (Rectangle characterCollision, Vector2 worldPos, float XOffset, float YOffset) {
     CollisionProperty collision1 {false, {}};
     Vector2 charCollisionScreenPos{XOffset > 0 ?  characterCollision.x + characterCollision.width : characterCollision.x,YOffset > 0 ? characterCollision.y + characterCollision.height : characterCollision.y + 8};

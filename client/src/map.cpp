@@ -38,3 +38,8 @@ std::vector<Drawing*> WorldSet::getAllDrawableProps () {
     }
     return allWorldProps;
 };
+void WorldSet::animateWorldProps(float deltaTime) {
+    for (MapProp* propSet : *worldProps) {
+        propSet->updateAnimation(deltaTime);
+    }
+}
