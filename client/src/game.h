@@ -15,7 +15,7 @@ class Game {
         std::vector<Drawing*> allDrawableObjects;
         Texture2D mapTexture = LoadTexture("resources/image/office_gang_map.png");
         WorldDrawProperty worldDrawProperty;
-        WorldHandler worldHandler;
+        WorldSet worldSet;
         Player player;
         std::vector<PropDrawCondition> arrowPropCondition{
         {79730, LoadTexture("resources/image/Modern_UI_Style_1.png") , 8, 5, 10, 0, 240/15, 688/21}
@@ -33,11 +33,10 @@ class Game {
         std::vector<PropDrawCondition> interactablePropCondition{
             {79737, LoadTexture("resources/image/Beach_Umbreall_Open.png"), 0, 0, 7, 0, 384/8, 304/4.5}
         };
-        MapProp arrowProp;
         MapProp boatProp;
-        MapProp characterProp;
-        MapProp carProp;
-
+        std::vector<MapProp*> worldProps = {
+            &boatProp
+        };
     public:
         Game();
         void tick(float deltaTime);

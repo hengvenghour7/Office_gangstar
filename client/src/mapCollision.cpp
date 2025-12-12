@@ -46,14 +46,13 @@ void MapBoundary::setCollisionData(std::vector<int>* mapCollisionData, int mapWi
     }
     std::cout<< "this width" << this->mapWidth << "height" << this->mapHeight;
 };
-MapProp::MapProp (std::vector<int> inputDataArray, int inputMapWidth, int inputMapHeight, int inputTileSize, std::vector<PropDrawCondition>* PropDrawConditions, float scale) : MapBoundary (inputDataArray,inputMapWidth, inputMapHeight, inputTileSize, 99),
-PropDrawConditions(PropDrawConditions), scale(scale)
+MapProp::MapProp (std::vector<int>* inputDataArray, int inputMapWidth, int inputMapHeight, int inputTileSize, std::vector<PropDrawCondition>* propCollisionConditions, float scale) : locationArray(arrayTo2DArray(inputDataArray, inputMapWidth)), PropDrawConditions(propCollisionConditions), scale(scale)
  {
     const int MAP_TILE_SIZE(16);
-    for (int y = 0; y < (int)dataArray.size(); y++) {
-        for (int x = 0; x < mapWidth; x++) {
+    for (int y = 0; y < (int)locationArray.size(); y++) {
+        for (int x = 0; x < inputMapWidth; x++) {
             for (PropDrawCondition &condition : *PropDrawConditions) {
-                if (dataArray[y][x] == condition.collisionCode) {
+                if (locationArray[y][x] == condition.collisionCode) {
                     props.emplace_back(&condition.imagePath, x*MAP_TILE_SIZE*this->scale, y*MAP_TILE_SIZE*this->scale, condition.width, condition.height, condition.startCol, condition.startRow, condition.maxCols, scale);
                 }
             }
@@ -71,9 +70,9 @@ void MapProp::moveProps2 (float speedX, float speedY, int colorCode) {
         prop.y += prop.direction.y;
     }
 }
-void MapProp::drawAllProps (float scale, Vector2 mapPos, float deltaTime, bool isBackward, bool isPauseisPauseAfterAnimated) {
+void MapProp::draw (Vector2 mapPos) {
     for (Prop &prop: props) {
-        prop.drawProp(mapPos, deltaTime, isBackward, isPauseisPauseAfterAnimated);
+        prop.draw(mapPos);
     }
 };
 CollisionProperty MapProp::checkInteraction (Rectangle characterCollision, Vector2 worldPos, float XOffset, float YOffset) {
@@ -82,7 +81,7 @@ CollisionProperty MapProp::checkInteraction (Rectangle characterCollision, Vecto
     Vector2 playerWorldPos = Vector2Add(charCollisionScreenPos, worldPos);
     int tileX = (int)(playerWorldPos.x + XOffset)/16/1.5; // x*16*1.5 + mapPos.x -- -mapPos.x/16/1.5
     int tileY = (int)(playerWorldPos.y + YOffset)/16/1.5;
-    if (dataArray[tileY][tileX] == 79742) {
+    if (locationArray[tileY][tileX] == 79742) {
             collision1.isCollide = true;
             return collision1;
         }
@@ -98,7 +97,10 @@ Prop::Prop (Texture2D* inputPropTexture, float inputX, float inputY, float input
     propWidth = inputPropWidth;
     propHeight = inputPropHeight;
 };
-void Prop::drawProp (Vector2 mapPos, float deltaTime, bool isBackward, bool isPauseisPauseAfterAnimated) {
+void Prop::draw (Vector2 mapPos) {
+    DrawTexturePro(*propTexture, {initialCol* propWidth,row* propHeight, propWidth, propHeight}, {x + mapPos.x,y + mapPos.y, propWidth*scale, propHeight*scale}, {0,0}, 0, WHITE);
+}
+void Prop::updateAnimation(float deltaTime, bool isBackward, bool isPauseisPauseAfterAnimated) {
     updatePropTime += deltaTime;
     if (updatePropTime > 0.2) {
         if (isBackward) {
@@ -116,7 +118,6 @@ void Prop::drawProp (Vector2 mapPos, float deltaTime, bool isBackward, bool isPa
                 updatePropTime = 0;
         }
     }
-    DrawTexturePro(*propTexture, {initialCol* propWidth,row* propHeight, propWidth, propHeight}, {x + mapPos.x,y + mapPos.y, propWidth*scale, propHeight*scale}, {0,0}, 0, WHITE);
 }
 void Prop::setIsFirstAction(bool isFirstAction) {
     this->isFirstAction = isFirstAction;
@@ -133,14 +134,14 @@ void MapHandler::drawMap (Vector2 mapPos) {
 void MapHandler::changeMap (Map inputMap) {
     drawTexture = inputMap.mapTexture;
 }
-InteractableProp::InteractableProp (std::vector<int> inputDataArray, int inputMapWidth, int inputMapHeight, int inputTileSize, std::vector<PropDrawCondition>* propCollisionConditions, float scale)
+InteractableProp::InteractableProp (std::vector<int>* inputDataArray, int inputMapWidth, int inputMapHeight, int inputTileSize, std::vector<PropDrawCondition>* propCollisionConditions, float scale)
 : MapProp (inputDataArray, inputMapWidth, inputMapHeight, inputTileSize, propCollisionConditions, scale), isOn(false) {};
 void InteractableProp::toggleDraw(float scale, Vector2 mapPos, float deltaTime) {
-    if (!isOn) {
-        drawAllProps(scale, mapPos, deltaTime, true, true);
-    } else {
-        drawAllProps(scale, mapPos, deltaTime, true, false);
-    }
+    // if (!isOn) {
+    //     drawAllProps(scale, mapPos, deltaTime, true, true);
+    // } else {
+    //     drawAllProps(scale, mapPos, deltaTime, true, false);
+    // }
 }
 void InteractableProp::toggleIsOn() {
     isOn = !isOn;

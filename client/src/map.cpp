@@ -7,11 +7,11 @@ WorldDrawProperty::WorldDrawProperty (int width, int height, std::vector<int>* c
 void WorldDrawProperty::changeProperty(int width, int height, Vector2 des, std::vector<int>* collisionData) {
     
 };
-WorldHandler::WorldHandler (const char* backgroundTexture, const char* foregroundTexture, WorldDrawProperty* drawProperty): 
-    background(backgroundTexture, drawProperty), foreground(foregroundTexture, drawProperty) {
+WorldSet::WorldSet(const char* backgroundTexture, const char* foregroundTexture, int mapWidth, int mapHeight, std::vector<int>* collisionData, std::vector<MapProp*>* worldProps): 
+    drawProperty(mapWidth, mapHeight, collisionData), background(backgroundTexture, &drawProperty), foreground(foregroundTexture, &drawProperty), worldProps(worldProps)  {
 
 }
-void WorldHandler::changeMap (const char* backgroundTexture, const char* foregroundTexture, int width, int height,
+void WorldSet::changeMap (const char* backgroundTexture, const char* foregroundTexture, int width, int height,
     Vector2 des, std::vector<int>* collisionData) {
         background.changeProperty( width, height, des, collisionData);
 }
@@ -22,7 +22,7 @@ World::World(const char* inputTexture, WorldDrawProperty* drawProperty): worldTe
 void World::changeProperty (int width, int height, Vector2 des, std::vector<int>* collisionData) {
     drawProperty->changeProperty(width, height, des, collisionData);
 }
-std::vector<std::vector<int>>* WorldHandler::getWorldCollisionArray () {
+std::vector<std::vector<int>>* WorldSet::getWorldCollisionArray () {
     return background.getWorldCollisionArray();
 }
 std::vector<std::vector<int>>* World::getWorldCollisionArray() {
@@ -31,3 +31,10 @@ std::vector<std::vector<int>>* World::getWorldCollisionArray() {
 void World::draw(Vector2 des) {
     DrawTextureEx(worldTexture, des, 0,MAP_SCALE,WHITE);
 }
+std::vector<Drawing*> WorldSet::getAllDrawableProps () {
+    std::vector<Drawing*> allWorldProps{};
+    for (Drawing* propSet : *worldProps) {
+        allWorldProps.push_back(propSet);
+    }
+    return allWorldProps;
+};

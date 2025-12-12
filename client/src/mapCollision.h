@@ -6,6 +6,7 @@
 #include <raylib.h>
 #include "helpers.h"
 #include <raymath.h>
+#include "drawing.h"
 
 struct PropDrawCondition {
     int collisionCode;
@@ -49,17 +50,19 @@ class Prop {
     float scale;
     bool isFirstAction{};
     Prop (Texture2D* inputPropTexture, float inputX, float inputY, float inputPropWidth, float inputPropHeight, float inputCol, float inputRow, float inputMaxCol, float scale);
-    void drawProp (Vector2 mapPos, float deltaTime, bool isBackward = false, bool isPauseAfterAnimated = false);
+    void draw (Vector2 mapPos);
     void setIsFirstAction(bool isFirstACtion);
+    void updateAnimation(float deltaTime, bool isBackward, bool isPauseisPauseAfterAnimated);
 };
-class MapProp: public MapBoundary {
+class MapProp: public Drawing {
     protected:
+    std::vector<std::vector<int>> locationArray;
     std::vector<Prop> props{};
     std::vector<PropDrawCondition>* PropDrawConditions;
     float scale;
     public:
-    MapProp (std::vector<int> inputDataArray, int inputMapWidth, int inputMapHeight, int inputTileSize, std::vector<PropDrawCondition>* propCollisionConditions, float scale);
-    virtual void drawAllProps (float scale, Vector2 mapPos, float deltaTime, bool isBackward = false , bool isPauseisPauseAfterAnimated = false);
+    MapProp (std::vector<int>* inputDataArray, int inputMapWidth, int inputMapHeight, int inputTileSize, std::vector<PropDrawCondition>* propCollisionConditions, float scale);
+    virtual void draw (Vector2 mapPos) override;
     CollisionProperty checkInteraction (Rectangle characterCollision, Vector2 worldPos, float XOffset, float YOffset);
     void moveProps (float speedX, float speedY);
     void moveProps2 (float speedX, float speedY, int colorCode);
@@ -71,7 +74,7 @@ class InteractableProp: public MapProp {
     protected:
     bool isOn{};
     public:
-    InteractableProp (std::vector<int> inputDataArray, int inputMapWidth, int inputMapHeight, int inputTileSize, std::vector<PropDrawCondition>* propCollisionConditions, float scale);
+    InteractableProp (std::vector<int>* inputDataArray, int inputMapWidth, int inputMapHeight, int inputTileSize, std::vector<PropDrawCondition>* propCollisionConditions, float scale);
     void toggleDraw (float scale, Vector2 mapPos, float deltaTime);
     void toggleIsOn();
 };

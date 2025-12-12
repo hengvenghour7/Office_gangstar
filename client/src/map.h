@@ -4,6 +4,7 @@
 #include <raylib.h>
 #include <vector>
 #include "drawing.h"
+#include "mapCollision.h"
 
 struct WorldProp {
 
@@ -26,13 +27,16 @@ class World : public Drawing {
     std::vector<std::vector<int>>* getWorldCollisionArray ();
     virtual void draw(Vector2 des) override;
 };
-class WorldHandler {
+class WorldSet {
     public:
+    WorldDrawProperty drawProperty;
     World background;
     World foreground;
-    WorldHandler(const char* backgroundTexture, const char* foregroundTexture, WorldDrawProperty* drawProperty);
+    std::vector<MapProp*>* worldProps;
+    WorldSet(const char* backgroundTexture, const char* foregroundTexture, int mapWidth, int mapHeight, std::vector<int>* collisionData, std::vector<MapProp*>* worldProps);
     void changeMap (const char* backgroundTexture, const char* foregroundTexture, int width, int height, Vector2 des, std::vector<int>* collisionData);
     std::vector<std::vector<int>>* getWorldCollisionArray ();
+    std::vector<Drawing*> getAllDrawableProps ();
 };
 
 #endif
