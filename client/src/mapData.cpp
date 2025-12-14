@@ -42,3 +42,31 @@ WorldSet& getCenterWorld() {
 
     return centerWorld;
 }
+WorldSet& getMarketInterior() {
+
+    static std::vector<MapProp*> marketInteriorProps = {
+    };
+
+    static WorldSet centerWorld(
+        "resources/image/supermarket_map.png",
+        "",
+        50,
+        20,
+        &supermarketBoundary,
+        &marketInteriorProps
+    );
+
+    return centerWorld;
+}
+WorldSet& getWorld(WorldEnums world) {
+    switch (world)
+    {
+    case CenterWorld:
+        return getCenterWorld();
+    case InteriorSuperMarket: 
+        return getMarketInterior();
+    default:
+        return getCenterWorld();
+        break;
+    }
+}

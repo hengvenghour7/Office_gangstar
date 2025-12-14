@@ -306,6 +306,9 @@ Player::Player (const char * imageTexture, std::vector<std::vector<int>>* worldC
             characterCollision = {screenPos.x, screenPos.y+12, width*scale_factor, (height-6)*scale_factor};
             characterHitBox = {screenPos.x + 30, screenPos.y, width*scale_factor, height*scale_factor};
         }
+void Player::setPlayerWorldPos(Vector2 worldPos) {
+    this->worldPos = worldPos;
+}
 void Player::tick (float deltaTime) {
     // DrawRectangle(characterHitBox.x, characterHitBox.y, characterHitBox.width, characterHitBox.height, GREEN);
     if (playerState != Hurt) {
@@ -348,7 +351,7 @@ void Player::tick (float deltaTime) {
             direction = Vector2Normalize(direction)*speed*deltaTime*50;
             direction.x = (int)(std::round(direction.x)); 
             direction.y = (int)(std::round(direction.y));
-            if (!checkPlayerCollisionTile(worldCollisionArray, characterCollision, worldPos, direction, 79732).isCollide) {
+            if (!checkPlayerCollisionTile(worldCollisionArray, characterCollision, worldPos, direction, collisionCode).isCollide) {
                 worldPos = Vector2Add(worldPos, direction);
                 setY(worldPos.y + characterCollision.y + characterCollision.height);
                 }
@@ -366,6 +369,10 @@ Vector2 Player::getWorldPos () {
 Vector2 Player::getScreenPos () {
             return screenPos;
         };
+void Player::changeCollisionCheck (std::vector<std::vector<int>>* newWorldCollisionArray, int newCollisionCode) {
+    worldCollisionArray = newWorldCollisionArray;
+    collisionCode = newCollisionCode;
+}
 AIPlayer::AIPlayer (const char * imageTexture, Player* inputPlayer, int id, float speed, float damage): Character(imageTexture, speed, damage), id(id) {
     player = inputPlayer;
 }

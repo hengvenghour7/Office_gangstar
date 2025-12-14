@@ -13,7 +13,8 @@
 
                 // Raylib
                 "C:/raylib/raylib/src",
-                "C:/raylib/raylib/src/external"
+                "C:/raylib/raylib/src/external",
+                "${workspaceFolder}/client/src/include"
             ],
             "defines": [],
             "compilerPath": "C:/msys64/mingw64/bin/g++.exe",

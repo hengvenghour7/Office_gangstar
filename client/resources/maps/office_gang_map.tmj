@@ -3240,9 +3240,86 @@
          "width":150,
          "x":0,
          "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":33,
+         "name":"entry point",
+         "objects":[
+                {
+                 "height":16,
+                 "id":1,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"spawn point",
+                         "type":"int",
+                         "value":0
+                        }, 
+                        {
+                         "name":"switchToMap",
+                         "type":"string",
+                         "value":"office_interior"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":47.3333333333333,
+                 "y":367.333333333333
+                }, 
+                {
+                 "height":16,
+                 "id":3,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"spawn point",
+                         "type":"int",
+                         "value":0
+                        }, 
+                        {
+                         "name":"switchToMap",
+                         "type":"string",
+                         "value":"office_interior"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":142.666666666667,
+                 "y":367.333333333333
+                }, 
+                {
+                 "height":16,
+                 "id":4,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"spawn point",
+                         "type":"int",
+                         "value":0
+                        }, 
+                        {
+                         "name":"switchToMap",
+                         "type":"string",
+                         "value":"supermarket_map"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":1439.33333333333,
+                 "y":703.333333333333
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
         }],
- "nextlayerid":32,
- "nextobjectid":1,
+ "nextlayerid":34,
+ "nextobjectid":5,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.2",
@@ -3250,11 +3327,11 @@
  "tilesets":[
         {
          "firstgid":1,
-         "source":"..\/..\/..\/..\/Game Builder\/Tileset\/Modern_Exteriors_Complete_Tileset.tsx"
+         "source":"..\/..\/..\/..\/..\/Game Builder\/Tileset\/Modern_Exteriors_Complete_Tileset.tsx"
         }, 
         {
          "firstgid":79729,
-         "source":"..\/..\/..\/..\/Game Builder\/Tileset\/collision tile.tsx"
+         "source":"..\/..\/..\/..\/..\/Game Builder\/Tileset\/collision tile.tsx"
         }],
  "tilewidth":16,
  "type":"map",

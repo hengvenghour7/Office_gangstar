@@ -1,0 +1,24 @@
+{ "columns":3,
+ "image":"..\/..\/..\/..\/..\/..\/..\/Rendering resource\/Game assets\/collision tile 2.png",
+ "imageheight":48,
+ "imagewidth":48,
+ "margin":0,
+ "name":"collision tile 2",
+ "spacing":0,
+ "tilecount":9,
+ "tiledversion":"1.11.2",
+ "tileheight":16,
+ "tiles":[
+        {
+         "id":0,
+         "properties":[
+                {
+                 "name":"door",
+                 "type":"string",
+                 "value":"green"
+                }]
+        }],
+ "tilewidth":16,
+ "type":"tileset",
+ "version":"1.10"
+}

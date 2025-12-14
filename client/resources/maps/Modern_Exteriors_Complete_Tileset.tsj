@@ -1,0 +1,14 @@
+{ "columns":176,
+ "image":"..\/..\/..\/..\/..\/..\/..\/Rendering resource\/Game assets\/modernexteriors-win\/Modern_Exteriors_16x16\/Modern_Exteriors_Complete_Tileset.png",
+ "imageheight":7248,
+ "imagewidth":2816,
+ "margin":0,
+ "name":"Modern_Exteriors_Complete_Tileset",
+ "spacing":0,
+ "tilecount":79728,
+ "tiledversion":"1.11.2",
+ "tileheight":16,
+ "tilewidth":16,
+ "type":"tileset",
+ "version":"1.10"
+}

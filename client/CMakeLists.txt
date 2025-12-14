@@ -35,6 +35,7 @@ add_executable(main ${SOURCES})
 target_include_directories(main PRIVATE
     ${Boost_INCLUDE_DIRS}
     ${RAYLIB_INCLUDE_DIR}
+    ${CMAKE_SOURCE_DIR}/src/include
 )
 
 # --- Link libraries ---

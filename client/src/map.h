@@ -5,9 +5,31 @@
 #include <vector>
 #include "drawing.h"
 #include "mapCollision.h"
+#include "worldEnums.h"
+#include "character.h"
 
 struct WorldProp {
 
+};
+class MapSwitcherProp {
+    Vector2 location;
+    Vector2 screenPos;
+    std::string switchToMap{};
+    int spawnIndex{};
+    public:
+        MapSwitcherProp(Vector2 location, std::string switchToMap, int spawnIndex);
+        WorldEnums getSwitchDestination();
+        Rectangle getCollision ();
+        void drawSwitch();
+        void setScreenPos(Vector2 mapPos);
+};
+class WorldSwitchers {
+    std::vector<MapSwitcherProp> switchers;
+    public:
+        WorldSwitchers();
+        void drawAllSwitchers();
+        void setSwitchersPos(Vector2 mapPos);
+        std::vector<MapSwitcherProp>* getSwitchers();
 };
 struct WorldDrawProperty {
     int width;

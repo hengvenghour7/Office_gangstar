@@ -1,8 +1,12 @@
 #include "map.h"
 #include "globalVar.h"
 #include "helpers.h"
+#include <fstream>
+#include <nlohmann/json.hpp>
 
-WorldDrawProperty::WorldDrawProperty (int width, int height, std::vector<int>* collisionData) : collisionArray(arrayTo2DArray(collisionData, 150)) {
+using json = nlohmann::json;
+
+WorldDrawProperty::WorldDrawProperty (int width, int height, std::vector<int>* collisionData) : collisionArray(arrayTo2DArray(collisionData, width)) {
 };
 void WorldDrawProperty::changeProperty(int width, int height, Vector2 des, std::vector<int>* collisionData) {
     
@@ -43,3 +47,65 @@ void WorldSet::animateWorldProps(float deltaTime) {
         propSet->updateAnimation(deltaTime);
     }
 }
+MapSwitcherProp::MapSwitcherProp (Vector2 location, std::string switchToMap, int spawnIndex) : location(location), screenPos(location), switchToMap(switchToMap),
+spawnIndex(spawnIndex) {
+    
+};
+void MapSwitcherProp::setScreenPos (Vector2 mapPos) {
+    screenPos = Vector2Add(location, mapPos);
+}
+WorldSwitchers::WorldSwitchers () {
+    std::fstream file ("resources/maps/office_gang_map.tmj");
+    if (!file.is_open()) {
+        std::cout<<"error, can't open file";
+    } else {
+        json j;
+        file >> j;
+        auto layers = j["layers"];
+        auto spawnPointLayer = std::find_if(layers.begin(), layers.end(), [](const json& layer) {
+                return layer["name"].get<std::string>() == "entry point";
+            });
+        if (spawnPointLayer != layers.end()) {
+            for (auto &obj : (*spawnPointLayer)["objects"]) {
+                int inputSpawnPoint{};
+                std::string inputSwitchToMap{};
+                Vector2 inputLocation = {std::round(obj["x"].get<float>()*MAP_SCALE), std::round(obj["y"].get<float>()*MAP_SCALE)};
+                if (obj.contains("properties")) {
+                    for (auto &property : obj["properties"]) {
+                        if (property["name"].get<std::string>() == "spawn point") {
+                            inputSpawnPoint = property["value"].get<int>();
+                        }
+                        if (property["name"] == "switchToMap") {
+                            inputSwitchToMap = property["value"].get<std::string>();
+                        }
+                    }
+                }
+                switchers.emplace_back(inputLocation, inputSwitchToMap, inputSpawnPoint);
+            }
+        }
+    }
+}
+std::vector<MapSwitcherProp>* WorldSwitchers::getSwitchers () {
+    return &switchers;
+}
+void WorldSwitchers::drawAllSwitchers () {
+    for (auto &prop : switchers) {
+        Rectangle propRect = prop.getCollision();
+        DrawRectangle(propRect.x, propRect.y, propRect.width, propRect.height, PURPLE);
+    }
+}
+void WorldSwitchers::setSwitchersPos (Vector2 mapPos) {
+    for (auto &prop : switchers) {
+        prop.setScreenPos(mapPos);
+    }
+}
+Rectangle MapSwitcherProp::getCollision() {
+    Rectangle collisionBox = {screenPos.x, screenPos.y, 16,16};
+    return collisionBox;
+}
+WorldEnums MapSwitcherProp::getSwitchDestination() {
+    WorldEnums newMap{};
+    if (switchToMap == "office_interior") newMap = InteriorOffice1;
+    if (switchToMap == "supermarket_map") newMap = InteriorSuperMarket;
+    return newMap;
+};

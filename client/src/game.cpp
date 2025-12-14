@@ -12,9 +12,10 @@ Game::Game():
 isGameOver(false),
 mapBoundary1(collisionData, 150, 100, 16, 79732) , 
 NPC("resources/image/character/workingman.png", &player, 11, 1, 30), 
+allSwitchers(),
 worldDrawProperty(150, 100, &collisionData),
-currentWorld(getCenterWorld()),
-player("resources/image/character/workingman2.png", currentWorld.getWorldCollisionArray(), 3, 50)
+currentWorld(&getCenterWorld()),
+player("resources/image/character/workingman2.png", currentWorld->getWorldCollisionArray(), 3, 50)
 {
     // std::cout<<"sss"<< worldHandler.getWorldCollisionArray().size();
     std::random_device rd;
@@ -28,11 +29,11 @@ player("resources/image/character/workingman2.png", currentWorld.getWorldCollisi
     for (int i = 0; i< 5; i++) {
         enemies.emplace_back("resources/image/character/workingman.png", &player, i, dis(gen)/4, dis(gen) + 20);
     }
-    currentWorld.foreground.setY(100*TILE_SIZE*MAP_SCALE);
-    allDrawableObjects.push_back(&currentWorld.background);
-    allDrawableObjects.push_back(&currentWorld.foreground);
+    currentWorld->foreground.setY(100*TILE_SIZE*MAP_SCALE);
+    allDrawableObjects.push_back(&currentWorld->background);
+    allDrawableObjects.push_back(&currentWorld->foreground);
     allDrawableObjects.push_back(&player);
-    for (Drawing* propSet : currentWorld.getAllDrawableProps()) {
+    for (Drawing* propSet : currentWorld->getAllDrawableProps()) {
         allDrawableObjects.push_back(propSet);
     }
 }
@@ -45,12 +46,14 @@ void Game::tick (float deltaTime) {
         for (Drawing &enemy : enemies) {
             allDrawableObjects2.push_back(&enemy);
         }
+        allSwitchers.setSwitchersPos(mapPos);
         std::sort(allDrawableObjects2.begin(), allDrawableObjects2.end(), [](Drawing* a, Drawing* b) {
             return a->getY() < b->getY();
         });
         for (Drawing* obj : allDrawableObjects2) {
             obj->draw(mapPos);
         }
+        allSwitchers.drawAllSwitchers();
         player.tick(deltaTime);
         player.drawHealth(0, 0);
         // boatProp.drawAllProps(MAP_SCALE, mapPos, deltaTime);
@@ -64,16 +67,39 @@ void Game::tick (float deltaTime) {
         if (enemies.size() == 0) {
             player.updatePlayerState(Idle, true);
         }
-        currentWorld.animateWorldProps(deltaTime);
+        currentWorld->animateWorldProps(deltaTime);
         enemies.erase(
         std::remove_if(enemies.begin(), enemies.end(), [](AIPlayer &enemy) {
             return enemy.getHealthComponent().currentHealth <= 0;  // remove if health <= 0
         }),
         enemies.end()
         );
+        checkSwitchWorldInteraction(player);
         if (player.getHealthComponent().currentHealth <= 0) isGameOver = true;
     } else {
         DrawText("GAME OVER", SCREEN_WIDTH/2 - 50, SCREEN_HEIGHT/2, 30, WHITE);
     }
     EndDrawing();
+}
+void Game::checkSwitchWorldInteraction(Player& player) {
+    //should clean up all drawable objects and push all items back in again when call this function
+    if (IsKeyReleased(KEY_I)) {
+        for (auto &switcher : (*allSwitchers.getSwitchers())) {
+            if (checkIsCollide(player.getCharacterCollision(), switcher.getCollision()).isCollide) {
+                std::cout<<"is changing";
+                currentWorld = &getWorld(switcher.getSwitchDestination());
+                allDrawableObjects = {};
+                player.setPlayerWorldPos({100,100});
+                player.changeCollisionCheck(currentWorld->getWorldCollisionArray(), 11256);
+                currentWorld->foreground.setY(100*TILE_SIZE*MAP_SCALE);
+                allDrawableObjects.push_back(&currentWorld->background);
+                allDrawableObjects.push_back(&currentWorld->foreground);
+                allDrawableObjects.push_back(&player);
+                for (Drawing* propSet : currentWorld->getAllDrawableProps()) {
+                    allDrawableObjects.push_back(propSet);
+                }
+                return;
+            }
+        }
+    }
 }

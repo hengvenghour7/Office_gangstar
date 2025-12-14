@@ -13,11 +13,13 @@ class Game {
         std::vector<Prop> signProps{};
         std::vector<Prop> mapProps{};
         std::vector<Drawing*> allDrawableObjects;
+        WorldSwitchers allSwitchers;
         Texture2D mapTexture = LoadTexture("resources/image/office_gang_map.png");
         WorldDrawProperty worldDrawProperty;
-        WorldSet& currentWorld;
+        WorldSet* currentWorld;
         Player player;
     public:
         Game();
         void tick(float deltaTime);
+        void checkSwitchWorldInteraction(Player& player);
 };
