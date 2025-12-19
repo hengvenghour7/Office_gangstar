@@ -37,7 +37,8 @@ WorldSet& getCenterWorld() {
         150,
         100,
         &collisionData,
-        &centerWorldProps
+        &centerWorldProps,
+        "resources/maps/office_gang_map.tmj"
     );
 
     return centerWorld;
@@ -53,7 +54,8 @@ WorldSet& getMarketInterior() {
         50,
         20,
         &supermarketBoundary,
-        &marketInteriorProps
+        &marketInteriorProps,
+        "resources/maps/supermarket_map.tmj"
     );
 
     return centerWorld;

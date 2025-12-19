@@ -7,42 +7,40 @@
 #include "mapCollision.h"
 #include "worldEnums.h"
 #include "character.h"
+#include <unordered_map>
 
-struct WorldProp {
-
+struct SpawnToDetail {
+    WorldEnums targetMap;
+    int targetSpawnPoint;
 };
-class MapSwitcherProp {
+class MapSwitcherProp: public Drawing {
     Vector2 location;
     Vector2 screenPos;
+    int width;
+    int height;
     std::string switchToMap{};
-    int spawnIndex{};
+    int spawnIndex;
+    int spawnToIndex;
     public:
-        MapSwitcherProp(Vector2 location, std::string switchToMap, int spawnIndex);
-        WorldEnums getSwitchDestination();
+        MapSwitcherProp(Vector2 location, std::string switchToMap, int spawnIndex, int spawnToIndex, int width, int height);
+        SpawnToDetail getSwitchDestination();
         Rectangle getCollision ();
-        void drawSwitch();
-        void setScreenPos(Vector2 mapPos);
-};
-class WorldSwitchers {
-    std::vector<MapSwitcherProp> switchers;
-    public:
-        WorldSwitchers();
-        void drawAllSwitchers();
-        void setSwitchersPos(Vector2 mapPos);
-        std::vector<MapSwitcherProp>* getSwitchers();
+        virtual void draw(Vector2 ) override;
+        void setScreenPos(Vector2 des);
+        Vector2 getSpawnLocation();
 };
 struct WorldDrawProperty {
     int width;
     int height;
     std::vector<std::vector<int>> collisionArray;
-
+    
     WorldDrawProperty(int width, int height, std::vector<int>* collisionData);
     void changeProperty(int width, int height, Vector2 des, std::vector<int>* collisionData);
 };
 class World : public Drawing {
     WorldDrawProperty* drawProperty;
     Texture2D worldTexture;
-
+    
     public:
     World(const char* inputTexture, WorldDrawProperty* drawProperty);
     void changeProperty(int width, int height, Vector2 des, std::vector<int>* collisionData);
@@ -50,16 +48,21 @@ class World : public Drawing {
     virtual void draw(Vector2 des) override;
 };
 class WorldSet {
+    std::string worldPropertySrc;
+    std::unordered_map<int , MapSwitcherProp> mapSwitchersList{};
     public:
     WorldDrawProperty drawProperty;
     World background;
     World foreground;
     std::vector<MapProp*>* worldProps;
-    WorldSet(const char* backgroundTexture, const char* foregroundTexture, int mapWidth, int mapHeight, std::vector<int>* collisionData, std::vector<MapProp*>* worldProps);
+    WorldSet(const char* backgroundTexture, const char* foregroundTexture, int mapWidth, int mapHeight, std::vector<int>* collisionData, std::vector<MapProp*>* worldProps, std::string mapPropertyPath);
     void changeMap (const char* backgroundTexture, const char* foregroundTexture, int width, int height, Vector2 des, std::vector<int>* collisionData);
     std::vector<std::vector<int>>* getWorldCollisionArray ();
     std::vector<Drawing*> getAllDrawableProps ();
     void animateWorldProps (float deltaTime);
+    void setSwitchersPos (Vector2 mapPos);
+    Vector2 getSpawnLocation(int spawnIndex);
+    std::unordered_map<int , MapSwitcherProp>* getMapSwitchersList();
 };
 
 #endif

@@ -311,9 +311,128 @@
          "width":50,
          "x":0,
          "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":14,
+         "name":"entry point",
+         "objects":[
+                {
+                 "height":16,
+                 "id":2,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"spawn index",
+                         "type":"int",
+                         "value":0
+                        }, 
+                        {
+                         "name":"spawn point",
+                         "type":"int",
+                         "value":2
+                        }, 
+                        {
+                         "name":"switchToMap",
+                         "type":"string",
+                         "value":"office_gang_map"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":63.3333,
+                 "x":199.333,
+                 "y":298.667
+                }, 
+                {
+                 "height":16,
+                 "id":3,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"spawn index",
+                         "type":"int",
+                         "value":1
+                        }, 
+                        {
+                         "name":"spawn point",
+                         "type":"int",
+                         "value":1
+                        }, 
+                        {
+                         "name":"switchToMap",
+                         "type":"string",
+                         "value":"supermarket_map"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":63.3333,
+                 "x":377,
+                 "y":297.333
+                }, 
+                {
+                 "height":16,
+                 "id":4,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"spawn index",
+                         "type":"int",
+                         "value":2
+                        }, 
+                        {
+                         "name":"spawn point",
+                         "type":"int",
+                         "value":2
+                        }, 
+                        {
+                         "name":"switchToMap",
+                         "type":"string",
+                         "value":"supermarket_map"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":35.3333,
+                 "x":567,
+                 "y":295.333
+                }, 
+                {
+                 "height":16,
+                 "id":5,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"spawn index",
+                         "type":"int",
+                         "value":3
+                        }, 
+                        {
+                         "name":"spawn point",
+                         "type":"int",
+                         "value":2
+                        }, 
+                        {
+                         "name":"switchToMap",
+                         "type":"string",
+                         "value":"supermarket_map"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":63.3333,
+                 "x":679.667,
+                 "y":296
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
         }],
- "nextlayerid":14,
- "nextobjectid":1,
+ "nextlayerid":15,
+ "nextobjectid":6,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.2",
@@ -321,19 +440,19 @@
  "tilesets":[
         {
          "firstgid":1,
-         "source":"..\/..\/..\/..\/Game Builder\/Tileset\/Room_Builder_3d_walls_16x16.tsx"
+         "source":"..\/..\/..\/..\/..\/Game Builder\/Tileset\/Room_Builder_3d_walls_16x16.tsx"
         }, 
         {
          "firstgid":1417,
-         "source":"..\/..\/..\/..\/Game Builder\/Tileset\/Room_Builder_16x16.tsx"
+         "source":"..\/..\/..\/..\/..\/Game Builder\/Tileset\/Room_Builder_16x16.tsx"
         }, 
         {
          "firstgid":10005,
-         "source":"..\/..\/..\/..\/Game Builder\/Tileset\/16_Grocery_store_Black_Shadow_16x16.tsx"
+         "source":"..\/..\/..\/..\/..\/Game Builder\/Tileset\/16_Grocery_store_Black_Shadow_16x16.tsx"
         }, 
         {
          "firstgid":11253,
-         "source":"..\/..\/..\/..\/Game Builder\/Tileset\/collision tile.tsx"
+         "source":"..\/..\/..\/..\/..\/Game Builder\/Tileset\/collision tile.tsx"
         }],
  "tilewidth":16,
  "type":"map",

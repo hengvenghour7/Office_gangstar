@@ -12,7 +12,6 @@ Game::Game():
 isGameOver(false),
 mapBoundary1(collisionData, 150, 100, 16, 79732) , 
 NPC("resources/image/character/workingman.png", &player, 11, 1, 30), 
-allSwitchers(),
 worldDrawProperty(150, 100, &collisionData),
 currentWorld(&getCenterWorld()),
 player("resources/image/character/workingman2.png", currentWorld->getWorldCollisionArray(), 3, 50)
@@ -36,6 +35,9 @@ player("resources/image/character/workingman2.png", currentWorld->getWorldCollis
     for (Drawing* propSet : currentWorld->getAllDrawableProps()) {
         allDrawableObjects.push_back(propSet);
     }
+    for (auto &[key, value] : (*currentWorld->getMapSwitchersList())) {
+        allDrawableObjects.push_back(&value);
+    }
 }
 void Game::tick (float deltaTime) {
     BeginDrawing();
@@ -46,14 +48,13 @@ void Game::tick (float deltaTime) {
         for (Drawing &enemy : enemies) {
             allDrawableObjects2.push_back(&enemy);
         }
-        allSwitchers.setSwitchersPos(mapPos);
         std::sort(allDrawableObjects2.begin(), allDrawableObjects2.end(), [](Drawing* a, Drawing* b) {
             return a->getY() < b->getY();
         });
+        currentWorld->setSwitchersPos(mapPos);
         for (Drawing* obj : allDrawableObjects2) {
             obj->draw(mapPos);
         }
-        allSwitchers.drawAllSwitchers();
         player.tick(deltaTime);
         player.drawHealth(0, 0);
         // boatProp.drawAllProps(MAP_SCALE, mapPos, deltaTime);
@@ -84,12 +85,13 @@ void Game::tick (float deltaTime) {
 void Game::checkSwitchWorldInteraction(Player& player) {
     //should clean up all drawable objects and push all items back in again when call this function
     if (IsKeyReleased(KEY_I)) {
-        for (auto &switcher : (*allSwitchers.getSwitchers())) {
-            if (checkIsCollide(player.getCharacterCollision(), switcher.getCollision()).isCollide) {
-                std::cout<<"is changing";
-                currentWorld = &getWorld(switcher.getSwitchDestination());
+        for (auto &[key, value] : (*currentWorld->getMapSwitchersList())) {
+            std::cout<<"is changing " << value.getCollision().x;
+            if (checkIsCollide(player.getCharacterCollision(), value.getCollision()).isCollide) {
+                SpawnToDetail SpawnToDetail = value.getSwitchDestination();
+                currentWorld = &getWorld(SpawnToDetail.targetMap);
                 allDrawableObjects = {};
-                player.setPlayerWorldPos({100,100});
+                player.setPlayerWorldPos(currentWorld->getSpawnLocation(SpawnToDetail.targetSpawnPoint));
                 player.changeCollisionCheck(currentWorld->getWorldCollisionArray(), 11256);
                 currentWorld->foreground.setY(100*TILE_SIZE*MAP_SCALE);
                 allDrawableObjects.push_back(&currentWorld->background);
@@ -97,6 +99,9 @@ void Game::checkSwitchWorldInteraction(Player& player) {
                 allDrawableObjects.push_back(&player);
                 for (Drawing* propSet : currentWorld->getAllDrawableProps()) {
                     allDrawableObjects.push_back(propSet);
+                }
+                for (auto &[key, value] : (*currentWorld->getMapSwitchersList())) {
+                    allDrawableObjects.push_back(&value);
                 }
                 return;
             }
