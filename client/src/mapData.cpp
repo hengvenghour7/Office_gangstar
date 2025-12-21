@@ -3,6 +3,10 @@
 #include "map.h"
 #include "mapData.h"
 #include "globalVar.h"
+#include <fstream>
+#include <nlohmann/json.hpp>
+
+using json = nlohmann::json;
 
 WorldSet& getCenterWorld() {
     static std::vector<PropDrawCondition> animatedObjectPropCondition{
@@ -60,6 +64,97 @@ WorldSet& getMarketInterior() {
 
     return centerWorld;
 }
+WorldSet& getOfficeInterior() {
+    static std::vector<MapProp*> officeInteriorProps = {
+    };
+    std::vector<int> mapCollisionData;
+    std::fstream file("resources/maps/office_interior.tmj");
+    if (file.is_open()) {
+        json j;
+        file >> j;
+        mapCollisionData = getArrayFromJson(j, "collision");
+    }
+    static WorldSet centerWorld(
+        "resources/image/office_interior.png",
+        "",
+        10,
+        20,
+        &mapCollisionData,
+        &officeInteriorProps,
+        "resources/maps/office_interior.tmj"
+    );
+
+    return centerWorld;
+}
+WorldSet& getOfficeInterior2() {
+    static std::vector<MapProp*> officeInteriorProps = {
+    };
+    std::vector<int> mapCollisionData;
+    std::fstream file("resources/maps/office_interior_2.tmj");
+    if (file.is_open()) {
+        json j;
+        file >> j;
+        mapCollisionData = getArrayFromJson(j, "collision");
+    }
+    static WorldSet officeInterior2(
+        "resources/image/office_interior_2.png",
+        "resources/image/office_interior_2_top.png",
+        40,
+        20,
+        &mapCollisionData,
+        &officeInteriorProps,
+        "resources/maps/office_interior_2.tmj"
+    );
+
+    return officeInterior2;
+}
+WorldSet& getHardwareInterior() {
+    std::cout<<"hard interior is here";
+    static std::vector<MapProp*> hardwareInteriorProps = {
+    };
+    std::vector<int> mapCollisionData;
+    std::fstream file("resources/maps/hardware_interior.tmj");
+    if (file.is_open()) {
+        json j;
+        file >> j;
+        mapCollisionData = getArrayFromJson(j, "collision");
+    }
+    static WorldSet hardwareInterior(
+        "resources/image/sunna_interior.png",
+        "",
+        20,
+        20,
+        &mapCollisionData,
+        &hardwareInteriorProps,
+        "resources/maps/sunna_interior.tmj"
+    );
+
+    return hardwareInterior;
+}
+WorldSet& getSunnaInterior() {
+    // std::cout<<"hard interior is here";
+    static std::vector<MapProp*> sunnaInteriorProps = {
+    };
+    std::vector<int> mapCollisionData;
+    std::fstream file("resources/maps/sunna_interior.tmj");
+    if (file.is_open()) {
+        json j;
+        file >> j;
+        mapCollisionData = getArrayFromJson(j, "collision");
+        // std::cout<<"mmmm " << mapCollisionData.size();
+    }
+    static WorldSet sunnaInterior(
+        "resources/image/sunna_interior.png",
+        "",
+        20,
+        30,
+        &mapCollisionData,
+        &sunnaInteriorProps,
+        "resources/maps/sunna_interior.tmj"
+    );
+
+    return sunnaInterior;
+}
 WorldSet& getWorld(WorldEnums world) {
     switch (world)
     {
@@ -67,6 +162,14 @@ WorldSet& getWorld(WorldEnums world) {
         return getCenterWorld();
     case InteriorSuperMarket: 
         return getMarketInterior();
+    case InteriorOffice1:
+        return getOfficeInterior();
+    case InteriorOffice2:
+        return getOfficeInterior2();
+    case InteriorHardware:
+        return getHardwareInterior();
+    case InteriorSunna:
+        return getSunnaInterior();
     default:
         return getCenterWorld();
         break;

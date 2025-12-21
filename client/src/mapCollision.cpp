@@ -44,7 +44,6 @@ void MapBoundary::setCollisionData(std::vector<int>* mapCollisionData, int mapWi
         }
         dataArray.push_back(chunk);
     }
-    std::cout<< "this width" << this->mapWidth << "height" << this->mapHeight;
 };
 MapProp::MapProp (std::vector<int>* inputDataArray, int inputMapWidth, int inputMapHeight, int inputTileSize, std::vector<PropDrawCondition>* propCollisionConditions, float scale) : locationArray(arrayTo2DArray(inputDataArray, inputMapWidth)), PropDrawConditions(propCollisionConditions), scale(scale)
  {

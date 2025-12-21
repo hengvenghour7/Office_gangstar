@@ -4,6 +4,17 @@
 #include "globalVar.h"
 #include <raymath.h>
 
+std::vector<int> getArrayFromJson(json& jObject, std::string key) {
+    std::vector<int> arrayData{};
+    auto layers = jObject["layers"];
+    auto collisionLayer = std::find_if(layers.begin(), layers.end(), [key](const json& layer) {
+        return layer["name"].get<std::string>() == key;
+    });
+    if (collisionLayer != layers.end()) {
+        arrayData = (*collisionLayer)["data"].get<std::vector<int>>();
+    }
+    return arrayData;
+}
 CollisionProperty checkIsCollide (Rectangle firstCollider, Rectangle secondCollider, float XOffset, float YOffset) {
     CollisionProperty collision1 {false, {}};
     if (firstCollider.x + XOffset < secondCollider.x + secondCollider.width && firstCollider.x + firstCollider.width > secondCollider.x && 

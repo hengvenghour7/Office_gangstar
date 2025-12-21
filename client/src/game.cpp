@@ -35,9 +35,9 @@ player("resources/image/character/workingman2.png", currentWorld->getWorldCollis
     for (Drawing* propSet : currentWorld->getAllDrawableProps()) {
         allDrawableObjects.push_back(propSet);
     }
-    for (auto &[key, value] : (*currentWorld->getMapSwitchersList())) {
-        allDrawableObjects.push_back(&value);
-    }
+    // for (auto &[key, value] : (*currentWorld->getMapSwitchersList())) {
+    //     allDrawableObjects.push_back(&value);
+    // }
 }
 void Game::tick (float deltaTime) {
     BeginDrawing();
@@ -86,13 +86,14 @@ void Game::checkSwitchWorldInteraction(Player& player) {
     //should clean up all drawable objects and push all items back in again when call this function
     if (IsKeyReleased(KEY_I)) {
         for (auto &[key, value] : (*currentWorld->getMapSwitchersList())) {
-            std::cout<<"is changing " << value.getCollision().x;
             if (checkIsCollide(player.getCharacterCollision(), value.getCollision()).isCollide) {
-                SpawnToDetail SpawnToDetail = value.getSwitchDestination();
-                currentWorld = &getWorld(SpawnToDetail.targetMap);
+                SpawnToDetail spawnToDetail = value.getSwitchDestination();
+                currentWorld->saveAIPlayers(enemies);
+                currentWorld = &getWorld(spawnToDetail.targetMap);
                 allDrawableObjects = {};
-                player.setPlayerWorldPos(currentWorld->getSpawnLocation(SpawnToDetail.targetSpawnPoint));
-                player.changeCollisionCheck(currentWorld->getWorldCollisionArray(), 11256);
+                enemies = *currentWorld->getAIPlayers();
+                player.setPlayerWorldPos(currentWorld->getSpawnLocation(spawnToDetail.targetSpawnPoint));
+                player.changeCollisionCheck(currentWorld->getWorldCollisionArray(), currentWorld->getCollisionCode());
                 currentWorld->foreground.setY(100*TILE_SIZE*MAP_SCALE);
                 allDrawableObjects.push_back(&currentWorld->background);
                 allDrawableObjects.push_back(&currentWorld->foreground);
@@ -100,9 +101,9 @@ void Game::checkSwitchWorldInteraction(Player& player) {
                 for (Drawing* propSet : currentWorld->getAllDrawableProps()) {
                     allDrawableObjects.push_back(propSet);
                 }
-                for (auto &[key, value] : (*currentWorld->getMapSwitchersList())) {
-                    allDrawableObjects.push_back(&value);
-                }
+                // for (auto &[key, value] : (*currentWorld->getMapSwitchersList())) {
+                //     allDrawableObjects.push_back(&value);
+                // }
                 return;
             }
         }

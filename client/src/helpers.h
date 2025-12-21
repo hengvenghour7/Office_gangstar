@@ -4,6 +4,9 @@
 #include <iostream>
 #include <raylib.h>
 #include <vector>
+#include <nlohmann/json.hpp>
+
+using json = nlohmann::json;
 
 struct CollisionProperty {
     bool isCollide;
@@ -31,5 +34,6 @@ CollisionProperty checkCollisionTile(std::vector<std::vector<int>>* tileArray, R
 CollisionProperty checkPlayerCollisionTile(std::vector<std::vector<int>>* tileArray, Rectangle characterCollision, Vector2 characterWorldPos, Vector2 direction, int colorCode);
 CollisionProperty checkInteractionTile(std::vector<std::vector<int>>* tileArray, Rectangle characterCollision, Vector2 worldPos, float XOffset, float YOffset, int colorCode);
 Vector2 Vector2Round(Vector2 inputVector);
+std::vector<int> getArrayFromJson(json& jObject, std::string key);
 
 #endif

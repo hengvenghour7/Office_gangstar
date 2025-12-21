@@ -3257,7 +3257,7 @@
                          "value":0
                         }, 
                         {
-                         "name":"spawn point",
+                         "name":"spawn target",
                          "type":"int",
                          "value":0
                         }, 
@@ -3284,9 +3284,9 @@
                          "value":1
                         }, 
                         {
-                         "name":"spawn point",
+                         "name":"spawn target",
                          "type":"int",
-                         "value":0
+                         "value":1
                         }, 
                         {
                          "name":"switchToMap",
@@ -3311,7 +3311,7 @@
                          "value":2
                         }, 
                         {
-                         "name":"spawn point",
+                         "name":"spawn target",
                          "type":"int",
                          "value":0
                         }, 
@@ -3326,6 +3326,114 @@
                  "width":16,
                  "x":1439.33,
                  "y":703.333
+                }, 
+                {
+                 "height":16,
+                 "id":5,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"spawn index",
+                         "type":"int",
+                         "value":3
+                        }, 
+                        {
+                         "name":"spawn target",
+                         "type":"int",
+                         "value":0
+                        }, 
+                        {
+                         "name":"switchToMap",
+                         "type":"string",
+                         "value":"office_interior_2"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":64.25,
+                 "y":111.5
+                }, 
+                {
+                 "height":16,
+                 "id":6,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"spawn index",
+                         "type":"int",
+                         "value":4
+                        }, 
+                        {
+                         "name":"spawn target",
+                         "type":"int",
+                         "value":0
+                        }, 
+                        {
+                         "name":"switchToMap",
+                         "type":"string",
+                         "value":"office_interior_2"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":160,
+                 "y":112.25
+                }, 
+                {
+                 "height":16,
+                 "id":7,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"spawn index",
+                         "type":"int",
+                         "value":5
+                        }, 
+                        {
+                         "name":"spawn target",
+                         "type":"int",
+                         "value":0
+                        }, 
+                        {
+                         "name":"switchToMap",
+                         "type":"string",
+                         "value":"hardware_interior"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":864.25,
+                 "y":367.75
+                }, 
+                {
+                 "height":16,
+                 "id":8,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"spawn index",
+                         "type":"int",
+                         "value":6
+                        }, 
+                        {
+                         "name":"spawn target",
+                         "type":"int",
+                         "value":0
+                        }, 
+                        {
+                         "name":"switchToMap",
+                         "type":"string",
+                         "value":"sunna_interior"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":1663.5,
+                 "y":111
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -3334,7 +3442,7 @@
          "y":0
         }],
  "nextlayerid":34,
- "nextobjectid":5,
+ "nextobjectid":11,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.2",

@@ -121,7 +121,7 @@
          "name":"store item 3",
          "opacity":1,
          "type":"tilelayer",
-         "visible":true,
+         "visible":false,
          "width":50,
          "x":0,
          "y":0
@@ -152,7 +152,7 @@
          "name":"store item 4",
          "opacity":1,
          "type":"tilelayer",
-         "visible":true,
+         "visible":false,
          "width":50,
          "x":0,
          "y":0
@@ -307,7 +307,7 @@
          "name":"collision",
          "opacity":1,
          "type":"tilelayer",
-         "visible":false,
+         "visible":true,
          "width":50,
          "x":0,
          "y":0
@@ -328,7 +328,7 @@
                          "value":0
                         }, 
                         {
-                         "name":"spawn point",
+                         "name":"spawn target",
                          "type":"int",
                          "value":2
                         }, 
@@ -355,7 +355,7 @@
                          "value":1
                         }, 
                         {
-                         "name":"spawn point",
+                         "name":"spawn target",
                          "type":"int",
                          "value":1
                         }, 
@@ -382,7 +382,7 @@
                          "value":2
                         }, 
                         {
-                         "name":"spawn point",
+                         "name":"spawn target",
                          "type":"int",
                          "value":2
                         }, 
@@ -409,7 +409,7 @@
                          "value":3
                         }, 
                         {
-                         "name":"spawn point",
+                         "name":"spawn target",
                          "type":"int",
                          "value":2
                         }, 

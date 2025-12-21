@@ -50,6 +50,8 @@ class World : public Drawing {
 class WorldSet {
     std::string worldPropertySrc;
     std::unordered_map<int , MapSwitcherProp> mapSwitchersList{};
+    std::vector<AIPlayer> AIPlayers;
+    int collisionCode{1};
     public:
     WorldDrawProperty drawProperty;
     World background;
@@ -61,8 +63,11 @@ class WorldSet {
     std::vector<Drawing*> getAllDrawableProps ();
     void animateWorldProps (float deltaTime);
     void setSwitchersPos (Vector2 mapPos);
+    void saveAIPlayers (std::vector<AIPlayer> currentAIPlayers);
+    std::vector<AIPlayer>* getAIPlayers ();
     Vector2 getSpawnLocation(int spawnIndex);
     std::unordered_map<int , MapSwitcherProp>* getMapSwitchersList();
+    int getCollisionCode();
 };
 
 #endif
