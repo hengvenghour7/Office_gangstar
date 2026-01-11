@@ -3,22 +3,35 @@
 #include "globalVar.h"
 #include "drawing.h"
 #include "map.h"
+#include "UIHandler/UI.h"
+#include "gameEnums.h"
 
 class Game {
     private:
         bool isGameOver;
+        bool isMenuOpen;
+        GameStateEnums gameState;
+        UI gameUI;
         MapBoundary mapBoundary1;
         std::vector<AIPlayer> enemies{};
         AIPlayer NPC;
         std::vector<Prop> signProps{};
         std::vector<Prop> mapProps{};
         std::vector<Drawing*> allDrawableObjects;
+        Vector2 speechLocation{SCREEN_WIDTH*0.5 - 320*0.5f, SCREEN_HEIGHT - (96*0.5 + 50)};
+        Texture2D speechBackground = LoadTexture("resources/image/UI/speechUI.png");
         Texture2D mapTexture = LoadTexture("resources/image/office_gang_map.png");
         WorldDrawProperty worldDrawProperty;
+        Vector2 pauseScreenWorldPos{0,0};
         WorldSet* currentWorld;
         Player player;
     public:
         Game();
         void tick(float deltaTime);
+        void handleMenuClick();
+        void startGame();
+        void saveGame();
+        void loadGame();
         void checkSwitchWorldInteraction(Player& player);
+        void checkPropsInteraction(Player& player, Vector2 mapPos);
 };

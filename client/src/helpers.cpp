@@ -91,7 +91,7 @@ void findPath (std::vector<std::vector<int>>* tileArray, Vector2 actorPos, Vecto
 CollisionProperty checkCollisionTile(std::vector<std::vector<int>>* tileArray, Rectangle characterCollision, Vector2 direction, int colorCode) {
     CollisionProperty collision {false, {}};
     return collision;
-}
+};
 CollisionProperty checkPlayerCollisionTile(std::vector<std::vector<int>>* tileArray, Rectangle characterCollision, Vector2 worldPos, Vector2 direction, int colorCode) {
 
     CollisionProperty collision {false, {}};
@@ -121,9 +121,28 @@ CollisionProperty checkInteractionTile(std::vector<std::vector<int>>* tileArray,
         }
     return collision1;
 };
+CollisionProperty checkButtonClick (Rectangle buttonRec) {
+    CollisionProperty collisionObj {false, {}};
+    if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
+        Vector2 mousePos = GetMousePosition();
+        if (mousePos.x >= buttonRec.x && mousePos.x < (buttonRec.x + buttonRec.width) &&
+            mousePos.y >= buttonRec.y && mousePos.y < (buttonRec.y + buttonRec.height)) {
+                collisionObj.isCollide = true;
+            }
+    }
+    return collisionObj;
+};
 Vector2 Vector2Round(Vector2 inputVector) {
     Vector2 newVector2 = inputVector;
     newVector2.x = (int)(std::round(newVector2.x));
     newVector2.y = (int)(std::round(newVector2.y));
     return newVector2;
+};
+CollisionProperty checkCircleInteraction(Vector2 CenterPoint_1, Vector2 CenterPoint_2, float desireDistance) {
+    CollisionProperty collisionObject {false, {}};
+    float distanceInSquare = (CenterPoint_1.x - CenterPoint_2.x)*(CenterPoint_1.x - CenterPoint_2.x) + (CenterPoint_1.y - CenterPoint_2.y)*(CenterPoint_1.y - CenterPoint_2.y);
+    if (distanceInSquare <= (desireDistance*desireDistance)) {
+        collisionObject.isCollide = true;
+    }
+    return collisionObject;
 };

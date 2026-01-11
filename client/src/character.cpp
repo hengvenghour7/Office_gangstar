@@ -289,6 +289,9 @@ void Character::tick (float deltaTime) {
             updateAnimation(deltaTime);
             // draw({0,0});
         }
+Vector2 Character::getCenter (Vector2 mapPos) {
+    
+}
 Rectangle Character::getCharacterCollision ()  {
             return characterCollision;
         };
@@ -308,6 +311,10 @@ Player::Player (const char * imageTexture, std::vector<std::vector<int>>* worldC
         }
 void Player::setPlayerWorldPos(Vector2 worldPos) {
     this->worldPos = worldPos;
+}
+Vector2 Player::getCenter (Vector2 mapPos) {
+    Vector2 center {characterCollision.x + width*scale_factor*0.5, characterCollision.y + height*scale_factor*0.5};
+    return center;
 }
 void Player::tick (float deltaTime) {
     // DrawRectangle(characterHitBox.x, characterHitBox.y, characterHitBox.width, characterHitBox.height, GREEN);
@@ -386,6 +393,10 @@ void AIPlayer::drawHealth() {
 }
 void AIPlayer::doDamage() {
     updatePlayerState(Attacking);
+}
+void AIPlayer::draw(Vector2 mapPos) {
+    Character::draw(mapPos);
+    drawHealth();
 }
 void AIPlayer::appraochTarget (std::vector<AIPlayer>* allAIPlayer, float deltaTime) {
     if (checkIsCollide(characterHitBox, player->getCharacterCollision(), 0, 0).isCollide) {

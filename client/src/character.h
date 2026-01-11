@@ -60,6 +60,7 @@ class Character : public Drawing
         void updateCharacterProgess (float deltaTime) {
             updateAnimation(deltaTime);
         }
+        virtual Vector2 getCenter (Vector2 mapPos);
         void updateHitBox ();
         void drawHealth ();
         void takeDamage (Character* secondCollider,float damage, float deltaTime);
@@ -93,7 +94,8 @@ class Player: public Character
         Vector2 getScreenPos ();
         void setPlayerWorldPos (Vector2 worldPos);
         void changeCollisionCheck(std::vector<std::vector<int>>* newWorldCollisionArray, int newCollisionCode);
-    };
+        virtual Vector2 getCenter(Vector2 mapPos) override;
+};
     
 class AIPlayer : public Character {
     private:
@@ -102,6 +104,7 @@ class AIPlayer : public Character {
         bool isNeedToMoveBack{false};
         Vector2 direction;
         Rectangle collider{};
+        virtual void draw (Vector2 des) override;
         // Vector2 currentDirection {0,0};
     public:
         AIPlayer (const char * imageTexture, Player* inputTarget, int id, float speed, float damage);

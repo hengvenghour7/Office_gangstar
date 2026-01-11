@@ -3,6 +3,7 @@
 #include <raylib.h>
 #include <raymath.h>
 #include "mapCollision.h"
+#include "globalVar.h"
 
 MapBoundary::MapBoundary(std::vector<int> inputDataArray, int inputMapWidth, int inputMapHeight, int inputTileSize, int inputCollisionCode) {
     
@@ -45,7 +46,8 @@ void MapBoundary::setCollisionData(std::vector<int>* mapCollisionData, int mapWi
         dataArray.push_back(chunk);
     }
 };
-MapProp::MapProp (std::vector<int>* inputDataArray, int inputMapWidth, int inputMapHeight, int inputTileSize, std::vector<PropDrawCondition>* propCollisionConditions, float scale) : locationArray(arrayTo2DArray(inputDataArray, inputMapWidth)), PropDrawConditions(propCollisionConditions), scale(scale)
+MapProp::MapProp (std::vector<int>* inputDataArray, int inputMapWidth, int inputMapHeight, int inputTileSize, std::vector<PropDrawCondition>* propCollisionConditions, float scale) : locationArray(arrayTo2DArray(inputDataArray, inputMapWidth)), 
+    PropDrawConditions(propCollisionConditions), scale(scale)
  {
     const int MAP_TILE_SIZE(16);
     for (int y = 0; y < (int)locationArray.size(); y++) {
@@ -74,6 +76,9 @@ void MapProp::draw (Vector2 mapPos) {
         prop.draw(mapPos);
     }
 };
+std::vector<Prop>* MapProp::getMapProp() {
+    return &props;
+}
 void MapProp::updateAnimation(float deltaTime, bool isBackward, bool isPauseisPauseAfterAnimated) {
     for (Prop &prop: props) {
         prop.updateAnimation(deltaTime, isBackward, isPauseisPauseAfterAnimated);
@@ -104,6 +109,10 @@ Prop::Prop (Texture2D* inputPropTexture, float inputX, float inputY, float input
 void Prop::draw (Vector2 mapPos) {
     DrawTexturePro(*propTexture, {initialCol* propWidth,row* propHeight, propWidth, propHeight}, {x + mapPos.x,y + mapPos.y, propWidth*scale, propHeight*scale}, {0,0}, 0, WHITE);
 }
+Vector2 Prop::getCenter (Vector2 mapPos) {
+    Vector2 center = {x + mapPos.x - (propWidth*scale*0.5),y + mapPos.y - (propHeight*scale*0.5)};
+    return center;
+}
 void Prop::updateAnimation(float deltaTime, bool isBackward, bool isPauseisPauseAfterAnimated) {
     updatePropTime += deltaTime;
     if (updatePropTime > 0.2) {
@@ -125,6 +134,10 @@ void Prop::updateAnimation(float deltaTime, bool isBackward, bool isPauseisPause
 }
 void Prop::setIsFirstAction(bool isFirstAction) {
     this->isFirstAction = isFirstAction;
+}
+void Prop::displayerInteractionText(Vector2* speechLocation, Texture2D* speechBackground) {
+    DrawTexturePro(* speechBackground, {0,0, 320, 96}, {speechLocation->x, speechLocation->y, 320, 96}, {0,0}, 0, WHITE);
+    DrawText(interactionSpeech, speechLocation->x + 50, speechLocation->y + 50, 16, GetColor(THEMECOLOR));
 }
 MapHandler::MapHandler (Vector2* inputMapPos, float inputScale, std::vector<int>* mapCollisionData) {
     drawTexture = outsideMap;

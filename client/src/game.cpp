@@ -10,6 +10,9 @@
 
 Game::Game(): 
 isGameOver(false),
+isMenuOpen(true),
+gameState(GameStateEnums::StartScreen),
+gameUI(),
 mapBoundary1(collisionData, 150, 100, 16, 79732) , 
 NPC("resources/image/character/workingman.png", &player, 11, 1, 30), 
 worldDrawProperty(150, 100, &collisionData),
@@ -42,48 +45,89 @@ player("resources/image/character/workingman2.png", currentWorld->getWorldCollis
 void Game::tick (float deltaTime) {
     BeginDrawing();
     ClearBackground(BLACK);
-    if (!isGameOver) {
-        Vector2 mapPos = (Vector2Scale(player.getWorldPos(), -1.f));
-        std::vector<Drawing*> allDrawableObjects2 = allDrawableObjects;
-        for (Drawing &enemy : enemies) {
-            allDrawableObjects2.push_back(&enemy);
+    switch (gameState)
+    {
+    case GameStateEnums::Playing :
+        {
+            Vector2 mapPos = (Vector2Scale(player.getWorldPos(), -1.f));
+            std::vector<Drawing*> allDrawableObjects2 = allDrawableObjects;
+            for (Drawing &enemy : enemies) {
+                allDrawableObjects2.push_back(&enemy);
+            }
+            std::sort(allDrawableObjects2.begin(), allDrawableObjects2.end(), [](Drawing* a, Drawing* b) {
+                return a->getY() < b->getY();
+            });
+            currentWorld->setSwitchersPos(mapPos);
+            for (Drawing* obj : allDrawableObjects2) {
+                obj->draw(mapPos);
+            }
+            player.tick(deltaTime);
+            player.drawHealth(0, 0);
+            // boatProp.drawAllProps(MAP_SCALE, mapPos, deltaTime);
+            for (AIPlayer &enemy : enemies) {
+                // enemy.takeDamage(&player, 100, deltaTime);
+        
+                enemy.AITick(deltaTime, &enemies);
+                // player.takeDamage(&enemy, 100, deltaTime );
+            }
+            if (enemies.size() == 0) {
+                player.updatePlayerState(Idle, true);
+            }
+            currentWorld->animateWorldProps(deltaTime);
+            enemies.erase(
+            std::remove_if(enemies.begin(), enemies.end(), [](AIPlayer &enemy) {
+                return enemy.getHealthComponent().currentHealth <= 0;  // remove if health <= 0
+            }),
+            enemies.end()
+            );
+            checkSwitchWorldInteraction(player);
+            checkPropsInteraction(player, mapPos);
+            if (player.getHealthComponent().currentHealth <= 0) gameState = GameStateEnums::GameOver;
+            if (IsKeyReleased(KEY_P)) {
+                gameState = GameStateEnums::Pause;
+            }
         }
-        std::sort(allDrawableObjects2.begin(), allDrawableObjects2.end(), [](Drawing* a, Drawing* b) {
-            return a->getY() < b->getY();
-        });
-        currentWorld->setSwitchersPos(mapPos);
-        for (Drawing* obj : allDrawableObjects2) {
-            obj->draw(mapPos);
+        break;
+    case GameStateEnums::Pause :
+        // currentWorld->background.draw({0,0});
+        DrawText("PAUSE", SCREEN_WIDTH/2 - 50, SCREEN_HEIGHT/2, 30, WHITE);
+        if (IsKeyReleased(KEY_P)) {
+                gameState = GameStateEnums::Playing;
         }
-        player.tick(deltaTime);
-        player.drawHealth(0, 0);
-        // boatProp.drawAllProps(MAP_SCALE, mapPos, deltaTime);
-        for (AIPlayer &enemy : enemies) {
-            // enemy.takeDamage(&player, 100, deltaTime);
+        break;
+    case GameStateEnums::StartScreen :
+        currentWorld->background.draw(pauseScreenWorldPos);
+        gameUI.draw();
+        for (Button* &button : gameUI.getMenuButton()) {
+            if (checkButtonClick (button->getButtonRec()).isCollide) {
+                // std::cout<< "actions __ " << static_cast<int>(button->getAction());
+                MenuActionEnums actionType = button->getAction();
+                switch (actionType)
+                {
+                case MenuActionEnums::Start :
+                    startGame();
+                    break;
+                case MenuActionEnums::Save :
+                    saveGame();
+                    break;
+                default:
+                    break;
+                }
+                break;
+            }
+        }
+        break;
     
-            enemy.AITick(deltaTime, &enemies);
-            enemy.drawHealth();
-            // player.takeDamage(&enemy, 100, deltaTime );
-        }
-        if (enemies.size() == 0) {
-            player.updatePlayerState(Idle, true);
-        }
-        currentWorld->animateWorldProps(deltaTime);
-        enemies.erase(
-        std::remove_if(enemies.begin(), enemies.end(), [](AIPlayer &enemy) {
-            return enemy.getHealthComponent().currentHealth <= 0;  // remove if health <= 0
-        }),
-        enemies.end()
-        );
-        checkSwitchWorldInteraction(player);
-        if (player.getHealthComponent().currentHealth <= 0) isGameOver = true;
-    } else {
+    case GameStateEnums::GameOver :
         DrawText("GAME OVER", SCREEN_WIDTH/2 - 50, SCREEN_HEIGHT/2, 30, WHITE);
+        break;
+    
+    default:
+        break;
     }
     EndDrawing();
 }
 void Game::checkSwitchWorldInteraction(Player& player) {
-    //should clean up all drawable objects and push all items back in again when call this function
     if (IsKeyReleased(KEY_I)) {
         for (auto &[key, value] : (*currentWorld->getMapSwitchersList())) {
             if (checkIsCollide(player.getCharacterCollision(), value.getCollision()).isCollide) {
@@ -108,4 +152,30 @@ void Game::checkSwitchWorldInteraction(Player& player) {
             }
         }
     }
+}
+void Game::checkPropsInteraction(Player& player, Vector2 mapPos) {
+    if (IsKeyDown(KEY_I)) {
+        for (MapProp* mapProp: *(currentWorld->worldProps)) {
+            for (Prop &prop : *mapProp->getMapProp()) {
+                if (checkCircleInteraction (prop.getCenter(mapPos), player.getCenter(mapPos), 100).isCollide) {
+                    // std::cout << "is interactable";
+                    prop.displayerInteractionText(&speechLocation, &speechBackground);
+                    return;
+                }                
+            }
+        }
+    }
+}
+void Game::handleMenuClick () {
+
+}
+void Game::startGame () {
+    std::cout<< "Start Game";
+    gameState = GameStateEnums::Playing;
+}
+void Game::loadGame () {
+
+}
+void Game::saveGame () {
+
 }

@@ -33,7 +33,7 @@ class MapBoundary {
     CollisionProperty checkBoundaryCollision(Rectangle characterCollision, Vector2 mapPos, float XOffset, float YOffset);
     void setCollisionData(std::vector<int>* mapCollisionData, int mapWidth, int mapHeight, int collisionCode);
 };
-class Prop {
+class Prop: public Drawing{
     private:
     public:
     Texture2D* propTexture;
@@ -49,16 +49,20 @@ class Prop {
     float updatePropTime{0};
     float scale;
     bool isFirstAction{};
+    const char* interactionSpeech{"Hello there how are you doing"};
     Prop (Texture2D* inputPropTexture, float inputX, float inputY, float inputPropWidth, float inputPropHeight, float inputCol, float inputRow, float inputMaxCol, float scale);
-    void draw (Vector2 mapPos);
+    virtual void draw (Vector2 mapPos) override;
     void setIsFirstAction(bool isFirstACtion);
     void updateAnimation(float deltaTime, bool isBackward, bool isPauseisPauseAfterAnimated);
+    Vector2 getCenter(Vector2 mapPos);
+    void displayerInteractionText(Vector2* speechLocation, Texture2D* speechBackground);
 };
 class MapProp: public Drawing {
     protected:
     std::vector<std::vector<int>> locationArray;
     std::vector<Prop> props{};
     std::vector<PropDrawCondition>* PropDrawConditions;
+    Vector2 speechLocation;
     float scale;
     public:
     MapProp (std::vector<int>* inputDataArray, int inputMapWidth, int inputMapHeight, int inputTileSize, std::vector<PropDrawCondition>* propCollisionConditions, float scale);
@@ -67,6 +71,7 @@ class MapProp: public Drawing {
     void moveProps (float speedX, float speedY);
     void moveProps2 (float speedX, float speedY, int colorCode);
     void updateAnimation(float deltaTime, bool isBackward = false, bool isPauseisPauseAfterAnimated = false);
+    std::vector<Prop>* getMapProp();
 };
 struct Map {
     Texture2D mapTexture;

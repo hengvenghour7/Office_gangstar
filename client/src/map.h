@@ -52,22 +52,23 @@ class WorldSet {
     std::unordered_map<int , MapSwitcherProp> mapSwitchersList{};
     std::vector<AIPlayer> AIPlayers;
     int collisionCode{1};
+
     public:
-    WorldDrawProperty drawProperty;
-    World background;
-    World foreground;
-    std::vector<MapProp*>* worldProps;
-    WorldSet(const char* backgroundTexture, const char* foregroundTexture, int mapWidth, int mapHeight, std::vector<int>* collisionData, std::vector<MapProp*>* worldProps, std::string mapPropertyPath);
-    void changeMap (const char* backgroundTexture, const char* foregroundTexture, int width, int height, Vector2 des, std::vector<int>* collisionData);
-    std::vector<std::vector<int>>* getWorldCollisionArray ();
-    std::vector<Drawing*> getAllDrawableProps ();
-    void animateWorldProps (float deltaTime);
-    void setSwitchersPos (Vector2 mapPos);
-    void saveAIPlayers (std::vector<AIPlayer> currentAIPlayers);
-    std::vector<AIPlayer>* getAIPlayers ();
-    Vector2 getSpawnLocation(int spawnIndex);
-    std::unordered_map<int , MapSwitcherProp>* getMapSwitchersList();
-    int getCollisionCode();
+        WorldDrawProperty drawProperty;
+        World background;
+        World foreground;
+        std::vector<MapProp*>* worldProps;
+        WorldSet(const char* backgroundTexture, const char* foregroundTexture, int mapWidth, int mapHeight, std::vector<int>* collisionData, std::vector<MapProp*>* worldProps, std::string mapPropertyPath);
+        void changeMap (const char* backgroundTexture, const char* foregroundTexture, int width, int height, Vector2 des, std::vector<int>* collisionData);
+        std::vector<std::vector<int>>* getWorldCollisionArray ();
+        std::vector<Drawing*> getAllDrawableProps ();
+        void animateWorldProps (float deltaTime);
+        void setSwitchersPos (Vector2 mapPos);
+        void saveAIPlayers (std::vector<AIPlayer> currentAIPlayers);
+        std::vector<AIPlayer>* getAIPlayers ();
+        Vector2 getSpawnLocation(int spawnIndex);
+        std::unordered_map<int , MapSwitcherProp>* getMapSwitchersList();
+        int getCollisionCode();
 };
 
 #endif
