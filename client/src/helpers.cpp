@@ -38,13 +38,16 @@ std::vector<std::vector<int>> arrayTo2DArray (std::vector<int>* arrayData, int m
 void findPath (std::vector<std::vector<int>>* tileArray, Vector2 actorPos, Vector2* direction, int colorCode, int startTileColorCode) {
     int tileX = (int)((actorPos.x)/TILE_SIZE/MAP_SCALE); // x*16*1.5 + mapPos.x -- -mapPos.x/16/1.5
     int tileY = (int)((actorPos.y)/TILE_SIZE/MAP_SCALE);
+    if (tileY >= (*tileArray).size() || tileX >= (*tileArray)[0].size() || tileX < 0 || tileY < 0) {
+        return;
+    }
     Vector2 nextDirection{0,0};
     if (direction->x >= 0 && tileX >= 0 && tileY >= 0) {
         if ((*tileArray)[tileY][tileX + 1] == colorCode) {
             direction->x = 1;
             direction->y = 0;
             return;
-        }
+        } 
         if (direction->y <= 0) {
             if ((*tileArray)[tileY-1][tileX] == colorCode) {
                 direction->y = -1;
@@ -66,9 +69,9 @@ void findPath (std::vector<std::vector<int>>* tileArray, Vector2 actorPos, Vecto
                 return;
             }
             if ((*tileArray)[tileY][tileX - 1] == colorCode) {
-            direction->x = -1;
-            direction->y = 0;
-            return;
+                direction->x = -1;
+                direction->y = 0;
+                return;
             }
             if ((*tileArray)[tileY-1][tileX] == colorCode) {
                 direction->y = -1;
@@ -76,7 +79,6 @@ void findPath (std::vector<std::vector<int>>* tileArray, Vector2 actorPos, Vecto
                 return;
             }
         }
-        
     }
     if (direction->x < 0 && tileX >= 0 && tileY >= 0) {
         if ((*tileArray)[tileY][tileX - 1] == colorCode && tileX - 1 >= 0) {

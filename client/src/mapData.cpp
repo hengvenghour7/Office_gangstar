@@ -17,7 +17,7 @@ WorldSet& getCenterWorld() {
     {79730, LoadTexture("resources/image/Modern_UI_Style_1.png") , 8, 5, 10, 0, 240/15, 688/21}
     };
     static std::vector<PropDrawCondition> characterPropCondition{
-        {79735, LoadTexture("resources/image/character/woman.png"), 0, 8, 4, 0, 896/56, 640/20}
+        {79735, LoadTexture("resources/image/character/woman.png"), 0, 8, 4, 0, 896/56, 640/20, {true, 79731}}
     };
     static std::vector<PropDrawCondition> carPropCondition{
         {79735, LoadTexture("resources/image/Buses_2.png"), 0, 1, 3, 0, 2272/15.8, 1200/11}

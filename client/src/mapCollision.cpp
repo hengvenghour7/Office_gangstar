@@ -54,21 +54,27 @@ MapProp::MapProp (std::vector<int>* inputDataArray, int inputMapWidth, int input
         for (int x = 0; x < inputMapWidth; x++) {
             for (PropDrawCondition &condition : *PropDrawConditions) {
                 if (locationArray[y][x] == condition.collisionCode) {
-                    props.emplace_back(&condition.imagePath, x*MAP_TILE_SIZE*this->scale, y*MAP_TILE_SIZE*this->scale, condition.width, condition.height, condition.startCol, condition.startRow, condition.maxCols, scale);
+                    props.emplace_back(&condition.imagePath, x*MAP_TILE_SIZE*this->scale, y*MAP_TILE_SIZE*this->scale, condition.width, condition.height, condition.startCol, condition.startRow, condition.maxCols, scale, condition.collisionCode, condition.followPathDetail);
                 }
             }
         }
     };
+    for (Prop &prop : props) {
+        if (prop.followPathDetail.isFollowPath) {
+            followPathProps.push_back(&prop);
+        }
+    }
 }
 void MapProp::moveProps (float speedX, float speedY) {
     for (Prop &prop : props) {
         prop.x += speedX;
     }
 }
-void MapProp::moveProps2 (float speedX, float speedY, int colorCode) {
-    for (Prop &prop : props) {
-        prop.x += prop.direction.x;
-        prop.y += prop.direction.y;
+void MapProp::moveProps2 (float speedX, float speedY) {
+    for (Prop* &prop : followPathProps) {
+        findPath(&locationArray, {prop->x, prop->y}, &prop->direction, prop->followPathDetail.pathCode, prop->locationCode);
+        prop->x += prop->direction.x*speedX;
+        prop->y += prop->direction.y*speedX;
     }
 }
 void MapProp::draw (Vector2 mapPos) {
@@ -83,6 +89,7 @@ void MapProp::updateAnimation(float deltaTime, bool isBackward, bool isPauseisPa
     for (Prop &prop: props) {
         prop.updateAnimation(deltaTime, isBackward, isPauseisPauseAfterAnimated);
     }
+    moveProps2(1,1);
 };
 CollisionProperty MapProp::checkInteraction (Rectangle characterCollision, Vector2 worldPos, float XOffset, float YOffset) {
     CollisionProperty collision1 {false, {}};
@@ -96,7 +103,8 @@ CollisionProperty MapProp::checkInteraction (Rectangle characterCollision, Vecto
         }
     return collision1;
 }
-Prop::Prop (Texture2D* inputPropTexture, float inputX, float inputY, float inputPropWidth, float inputPropHeight, float inputCol, float inputRow, float inputMaxCol, float scale): scale(scale), isFirstAction(true), propTexture(inputPropTexture) {
+Prop::Prop (Texture2D* inputPropTexture, float inputX, float inputY, float inputPropWidth, float inputPropHeight, float inputCol, float inputRow, float inputMaxCol, float scale, int locationCode, FollowPathDetail followPathDetail): 
+    scale(scale), isFirstAction(true), propTexture(inputPropTexture), locationCode(locationCode),followPathDetail(followPathDetail) {
     startCol = inputCol;
     initialCol = inputCol;
     maxCol = inputMaxCol;

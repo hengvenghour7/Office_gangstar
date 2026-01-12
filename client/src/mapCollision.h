@@ -8,6 +8,10 @@
 #include <raymath.h>
 #include "drawing.h"
 
+struct FollowPathDetail {
+    bool isFollowPath;
+    int pathCode;
+};
 struct PropDrawCondition {
     int collisionCode;
     Texture2D imagePath;
@@ -17,6 +21,7 @@ struct PropDrawCondition {
     int maxRows;
     float width;
     float height;
+    FollowPathDetail followPathDetail{false, 0};
 };
 class MapBoundary {
     protected:
@@ -47,12 +52,14 @@ class Prop: public Drawing{
     float propHeight{};
     float row{};
     float updatePropTime{0};
+    int locationCode;
     float scale;
     bool isFirstAction{};
+    FollowPathDetail followPathDetail;
     const char* interactionSpeech{"Hello there how are you doing ?"};
     std::vector<const char*> interactionSpeechs{"Hello there how are you doing ?", "Hey!!!", "Don't touch me"};
     int speechIndex{0};
-    Prop (Texture2D* inputPropTexture, float inputX, float inputY, float inputPropWidth, float inputPropHeight, float inputCol, float inputRow, float inputMaxCol, float scale);
+    Prop (Texture2D* inputPropTexture, float inputX, float inputY, float inputPropWidth, float inputPropHeight, float inputCol, float inputRow, float inputMaxCol, float scale, int locationCode, FollowPathDetail followPathDetail);
     virtual void draw (Vector2 mapPos) override;
     void setIsFirstAction(bool isFirstACtion);
     void updateAnimation(float deltaTime, bool isBackward, bool isPauseisPauseAfterAnimated);
@@ -64,6 +71,7 @@ class MapProp: public Drawing {
     protected:
     std::vector<std::vector<int>> locationArray;
     std::vector<Prop> props{};
+    std::vector<Prop*> followPathProps{};
     std::vector<PropDrawCondition>* PropDrawConditions;
     Vector2 speechLocation;
     float scale;
@@ -72,7 +80,7 @@ class MapProp: public Drawing {
     virtual void draw (Vector2 mapPos) override;
     CollisionProperty checkInteraction (Rectangle characterCollision, Vector2 worldPos, float XOffset, float YOffset);
     void moveProps (float speedX, float speedY);
-    void moveProps2 (float speedX, float speedY, int colorCode);
+    void moveProps2 (float speedX, float speedY);
     void updateAnimation(float deltaTime, bool isBackward = false, bool isPauseisPauseAfterAnimated = false);
     std::vector<Prop>* getMapProp();
 };
