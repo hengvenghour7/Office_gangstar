@@ -1,6 +1,7 @@
 #include "character.h"
 #include "mapCollision.h"
 #include "helpers.h"
+#include "globalVar.h"
 
 HealthComponent::HealthComponent (float inputMaxHealth) {
     maxHealth = inputMaxHealth;
@@ -16,7 +17,7 @@ void HealthComponent::heal(float healAmount) {
 void HealthComponent::drawHealth(float locationX, float locationY, float width, float height, Color inputColor){
     DrawRectangle(locationX, locationY, width, height, inputColor);
 };
-Character::Character (const char * imageTexture, float speed, float damage) : characterHealth(300), speed(speed), takeDamageTimeCap(1.f), stunTimeCap(takeDamageTimeCap + 0.5f), directionState(Right), damage(damage) {
+Character::Character (const char * imageTexture, float speed, float damage) : characterHealth(200), speed(speed), takeDamageTimeCap(1.f), stunTimeCap(takeDamageTimeCap + 0.5f), directionState(Right), damage(damage) {
             width = 896/56;
             height = 640/20;
             maxCols = 6;
@@ -301,7 +302,9 @@ Rectangle Character::getCharacterHitBox ()  {
 HealthComponent Character::getHealthComponent () {
     return characterHealth;
 }
-Player::Player (const char * imageTexture, std::vector<std::vector<int>>* worldCollisionArray, float speed, float damage): Character(imageTexture, speed, damage), worldCollisionArray(worldCollisionArray) {
+Player::Player (const char * imageTexture, std::vector<std::vector<int>>* worldCollisionArray, float speed, float damage): Character(imageTexture, speed, damage), 
+        worldCollisionArray(worldCollisionArray),
+        healthBarTexture(LoadTexture("resources/image/UI/healthUI.png")) {
             screenPos.x = SCREEN_WIDTH/2;
             screenPos.y = SCREEN_HEIGHT/2;
             worldPos = {200, 100};
@@ -368,7 +371,20 @@ void Player::tick (float deltaTime) {
         Character::tick(deltaTime);
     }
 void Player::drawHealth(int x, int y) {
-    characterHealth.drawHealth(x, y, characterHealth.currentHealth, 10, GREEN);
+    Vector2 startingPoint = {x - 32, y};
+    float segmentWidth = TILE_SIZE;
+    int healthScaleFactor = 3;
+    DrawTexturePro(healthBarTexture, {0,0, segmentWidth, TILE_SIZE}, {startingPoint.x,0, segmentWidth*healthScaleFactor, (float)TILE_SIZE*healthScaleFactor}, {0,0}, 0, WHITE);
+    DrawTexturePro(healthBarTexture, 
+        {segmentWidth,0, segmentWidth, TILE_SIZE}, 
+        {startingPoint.x + segmentWidth*healthScaleFactor,0, characterHealth.maxHealth, (float)TILE_SIZE*healthScaleFactor}, 
+        {0,0}, 
+        0, 
+        WHITE);
+    DrawTexturePro(healthBarTexture, {segmentWidth*2,0, segmentWidth, TILE_SIZE}, 
+        {startingPoint.x + segmentWidth*healthScaleFactor + characterHealth.maxHealth,startingPoint.y, segmentWidth*3, TILE_SIZE*3}, 
+        {0,0}, 0, WHITE);
+    characterHealth.drawHealth(x + segmentWidth, startingPoint.y + 20, characterHealth.currentHealth, 12, GREEN);
 }
 Vector2 Player::getWorldPos () {
             return worldPos;
