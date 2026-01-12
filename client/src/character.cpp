@@ -304,7 +304,8 @@ HealthComponent Character::getHealthComponent () {
 }
 Player::Player (const char * imageTexture, std::vector<std::vector<int>>* worldCollisionArray, float speed, float damage): Character(imageTexture, speed, damage), 
         worldCollisionArray(worldCollisionArray),
-        healthBarTexture(LoadTexture("resources/image/UI/healthUI.png")) {
+        healthBarTexture(LoadTexture("resources/image/UI/healthUI.png")),
+        coinTexture(LoadTexture("resources/image/UI/coin.png")) {
             screenPos.x = SCREEN_WIDTH/2;
             screenPos.y = SCREEN_HEIGHT/2;
             worldPos = {200, 100};
@@ -371,13 +372,13 @@ void Player::tick (float deltaTime) {
         Character::tick(deltaTime);
     }
 void Player::drawHealth(int x, int y) {
-    Vector2 startingPoint = {x - 32, y};
+    Vector2 startingPoint = {x - 32, y - 5};
     float segmentWidth = TILE_SIZE;
     int healthScaleFactor = 3;
-    DrawTexturePro(healthBarTexture, {0,0, segmentWidth, TILE_SIZE}, {startingPoint.x,0, segmentWidth*healthScaleFactor, (float)TILE_SIZE*healthScaleFactor}, {0,0}, 0, WHITE);
+    DrawTexturePro(healthBarTexture, {0,0, segmentWidth, TILE_SIZE}, {startingPoint.x, startingPoint.y, segmentWidth*healthScaleFactor, (float)TILE_SIZE*healthScaleFactor}, {0,0}, 0, WHITE);
     DrawTexturePro(healthBarTexture, 
         {segmentWidth,0, segmentWidth, TILE_SIZE}, 
-        {startingPoint.x + segmentWidth*healthScaleFactor,0, characterHealth.maxHealth, (float)TILE_SIZE*healthScaleFactor}, 
+        {startingPoint.x + segmentWidth*healthScaleFactor, startingPoint.y, characterHealth.maxHealth, (float)TILE_SIZE*healthScaleFactor}, 
         {0,0}, 
         0, 
         WHITE);
@@ -385,6 +386,10 @@ void Player::drawHealth(int x, int y) {
         {startingPoint.x + segmentWidth*healthScaleFactor + characterHealth.maxHealth,startingPoint.y, segmentWidth*3, TILE_SIZE*3}, 
         {0,0}, 0, WHITE);
     characterHealth.drawHealth(x + segmentWidth, startingPoint.y + 20, characterHealth.currentHealth, 12, GREEN);
+    DrawText("220", SCREEN_WIDTH - 32*3 - 10, startingPoint.y + 20, 20, WHITE);
+    DrawTexturePro(coinTexture, {0,0, 32, 32}, 
+        {SCREEN_WIDTH - 32*2, 0, 32*scale_factor, 32*scale_factor}, 
+        {0,0}, 0, WHITE);
 }
 Vector2 Player::getWorldPos () {
             return worldPos;

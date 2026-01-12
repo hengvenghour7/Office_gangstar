@@ -87,6 +87,7 @@ class Player: public Character
         std::vector<std::vector<int>>* worldCollisionArray;
         int collisionCode{79732};
         Texture2D healthBarTexture;
+        Texture2D coinTexture;
     public:
         Player (const char * imageTexture, std::vector<std::vector<int>>* worldCollisionArray, float speed, float damage);
         virtual void tick(float deltaTime) override;

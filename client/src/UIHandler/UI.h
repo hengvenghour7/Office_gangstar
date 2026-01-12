@@ -32,3 +32,7 @@ class UI {
         void startGame();
         std::vector<Button*> getMenuButton ();
 };
+class GameplayUI {
+    public:
+        GameplayUI();
+};
