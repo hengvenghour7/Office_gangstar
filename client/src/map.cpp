@@ -11,8 +11,10 @@ WorldDrawProperty::WorldDrawProperty (int width, int height, std::vector<int>* c
 void WorldDrawProperty::changeProperty(int width, int height, Vector2 des, std::vector<int>* collisionData) {
     
 };
-WorldSet::WorldSet(const char* backgroundTexture, const char* foregroundTexture, int mapWidth, int mapHeight, std::vector<int>* collisionData, std::vector<MapProp*>* worldProps, std::string mapPropertyPath): 
-    drawProperty(mapWidth, mapHeight, collisionData), background(backgroundTexture, &drawProperty), foreground(foregroundTexture, &drawProperty), worldProps(worldProps)  {
+WorldSet::WorldSet(const char* backgroundTexture, const char* foregroundTexture, int mapWidth, int mapHeight, 
+    std::vector<int>* collisionData, std::vector<MapProp*>* worldProps, std::string mapPropertyPath, WorldEnums worldName): 
+    drawProperty(mapWidth, mapHeight, collisionData), background(backgroundTexture, &drawProperty), foreground(foregroundTexture, &drawProperty), worldProps(worldProps),
+    worldName(worldName)  {
         std::fstream file (mapPropertyPath);
     if (!file.is_open()) {
         std::cout<<"error, can't open file";
@@ -54,6 +56,9 @@ WorldSet::WorldSet(const char* backgroundTexture, const char* foregroundTexture,
             }
         }
     }
+}
+WorldEnums WorldSet::getWorldName() {
+    return worldName;
 }
 int WorldSet::getCollisionCode() {
     return collisionCode;
@@ -111,10 +116,8 @@ std::vector<AIPlayer>* WorldSet::getAIPlayers() {
 }
 MapSwitcherProp::MapSwitcherProp (Vector2 location, std::string switchToMap, int spawnIndex, int spawnToIndex, int width, int height) : location(location), screenPos(location), switchToMap(switchToMap),
 spawnIndex(spawnIndex), spawnToIndex(spawnToIndex), width(width), height(height) {
-    std::cout<<" location x "<< location.x << " y " << location.y;
 };
 void MapSwitcherProp::draw(Vector2 des) {
-    // std::cout<<"ddddd "<< width;
     DrawRectangle(location.x + des.x, location.y + des.y, width, height, GREEN);
 }
 void MapSwitcherProp::setScreenPos (Vector2 mapPos) {

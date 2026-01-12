@@ -52,13 +52,15 @@ class WorldSet {
     std::unordered_map<int , MapSwitcherProp> mapSwitchersList{};
     std::vector<AIPlayer> AIPlayers;
     int collisionCode{1};
+    WorldEnums worldName;
 
     public:
         WorldDrawProperty drawProperty;
         World background;
         World foreground;
         std::vector<MapProp*>* worldProps;
-        WorldSet(const char* backgroundTexture, const char* foregroundTexture, int mapWidth, int mapHeight, std::vector<int>* collisionData, std::vector<MapProp*>* worldProps, std::string mapPropertyPath);
+        WorldSet(const char* backgroundTexture, const char* foregroundTexture, int mapWidth, int mapHeight, 
+            std::vector<int>* collisionData, std::vector<MapProp*>* worldProps, std::string mapPropertyPath, WorldEnums worldName);
         void changeMap (const char* backgroundTexture, const char* foregroundTexture, int width, int height, Vector2 des, std::vector<int>* collisionData);
         std::vector<std::vector<int>>* getWorldCollisionArray ();
         std::vector<Drawing*> getAllDrawableProps ();
@@ -69,6 +71,7 @@ class WorldSet {
         Vector2 getSpawnLocation(int spawnIndex);
         std::unordered_map<int , MapSwitcherProp>* getMapSwitchersList();
         int getCollisionCode();
+        WorldEnums getWorldName();
 };
 
 #endif

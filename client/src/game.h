@@ -10,6 +10,8 @@ class Game {
     private:
         bool isGameOver;
         bool isMenuOpen;
+        bool isOpenInteractionDialog;
+        const char* interactionText{""};
         GameStateEnums gameState;
         UI gameUI;
         MapBoundary mapBoundary1;
@@ -34,4 +36,5 @@ class Game {
         void loadGame();
         void checkSwitchWorldInteraction(Player& player);
         void checkPropsInteraction(Player& player, Vector2 mapPos);
+        void loadWorld(WorldEnums targetMap, Vector2 targetLocation);
 };

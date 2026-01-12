@@ -49,12 +49,15 @@ class Prop: public Drawing{
     float updatePropTime{0};
     float scale;
     bool isFirstAction{};
-    const char* interactionSpeech{"Hello there how are you doing"};
+    const char* interactionSpeech{"Hello there how are you doing ?"};
+    std::vector<const char*> interactionSpeechs{"Hello there how are you doing ?", "Hey!!!", "Don't touch me"};
+    int speechIndex{0};
     Prop (Texture2D* inputPropTexture, float inputX, float inputY, float inputPropWidth, float inputPropHeight, float inputCol, float inputRow, float inputMaxCol, float scale);
     virtual void draw (Vector2 mapPos) override;
     void setIsFirstAction(bool isFirstACtion);
     void updateAnimation(float deltaTime, bool isBackward, bool isPauseisPauseAfterAnimated);
     Vector2 getCenter(Vector2 mapPos);
+    const char* getInteractionSpeech ();
     void displayerInteractionText(Vector2* speechLocation, Texture2D* speechBackground);
 };
 class MapProp: public Drawing {

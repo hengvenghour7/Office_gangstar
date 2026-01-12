@@ -139,6 +139,12 @@ void Prop::displayerInteractionText(Vector2* speechLocation, Texture2D* speechBa
     DrawTexturePro(* speechBackground, {0,0, 320, 96}, {speechLocation->x, speechLocation->y, 320, 96}, {0,0}, 0, WHITE);
     DrawText(interactionSpeech, speechLocation->x + 50, speechLocation->y + 50, 16, GetColor(THEMECOLOR));
 }
+const char* Prop::getInteractionSpeech () {
+    const char* speech = interactionSpeechs[speechIndex];
+    speechIndex++;
+    if (speechIndex >= interactionSpeechs.size()) speechIndex = 0;
+    return speech;
+}
 MapHandler::MapHandler (Vector2* inputMapPos, float inputScale, std::vector<int>* mapCollisionData) {
     drawTexture = outsideMap;
     mapPos = inputMapPos;

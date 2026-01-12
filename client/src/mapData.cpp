@@ -42,7 +42,8 @@ WorldSet& getCenterWorld() {
         100,
         &collisionData,
         &centerWorldProps,
-        "resources/maps/office_gang_map.tmj"
+        "resources/maps/office_gang_map.tmj",
+        WorldEnums::CenterWorld
     );
 
     return centerWorld;
@@ -52,17 +53,18 @@ WorldSet& getMarketInterior() {
     static std::vector<MapProp*> marketInteriorProps = {
     };
 
-    static WorldSet centerWorld(
+    static WorldSet marketInterior(
         "resources/image/supermarket_map.png",
         "",
         50,
         20,
         &supermarketBoundary,
         &marketInteriorProps,
-        "resources/maps/supermarket_map.tmj"
+        "resources/maps/supermarket_map.tmj",
+        WorldEnums::InteriorSuperMarket
     );
 
-    return centerWorld;
+    return marketInterior;
 }
 WorldSet& getOfficeInterior() {
     static std::vector<MapProp*> officeInteriorProps = {
@@ -81,7 +83,8 @@ WorldSet& getOfficeInterior() {
         20,
         &mapCollisionData,
         &officeInteriorProps,
-        "resources/maps/office_interior.tmj"
+        "resources/maps/office_interior.tmj",
+        WorldEnums::InteriorOffice1
     );
 
     return centerWorld;
@@ -103,13 +106,13 @@ WorldSet& getOfficeInterior2() {
         20,
         &mapCollisionData,
         &officeInteriorProps,
-        "resources/maps/office_interior_2.tmj"
+        "resources/maps/office_interior_2.tmj",
+        WorldEnums::InteriorOffice2
     );
 
     return officeInterior2;
 }
 WorldSet& getHardwareInterior() {
-    std::cout<<"hard interior is here";
     static std::vector<MapProp*> hardwareInteriorProps = {
     };
     std::vector<int> mapCollisionData;
@@ -126,13 +129,13 @@ WorldSet& getHardwareInterior() {
         20,
         &mapCollisionData,
         &hardwareInteriorProps,
-        "resources/maps/sunna_interior.tmj"
+        "resources/maps/sunna_interior.tmj",
+        WorldEnums::InteriorHardware
     );
 
     return hardwareInterior;
 }
 WorldSet& getSunnaInterior() {
-    // std::cout<<"hard interior is here";
     static std::vector<MapProp*> sunnaInteriorProps = {
     };
     std::vector<int> mapCollisionData;
@@ -141,7 +144,6 @@ WorldSet& getSunnaInterior() {
         json j;
         file >> j;
         mapCollisionData = getArrayFromJson(j, "collision");
-        // std::cout<<"mmmm " << mapCollisionData.size();
     }
     static WorldSet sunnaInterior(
         "resources/image/sunna_interior.png",
@@ -150,7 +152,8 @@ WorldSet& getSunnaInterior() {
         30,
         &mapCollisionData,
         &sunnaInteriorProps,
-        "resources/maps/sunna_interior.tmj"
+        "resources/maps/sunna_interior.tmj",
+        WorldEnums::InteriorSunna
     );
 
     return sunnaInterior;
