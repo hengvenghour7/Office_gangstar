@@ -11,6 +11,19 @@ WorldDrawProperty::WorldDrawProperty (int width, int height, std::vector<int>* c
 void WorldDrawProperty::changeProperty(int width, int height, Vector2 des, std::vector<int>* collisionData) {
     
 };
+Shop::Shop(Rectangle shopDimension, std::string name, std::vector<ShopItemProperties> allShopItemProperties): 
+    shopDimension(shopDimension),
+    name(name) {
+        for (ShopItemProperties property: allShopItemProperties) {
+            shopItems.emplace_back(property.textureSrc, property.name, property.heal, property.energyHeal);
+        }
+};
+std::vector<ShopItem>* Shop::getShopItems(){
+    return &shopItems;
+}
+std::string Shop::getShopName() {
+    return name;
+}
 WorldSet::WorldSet(const char* backgroundTexture, const char* foregroundTexture, int mapWidth, int mapHeight, 
     std::vector<int>* collisionData, std::vector<MapProp*>* worldProps, std::string mapPropertyPath, WorldEnums worldName): 
     drawProperty(mapWidth, mapHeight, collisionData), background(backgroundTexture, &drawProperty), foreground(foregroundTexture, &drawProperty), worldProps(worldProps),
@@ -55,11 +68,45 @@ WorldSet::WorldSet(const char* backgroundTexture, const char* foregroundTexture,
                 mapSwitchersList.emplace(spawnIndex, MapSwitcherProp(inputLocation, inputSwitchToMap, spawnIndex , spawnToIndex, width, height));
             }
         }
+        auto shopLocationLayer = std::find_if(layers.begin(), layers.end(), [](const json& layer) {
+                return layer["name"].get<std::string>() == "shop location";
+            });
+        if (shopLocationLayer != layers.end()) {
+            auto allShop = (*shopLocationLayer)["objects"];
+            auto it = allShopItems.find(worldName);
+            if (it != allShopItems.end()) {
+                AllShopProperties worldShops = it->second;
+                for (auto &shop: allShop) {
+                    std::string tempShopName{};
+                    if (shop.contains("properties")) {
+                        for (auto &property: shop["properties"]) {
+                            if (property["name"] == "shopName") {
+                                tempShopName = property["value"];
+                            }
+                        }
+                    }
+                    Rectangle tempDimension = {shop["x"], shop["y"], shop["width"], shop["height"]};
+                    auto it_2 = worldShops.find(tempShopName);
+                    if (it_2 != worldShops.end()) {
+                        std::vector<ShopItemProperties> availableItemsProperties = it_2->second;
+                        shops.emplace_back(tempDimension, tempShopName, availableItemsProperties);
+                    }
+                }
+            }
+        }
     }
 }
 WorldEnums WorldSet::getWorldName() {
     return worldName;
 }
+std::vector<ShopItem>* WorldSet::getShopItems (std::string name) {
+    auto shopToOpen = std::find_if(shops.begin(), shops.end(), [name](Shop shop){
+        return shop.getShopName() == name;
+    });
+    std::cout<< "first shop item is "<< (*(*shopToOpen).getShopItems())[0].name;
+    std::vector<ShopItem>* shopItems = (*shopToOpen).getShopItems();
+    return shopItems;
+};
 int WorldSet::getCollisionCode() {
     return collisionCode;
 }

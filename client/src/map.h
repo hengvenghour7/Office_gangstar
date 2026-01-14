@@ -8,14 +8,21 @@
 #include "worldEnums.h"
 #include "character.h"
 #include <unordered_map>
+#include "shop/shopData.h"
+#include "UIHandler/UI.h"
 
 struct SpawnToDetail {
     WorldEnums targetMap;
     int targetSpawnPoint;
 };
 class Shop {
+    Rectangle shopDimension;
+    std::string name;
+    std::vector<ShopItem> shopItems{};
     public:
-    Shop();
+    Shop(Rectangle shopDimension, std::string name, std::vector<ShopItemProperties> allShopItemProperties);
+    std::vector<ShopItem>* getShopItems();
+    std::string getShopName();
 };
 class MapSwitcherProp: public Drawing {
     Vector2 location;
@@ -77,6 +84,7 @@ class WorldSet {
         std::unordered_map<int , MapSwitcherProp>* getMapSwitchersList();
         int getCollisionCode();
         WorldEnums getWorldName();
+        std::vector<ShopItem>* getShopItems(std::string name);
 };
 
 #endif

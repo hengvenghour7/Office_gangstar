@@ -18,16 +18,7 @@ isMenuOpen(true),
 isOpenInteractionDialog(false),
 gameState(GameStateEnums::StartScreen),
 gameUI(),
-shopUI(
-    {
-        {
-            "resources/image/UI/shop/meat_icon.png",
-            "meat",
-            20,
-            0
-        }
-    }
-),
+shopUI(),
 mapBoundary1(collisionData, 150, 100, 16, 79732) , 
 NPC("resources/image/character/workingman.png", &player, 11, 1, 30), 
 worldDrawProperty(150, 100, &collisionData),
@@ -52,9 +43,11 @@ player("resources/image/character/workingman2.png", currentWorld->getWorldCollis
     for (Drawing* propSet : currentWorld->getAllDrawableProps()) {
         allDrawableObjects.push_back(propSet);
     }
+    shopUI.setShopItems(currentWorld->getShopItems("shop1"));
     // for (auto &[key, value] : (*currentWorld->getMapSwitchersList())) {
     //     allDrawableObjects.push_back(&value);
     // }
+
 }
 void Game::tick (float deltaTime) {
     BeginDrawing();

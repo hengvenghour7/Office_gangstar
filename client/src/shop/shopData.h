@@ -16,10 +16,13 @@ struct ShopItemProperties {
     int heal;
     int energyHeal;
 };
-struct ShopProperties {
-    std::string shopName;
-    std::vector<ShopItemProperties> shopItems;
+using AllShopProperties = std::unordered_map<std::string ,std::vector<ShopItemProperties>>;
+extern std::unordered_map<WorldEnums , AllShopProperties> allShopItems;
+
+class HandleWorldShop {
+    public:
+        HandleWorldShop();
+        std::vector<ShopItemProperties> getShopItems();
 };
-extern std::unordered_map<WorldEnums , std::vector<ShopProperties>> allShopItem;
 
 #endif

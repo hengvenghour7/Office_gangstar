@@ -1,6 +1,6 @@
 #include "shopData.h"
 
-std::unordered_map<WorldEnums , std::vector<ShopProperties>> allShopItem = {
+std::unordered_map<WorldEnums , AllShopProperties> allShopItems = {
     {
         WorldEnums::CenterWorld,
         {
@@ -12,7 +12,19 @@ std::unordered_map<WorldEnums , std::vector<ShopProperties>> allShopItem = {
                         "resources/image/UI/shop/meat_icon.png",
                         20,
                         10
-                    }
+                    },
+                    {
+                        "meat2",
+                        "resources/image/UI/shop/meat_icon.png",
+                        20,
+                        10
+                    },
+                    {
+                        "meat3",
+                        "resources/image/UI/shop/meat_icon.png",
+                        20,
+                        10
+                    },
                 }
             },
         }

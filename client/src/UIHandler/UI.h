@@ -1,3 +1,6 @@
+#ifndef UI_H
+#define UI_H
+
 #include <iostream>
 #include <raylib.h>
 #include <raymath.h>
@@ -55,9 +58,10 @@ class GameplayUI {
 class ShopUI {
     Vector2 location;
     Texture2D backgroundTexture;
-    std::vector<ShopItem> shopItems{};
+    std::vector<ShopItem>* shopItems{};
     public:
-        ShopUI(std::vector<UIComponentProperties> shopItemProperties);
+        ShopUI();
+        void setShopItems(std::vector<ShopItem>* shop_items);
         void draw();
 };
 class InventoryUI {
@@ -66,3 +70,5 @@ class InventoryUI {
     public:
         InventoryUI(std::vector<UIComponentProperties> shopItemProperties);
 };
+
+#endif
