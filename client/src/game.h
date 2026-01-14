@@ -13,6 +13,7 @@ class Game {
         bool isOpenInteractionDialog;
         const char* interactionText{""};
         GameStateEnums gameState;
+        ShopUI shopUI;
         UI gameUI;
         MapBoundary mapBoundary1;
         std::vector<AIPlayer> enemies{};

@@ -13,6 +13,10 @@ struct SpawnToDetail {
     WorldEnums targetMap;
     int targetSpawnPoint;
 };
+class Shop {
+    public:
+    Shop();
+};
 class MapSwitcherProp: public Drawing {
     Vector2 location;
     Vector2 screenPos;
@@ -53,6 +57,7 @@ class WorldSet {
     std::vector<AIPlayer> AIPlayers;
     int collisionCode{1};
     WorldEnums worldName;
+    std::vector<Shop> shops;
 
     public:
         WorldDrawProperty drawProperty;

@@ -3383,33 +3383,6 @@
                 }, 
                 {
                  "height":16,
-                 "id":7,
-                 "name":"",
-                 "properties":[
-                        {
-                         "name":"spawn index",
-                         "type":"int",
-                         "value":5
-                        }, 
-                        {
-                         "name":"spawn target",
-                         "type":"int",
-                         "value":0
-                        }, 
-                        {
-                         "name":"switchToMap",
-                         "type":"string",
-                         "value":"hardware_interior"
-                        }],
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":16,
-                 "x":864.25,
-                 "y":367.75
-                }, 
-                {
-                 "height":16,
                  "id":8,
                  "name":"",
                  "properties":[
@@ -3440,9 +3413,37 @@
          "visible":true,
          "x":0,
          "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":34,
+         "name":"shop location",
+         "objects":[
+                {
+                 "height":51,
+                 "id":11,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"shopName",
+                         "type":"string",
+                         "value":"shop1"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":63,
+                 "x":777,
+                 "y":299
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
         }],
- "nextlayerid":34,
- "nextobjectid":11,
+ "nextlayerid":35,
+ "nextobjectid":12,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.2",

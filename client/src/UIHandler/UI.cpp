@@ -1,6 +1,7 @@
 #include "../globalVar.h"
 #include "UI.h"
 
+
 Button::Button (const char* text, Vector2 location, MenuActionEnums action): text(text), location(location),
     action(action), dimension({(float)MeasureText(text, 20), 30.f}) {
 
@@ -33,4 +34,23 @@ void UI::draw() {
 }
 std::vector<Button*> UI::getMenuButton() {
     return Buttons;
+}
+ShopItem::ShopItem (const char* textureSrc, std::string name, int heal, int energyHeal): texture(LoadTexture(textureSrc)),
+    name(name), heal(heal), energyHeal(energyHeal) {
+
+}
+ShopUI::ShopUI (std::vector<UIComponentProperties> shopItemProperties):
+    backgroundTexture(LoadTexture("resources/image/UI/shop/shop_background.png")),
+    location({SCREEN_WIDTH/2 - 480*0.5, SCREEN_HEIGHT*0.5 - 320*0.5}) {
+        int itemIndex = 0;
+        for (UIComponentProperties &property: shopItemProperties ) {
+            shopItems.emplace_back(property.textureSrc, property.name, property.heal, property.energyHeal);
+            itemIndex++;
+        }
+}
+void ShopUI::draw () {
+    DrawTexturePro(backgroundTexture, {0,0, 480, 320}, {location.x, location.y, 480, 320 }, {0,0}, 0, WHITE);
+    for (ShopItem &item: shopItems) {
+        DrawTexturePro(item.texture, {0,0, 16, 16}, {location.x + 50, location.y + 50, 50, 50 }, {0,0}, 0, WHITE);
+    }
 }

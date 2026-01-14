@@ -47,7 +47,7 @@ void findPath (std::vector<std::vector<int>>* tileArray, Vector2 actorPos, Vecto
             direction->x = 1;
             direction->y = 0;
             return;
-        } 
+        }
         if (direction->y <= 0) {
             if ((*tileArray)[tileY-1][tileX] == colorCode) {
                 direction->y = -1;

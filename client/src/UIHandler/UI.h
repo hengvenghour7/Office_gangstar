@@ -4,7 +4,23 @@
 #include <vector>
 #include "buttonEnums.h"
 #include "../helpers.h"
+#include "../shop/shopData.h"
 
+struct UIComponentProperties {
+    const char* textureSrc;
+    std::string name;
+    int heal;
+    int energyHeal;
+};
+class ShopItem {
+    public:
+        Texture2D texture;
+        std::string name;
+        int heal;
+        int energyHeal;
+        Vector2 drawLocation;
+        ShopItem(const char* textureSrc, std::string name, int heal, int energyHeal);
+};
 class Button {
     const char* text;
     Vector2 location;
@@ -35,4 +51,18 @@ class UI {
 class GameplayUI {
     public:
         GameplayUI();
+};
+class ShopUI {
+    Vector2 location;
+    Texture2D backgroundTexture;
+    std::vector<ShopItem> shopItems{};
+    public:
+        ShopUI(std::vector<UIComponentProperties> shopItemProperties);
+        void draw();
+};
+class InventoryUI {
+    Vector2 location;
+    Texture2D backgroundTexture;
+    public:
+        InventoryUI(std::vector<UIComponentProperties> shopItemProperties);
 };

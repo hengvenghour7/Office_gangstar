@@ -18,6 +18,16 @@ isMenuOpen(true),
 isOpenInteractionDialog(false),
 gameState(GameStateEnums::StartScreen),
 gameUI(),
+shopUI(
+    {
+        {
+            "resources/image/UI/shop/meat_icon.png",
+            "meat",
+            20,
+            0
+        }
+    }
+),
 mapBoundary1(collisionData, 150, 100, 16, 79732) , 
 NPC("resources/image/character/workingman.png", &player, 11, 1, 30), 
 worldDrawProperty(150, 100, &collisionData),
@@ -67,6 +77,7 @@ void Game::tick (float deltaTime) {
             }
             player.tick(deltaTime);
             player.drawHealth(0, 0);
+            shopUI.draw();
             // boatProp.drawAllProps(MAP_SCALE, mapPos, deltaTime);
             for (AIPlayer &enemy : enemies) {
                 // enemy.takeDamage(&player, 100, deltaTime);
