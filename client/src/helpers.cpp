@@ -157,3 +157,7 @@ CollisionProperty checkCircleInteraction(Vector2 CenterPoint_1, Vector2 CenterPo
     }
     return collisionObject;
 };
+void drawButtonBackground (Rectangle DestinationRec, Color color, float marginX, float marginY) {
+    Rectangle update_rectangle = {DestinationRec.x - marginX, DestinationRec.y - marginY, DestinationRec.width + marginX*2, DestinationRec.height + marginY*2};
+    DrawRectangleRounded(update_rectangle, 0.4, 3, color);
+}
