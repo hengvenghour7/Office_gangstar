@@ -8,6 +8,7 @@
 #include "buttonEnums.h"
 #include "../helpers.h"
 #include "../shop/shopData.h"
+#include "../character.h"
 
 struct UIComponentProperties {
     const char* textureSrc;
@@ -21,8 +22,16 @@ class ShopItem {
         std::string name;
         int heal;
         int energyHeal;
-        Vector2 drawLocation;
         ShopItem(const char* textureSrc, std::string name, int heal, int energyHeal);
+};
+class ShopUIItem {
+    public:
+        Texture2D* texture;
+        std::string name;
+        int heal;
+        int energyHeal;
+        Rectangle dimension;
+        ShopUIItem(Texture2D* texture, std::string name, int heal, int energyHeal, Rectangle dimension);
 };
 class Button {
     const char* text;
@@ -58,11 +67,12 @@ class GameplayUI {
 class ShopUI {
     Vector2 location;
     Texture2D backgroundTexture;
-    std::vector<ShopItem>* shopItems{};
+    std::vector<ShopUIItem> shopItems{};
     public:
         ShopUI();
         void setShopItems(std::vector<ShopItem>* shop_items);
         void draw();
+        void handleInteraction(Player& player);
 };
 class InventoryUI {
     Vector2 location;

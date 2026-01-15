@@ -78,7 +78,7 @@ class Character : public Drawing
         float getDamage () {
             return damage;
         }
-        HealthComponent getHealthComponent();
+        HealthComponent* getHealthComponent();
     };
 class Player: public Character
 {

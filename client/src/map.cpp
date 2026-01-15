@@ -24,6 +24,10 @@ std::vector<ShopItem>* Shop::getShopItems(){
 std::string Shop::getShopName() {
     return name;
 }
+Rectangle Shop::getShopDimension(Vector2 mapPos) {
+    Rectangle screenShopDimension = {shopDimension.x + mapPos.x, shopDimension.y + mapPos.y, shopDimension.width, shopDimension.height};
+    return screenShopDimension;
+}
 WorldSet::WorldSet(const char* backgroundTexture, const char* foregroundTexture, int mapWidth, int mapHeight, 
     std::vector<int>* collisionData, std::vector<MapProp*>* worldProps, std::string mapPropertyPath, WorldEnums worldName): 
     drawProperty(mapWidth, mapHeight, collisionData), background(backgroundTexture, &drawProperty), foreground(foregroundTexture, &drawProperty), worldProps(worldProps),
@@ -85,7 +89,7 @@ WorldSet::WorldSet(const char* backgroundTexture, const char* foregroundTexture,
                             }
                         }
                     }
-                    Rectangle tempDimension = {shop["x"], shop["y"], shop["width"], shop["height"]};
+                    Rectangle tempDimension = {shop["x"].get<float>()*MAP_SCALE, shop["y"].get<float>()*MAP_SCALE, shop["width"].get<float>()*MAP_SCALE, shop["height"].get<float>()*MAP_SCALE};
                     auto it_2 = worldShops.find(tempShopName);
                     if (it_2 != worldShops.end()) {
                         std::vector<ShopItemProperties> availableItemsProperties = it_2->second;
@@ -99,6 +103,9 @@ WorldSet::WorldSet(const char* backgroundTexture, const char* foregroundTexture,
 WorldEnums WorldSet::getWorldName() {
     return worldName;
 }
+std::vector<Shop>* WorldSet::getCurrentWorldShops() {
+    return &shops;
+};
 std::vector<ShopItem>* WorldSet::getShopItems (std::string name) {
     auto shopToOpen = std::find_if(shops.begin(), shops.end(), [name](Shop shop){
         return shop.getShopName() == name;

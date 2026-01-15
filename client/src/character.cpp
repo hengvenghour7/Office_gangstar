@@ -12,7 +12,11 @@ void HealthComponent::takeDamage(float damage) {
     currentHealth-= damage;
 };
 void HealthComponent::heal(float healAmount) {
-    currentHealth+= healAmount;
+    if (currentHealth + healAmount <= maxHealth) {
+        currentHealth+= healAmount;
+    } else {
+        currentHealth = maxHealth;
+    };
 };
 void HealthComponent::drawHealth(float locationX, float locationY, float width, float height, Color inputColor){
     DrawRectangle(locationX, locationY, width, height, inputColor);
@@ -291,7 +295,8 @@ void Character::tick (float deltaTime) {
             // draw({0,0});
         }
 Vector2 Character::getCenter (Vector2 mapPos) {
-    
+    std::cout<<"this function need to be check later";
+    return {0,0};
 }
 Rectangle Character::getCharacterCollision ()  {
             return characterCollision;
@@ -299,8 +304,8 @@ Rectangle Character::getCharacterCollision ()  {
 Rectangle Character::getCharacterHitBox ()  {
             return characterHitBox;
         };
-HealthComponent Character::getHealthComponent () {
-    return characterHealth;
+HealthComponent* Character::getHealthComponent () {
+    return &characterHealth;
 }
 Player::Player (const char * imageTexture, std::vector<std::vector<int>>* worldCollisionArray, float speed, float damage): Character(imageTexture, speed, damage), 
         worldCollisionArray(worldCollisionArray),
@@ -317,7 +322,7 @@ void Player::setPlayerWorldPos(Vector2 worldPos) {
     this->worldPos = worldPos;
 }
 Vector2 Player::getCenter (Vector2 mapPos) {
-    Vector2 center {characterCollision.x + width*scale_factor*0.5, characterCollision.y + height*scale_factor*0.5};
+    Vector2 center {characterCollision.x + width*scale_factor*0.5f, characterCollision.y + height*scale_factor*0.5f};
     return center;
 }
 void Player::tick (float deltaTime) {
@@ -372,7 +377,7 @@ void Player::tick (float deltaTime) {
         Character::tick(deltaTime);
     }
 void Player::drawHealth(int x, int y) {
-    Vector2 startingPoint = {x - 32, y - 5};
+    Vector2 startingPoint = {x - 32.f, y - 5.f};
     float segmentWidth = TILE_SIZE;
     int healthScaleFactor = 3;
     DrawTexturePro(healthBarTexture, {0,0, segmentWidth, TILE_SIZE}, {startingPoint.x, startingPoint.y, segmentWidth*healthScaleFactor, (float)TILE_SIZE*healthScaleFactor}, {0,0}, 0, WHITE);

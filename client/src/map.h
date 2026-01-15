@@ -23,6 +23,7 @@ class Shop {
     Shop(Rectangle shopDimension, std::string name, std::vector<ShopItemProperties> allShopItemProperties);
     std::vector<ShopItem>* getShopItems();
     std::string getShopName();
+    Rectangle getShopDimension(Vector2 mapPos);
 };
 class MapSwitcherProp: public Drawing {
     Vector2 location;
@@ -84,6 +85,7 @@ class WorldSet {
         std::unordered_map<int , MapSwitcherProp>* getMapSwitchersList();
         int getCollisionCode();
         WorldEnums getWorldName();
+        std::vector<Shop>* getCurrentWorldShops();
         std::vector<ShopItem>* getShopItems(std::string name);
 };
 

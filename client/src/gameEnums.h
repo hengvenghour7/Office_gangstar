@@ -4,7 +4,7 @@ enum class GameStateEnums {
     Pause,
     GameOver,
 };
-enum class GameplayStateEnums {
+enum class GameUIStateEnums {
     Playing,
     OpenShop,
     OpenInventory

@@ -134,6 +134,15 @@ CollisionProperty checkButtonClick (Rectangle buttonRec) {
     }
     return collisionObj;
 };
+CollisionProperty checkMouseOnHover (Rectangle buttonRec) {
+    CollisionProperty collisionObj {false, {}};
+    Vector2 mousePos = GetMousePosition();
+    if (mousePos.x >= buttonRec.x && mousePos.x < (buttonRec.x + buttonRec.width) &&
+        mousePos.y >= buttonRec.y && mousePos.y < (buttonRec.y + buttonRec.height)) {
+            collisionObj.isCollide = true;
+        }
+    return collisionObj;
+};
 Vector2 Vector2Round(Vector2 inputVector) {
     Vector2 newVector2 = inputVector;
     newVector2.x = (int)(std::round(newVector2.x));

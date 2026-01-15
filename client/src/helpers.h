@@ -51,6 +51,7 @@ CollisionProperty checkInteractionTile(
 Vector2 Vector2Round(Vector2 inputVector);
 std::vector<int> getArrayFromJson(json& jObject, std::string key);
 CollisionProperty checkButtonClick(Rectangle buttonRec);
+CollisionProperty checkMouseOnHover(Rectangle buttonRec);
 CollisionProperty checkCircleInteraction(Vector2 CenterPoint_1, Vector2 CenterPoint_2, float desireDistance);
 
 #endif

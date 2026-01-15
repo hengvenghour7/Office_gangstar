@@ -45,17 +45,36 @@ ShopUI::ShopUI ():
 
 }
 void ShopUI::setShopItems(std::vector<ShopItem>* shop_items) {
-    shopItems = shop_items;
+    shopItems = {};
+    int column{0};
+    int row{0};
+    Rectangle tempDimension{location.x + 50 + 50*column, location.y + 50, 50, 50};
+    for (ShopItem &item: *shop_items) {
+        shopItems.emplace_back(&item.texture, item.name, item.heal, item.energyHeal, tempDimension);
+        column++;
+        tempDimension.x = location.x + 50 + 60*column;
+    };
 };
 void ShopUI::draw () {
     DrawTexturePro(backgroundTexture, {0,0, 480, 320}, {location.x, location.y, 480, 320 }, {0,0}, 0, WHITE);
-    if (shopItems != nullptr) {
-        // std::cout<<"ffffvv " << (*shopItems).size();
-        Vector2 itemPosition {};
-        for (ShopItem &item: *shopItems) {
-            DrawTexturePro(item.texture, {0,0, 16, 16}, {location.x + 50 + 50*itemPosition.x, location.y + 50, 50, 50 }, {0,0}, 0, WHITE);
-            DrawText(item.name.c_str(), location.x + 60 + 50*itemPosition.x, location.y + 60 + 32, 16, WHITE);
-            itemPosition.x++;
+        for (ShopUIItem &item: shopItems) {
+            if (checkMouseOnHover(item.dimension).isCollide) {
+                DrawRectangle(item.dimension.x, item.dimension.y, item.dimension.width, item.dimension.height, GetColor(HOVER_BACKGROUND_COLOR));
+            }
+            DrawTexturePro(*item.texture, {0,0, 16, 16}, item.dimension, {0,0}, 0, WHITE);
+            DrawText(item.name.c_str(), item.dimension.x, item.dimension.y + 40, 16, WHITE);
+        }
+}
+void ShopUI::handleInteraction(Player& player) {
+    for (ShopUIItem &item: shopItems) {
+        if (checkButtonClick(item.dimension).isCollide) {
+            std::cout<<"item name "<< item.name;
+            player.getHealthComponent()->heal(item.heal);
         }
     }
+};
+ShopUIItem::ShopUIItem(Texture2D* texture, std::string name, int heal, int energyHeal, Rectangle dimension):
+    texture(texture), name(name), heal(heal), energyHeal(energyHeal),
+    dimension(dimension) {
+
 }

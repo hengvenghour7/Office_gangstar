@@ -17,6 +17,7 @@ isGameOver(false),
 isMenuOpen(true),
 isOpenInteractionDialog(false),
 gameState(GameStateEnums::StartScreen),
+gameUIState(GameUIStateEnums::Playing),
 gameUI(),
 shopUI(),
 mapBoundary1(collisionData, 150, 100, 16, 79732) , 
@@ -70,7 +71,11 @@ void Game::tick (float deltaTime) {
             }
             player.tick(deltaTime);
             player.drawHealth(0, 0);
-            shopUI.draw();
+            checkShopInteraction(player, mapPos);
+            if (gameUIState == GameUIStateEnums::OpenShop) {
+                shopUI.draw();
+                shopUI.handleInteraction(player);
+            }
             // boatProp.drawAllProps(MAP_SCALE, mapPos, deltaTime);
             for (AIPlayer &enemy : enemies) {
                 // enemy.takeDamage(&player, 100, deltaTime);
@@ -84,13 +89,13 @@ void Game::tick (float deltaTime) {
             currentWorld->animateWorldProps(deltaTime);
             enemies.erase(
             std::remove_if(enemies.begin(), enemies.end(), [](AIPlayer &enemy) {
-                return enemy.getHealthComponent().currentHealth <= 0;  // remove if health <= 0
+                return enemy.getHealthComponent()->currentHealth <= 0;  // remove if health <= 0
             }),
             enemies.end()
             );
             checkSwitchWorldInteraction(player);
             checkPropsInteraction(player, mapPos);
-            if (player.getHealthComponent().currentHealth <= 0) gameState = GameStateEnums::GameOver;
+            if (player.getHealthComponent()->currentHealth <= 0) gameState = GameStateEnums::GameOver;
             if (IsKeyReleased(KEY_P)) {
                 gameState = GameStateEnums::Pause;
             }
@@ -184,6 +189,23 @@ void Game::checkPropsInteraction(Player& player, Vector2 mapPos) {
             }
         } else {
             isOpenInteractionDialog = false;
+        }
+    }
+}
+void Game::checkShopInteraction(Player &player, Vector2 mapPos) {
+    if (IsKeyReleased(KEY_I)) {
+        if (gameUIState == GameUIStateEnums::OpenShop) {
+            gameUIState = GameUIStateEnums::Playing;
+            return;
+        }
+        for (Shop& shop: *currentWorld->getCurrentWorldShops()) {
+            Rectangle screenShopDimension = shop.getShopDimension(mapPos);
+            // std::cout << "rrr " << screenShopDimension.width<< " kk " << screenShopDimension.height;
+            // DrawRectangle(screenShopDimension.x, screenShopDimension.y, screenShopDimension.width, screenShopDimension.height, PURPLE);
+            if (checkIsCollide(player.getCharacterCollision(), screenShopDimension).isCollide) {
+                gameUIState = GameUIStateEnums::OpenShop;
+                return;
+            }
         }
     }
 }
