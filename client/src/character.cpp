@@ -310,7 +310,8 @@ HealthComponent* Character::getHealthComponent () {
 Player::Player (const char * imageTexture, std::vector<std::vector<int>>* worldCollisionArray, float speed, float damage): Character(imageTexture, speed, damage), 
         worldCollisionArray(worldCollisionArray),
         healthBarTexture(LoadTexture("resources/image/UI/healthUI.png")),
-        coinTexture(LoadTexture("resources/image/UI/coin.png")) {
+        coinTexture(LoadTexture("resources/image/UI/coin.png")),
+        playerInventory({}) {
             screenPos.x = SCREEN_WIDTH/2;
             screenPos.y = SCREEN_HEIGHT/2;
             worldPos = {200, 100};
@@ -320,6 +321,9 @@ Player::Player (const char * imageTexture, std::vector<std::vector<int>>* worldC
         }
 void Player::setPlayerWorldPos(Vector2 worldPos) {
     this->worldPos = worldPos;
+}
+Inventory* Player::getPlayerInventory() {
+    return &playerInventory;
 }
 Vector2 Player::getCenter (Vector2 mapPos) {
     Vector2 center {characterCollision.x + width*scale_factor*0.5f, characterCollision.y + height*scale_factor*0.5f};
@@ -458,4 +462,4 @@ void AIPlayer::appraochTarget (std::vector<AIPlayer>* allAIPlayer, float deltaTi
             worldPos = Vector2Add(worldPos,direction*speed);
     }
     setCharacterPos(worldPos, player->getWorldPos());
-    }
+}

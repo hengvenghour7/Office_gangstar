@@ -40,4 +40,5 @@ class Game {
         void checkPropsInteraction(Player& player, Vector2 mapPos);
         void checkShopInteraction(Player& player, Vector2 mapPos);
         void loadWorld(WorldEnums targetMap, Vector2 targetLocation);
+        void handleGamePlayUIInteraction();
 };

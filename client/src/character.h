@@ -7,7 +7,8 @@
 #include "globalVar.h"
 #include "mapCollision.h"
 #include "helpers.h"
-#include"drawing.h"
+#include "drawing.h"
+#include "shop/shop.h"
 
 using namespace std;
 
@@ -88,6 +89,7 @@ class Player: public Character
         int collisionCode{79732};
         Texture2D healthBarTexture;
         Texture2D coinTexture;
+        Inventory playerInventory;
     public:
         Player (const char * imageTexture, std::vector<std::vector<int>>* worldCollisionArray, float speed, float damage);
         virtual void tick(float deltaTime) override;
@@ -97,6 +99,7 @@ class Player: public Character
         void setPlayerWorldPos (Vector2 worldPos);
         void changeCollisionCheck(std::vector<std::vector<int>>* newWorldCollisionArray, int newCollisionCode);
         virtual Vector2 getCenter(Vector2 mapPos) override;
+        Inventory* getPlayerInventory();
 };
     
 class AIPlayer : public Character {

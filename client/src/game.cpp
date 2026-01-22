@@ -72,9 +72,19 @@ void Game::tick (float deltaTime) {
             player.tick(deltaTime);
             player.drawHealth(0, 0);
             checkShopInteraction(player, mapPos);
+            if (IsKeyReleased(KEY_U)) {
+                if (gameUIState == GameUIStateEnums::OpenInventory) {
+                    gameUIState = GameUIStateEnums::Playing;
+                    break;
+                }
+                gameUIState = GameUIStateEnums::OpenInventory;
+            }
             if (gameUIState == GameUIStateEnums::OpenShop) {
                 shopUI.draw();
                 shopUI.handleInteraction(player);
+            }
+            if (gameUIState == GameUIStateEnums::OpenInventory) {
+                player.getPlayerInventory()->draw();
             }
             // boatProp.drawAllProps(MAP_SCALE, mapPos, deltaTime);
             for (AIPlayer &enemy : enemies) {
@@ -236,7 +246,6 @@ void Game::loadGame () {
     WorldEnums loadedWorld = save["world"]["worldName"].get<WorldEnums>();
     Vector2 loadedLocation = {save["player"]["x"].get<float>(), save["player"]["y"].get<float>()};
     loadWorld(loadedWorld, loadedLocation);
-    std::cout << "load save" << " player x" << save["player"]["x"];
     startGame();
 }
 void Game::loadWorld(WorldEnums targetMap, Vector2 targetLocation) {

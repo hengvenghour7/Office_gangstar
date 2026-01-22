@@ -9,29 +9,13 @@
 #include "../helpers.h"
 #include "../shop/shopData.h"
 #include "../character.h"
+#include "../shop/shop.h"
 
 struct UIComponentProperties {
     const char* textureSrc;
     std::string name;
     int heal;
     int energyHeal;
-};
-class ShopItem {
-    public:
-        Texture2D texture;
-        std::string name;
-        int heal;
-        int energyHeal;
-        ShopItem(const char* textureSrc, std::string name, int heal, int energyHeal);
-};
-class ShopUIItem {
-    public:
-        Texture2D* texture;
-        std::string name;
-        int heal;
-        int energyHeal;
-        Rectangle dimension;
-        ShopUIItem(Texture2D* texture, std::string name, int heal, int energyHeal, Rectangle dimension);
 };
 class Button {
     const char* text;

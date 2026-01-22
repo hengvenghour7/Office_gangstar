@@ -39,14 +39,9 @@ void UI::draw() {
 std::vector<Button*> UI::getMenuButton() {
     return Buttons;
 }
-ShopItem::ShopItem (const char* textureSrc, std::string name, int heal, int energyHeal): texture(LoadTexture(textureSrc)),
-    name(name), heal(heal), energyHeal(energyHeal) {
-
-}
 ShopUI::ShopUI ():
     backgroundTexture(LoadTexture("resources/image/UI/shop/shop_background.png")),
     location({SCREEN_WIDTH/2 - 480*0.5, SCREEN_HEIGHT*0.5 - 320*0.5}) {
-
 }
 void ShopUI::setShopItems(std::vector<ShopItem>* shop_items) {
     shopItems = {};
@@ -65,19 +60,15 @@ void ShopUI::draw () {
             if (checkMouseOnHover(item.dimension).isCollide) {
                 drawButtonBackground(item.dimension, GetColor(HOVER_BACKGROUND_COLOR), 5, 5);
             }
-            DrawTexturePro(*item.texture, {0,0, 16, 16}, item.dimension, {0,0}, 0, WHITE);
-            DrawText(item.name.c_str(), item.dimension.x, item.dimension.y + 50, 16, WHITE);
+            item.draw();
         }
 }
 void ShopUI::handleInteraction(Player& player) {
     for (ShopUIItem &item: shopItems) {
         if (checkButtonClick(item.dimension).isCollide) {
+            player.getPlayerInventory()->AddItems(item);
             player.getHealthComponent()->heal(item.heal);
+            std::cout<< (*player.getPlayerInventory()->getItems()).size();
         }
     }
 };
-ShopUIItem::ShopUIItem(Texture2D* texture, std::string name, int heal, int energyHeal, Rectangle dimension):
-    texture(texture), name(name), heal(heal), energyHeal(energyHeal),
-    dimension(dimension) {
-
-}
