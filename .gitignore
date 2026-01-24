@@ -1,4 +1,7 @@
 *.exe
 *.dsym
+main
 build/
 client/saved/save.json
+client/CMakeLists.txt
+.DS_Store
