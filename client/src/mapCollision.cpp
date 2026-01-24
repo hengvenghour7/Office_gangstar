@@ -118,7 +118,7 @@ void Prop::draw (Vector2 mapPos) {
     DrawTexturePro(*propTexture, {initialCol* propWidth,row* propHeight, propWidth, propHeight}, {x + mapPos.x,y + mapPos.y, propWidth*scale, propHeight*scale}, {0,0}, 0, WHITE);
 }
 Vector2 Prop::getCenter (Vector2 mapPos) {
-    Vector2 center = {x + mapPos.x - (propWidth*scale*0.5),y + mapPos.y - (propHeight*scale*0.5)};
+    Vector2 center = {x + mapPos.x - (propWidth*scale*0.5f),y + mapPos.y - (propHeight*scale*0.5f)};
     return center;
 }
 void Prop::updateAnimation(float deltaTime, bool isBackward, bool isPauseisPauseAfterAnimated) {
