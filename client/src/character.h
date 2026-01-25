@@ -100,6 +100,7 @@ class Player: public Character
         void changeCollisionCheck(std::vector<std::vector<int>>* newWorldCollisionArray, int newCollisionCode);
         virtual Vector2 getCenter(Vector2 mapPos) override;
         Inventory* getPlayerInventory();
+        void handleInteraction();
 };
     
 class AIPlayer : public Character {

@@ -5,8 +5,6 @@
 #include "globalVar.h"
 #include <fstream>
 #include <nlohmann/json.hpp>
-#include <unistd.h>
-#include <limits.h>
 
 using json = nlohmann::json;
 
@@ -47,16 +45,6 @@ WorldSet& getCenterWorld() {
         "resources/maps/office_gang_map.tmj",
         WorldEnums::CenterWorld
     );
-    char cwd[PATH_MAX];
-    if (getcwd(cwd, sizeof(cwd)) != nullptr) {
-        std::cout << "Current working directory: " << cwd << std::endl;
-    } else {
-        perror("getcwd() error");
-    }
-
-    // Show the full path raylib will try
-    std::string filePath = "client/sresources/image/office_gang_map.png";
-    std::cout << "Trying to open file at: " << cwd << "/" << filePath << std::endl;
 
     return centerWorld;
 }

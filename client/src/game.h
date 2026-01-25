@@ -32,7 +32,7 @@ class Game {
     public:
         Game();
         void tick(float deltaTime);
-        void handleMenuClick();
+        void handleStartMenuTick();
         void startGame();
         void saveGame();
         void loadGame();

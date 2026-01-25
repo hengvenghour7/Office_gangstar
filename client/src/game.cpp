@@ -45,9 +45,6 @@ player("resources/image/character/workingman2.png", currentWorld->getWorldCollis
         allDrawableObjects.push_back(propSet);
     }
     shopUI.setShopItems(currentWorld->getShopItems("shop1"));
-    // for (auto &[key, value] : (*currentWorld->getMapSwitchersList())) {
-    //     allDrawableObjects.push_back(&value);
-    // }
 
 }
 void Game::tick (float deltaTime) {
@@ -79,19 +76,10 @@ void Game::tick (float deltaTime) {
                 }
                 gameUIState = GameUIStateEnums::OpenInventory;
             }
-            if (gameUIState == GameUIStateEnums::OpenShop) {
-                shopUI.draw();
-                shopUI.handleInteraction(player);
-            }
-            if (gameUIState == GameUIStateEnums::OpenInventory) {
-                player.getPlayerInventory()->draw();
-            }
-            // boatProp.drawAllProps(MAP_SCALE, mapPos, deltaTime);
+            handleGamePlayUIInteraction();
             for (AIPlayer &enemy : enemies) {
-                // enemy.takeDamage(&player, 100, deltaTime);
         
                 enemy.AITick(deltaTime, &enemies);
-                // player.takeDamage(&enemy, 100, deltaTime );
             }
             if (enemies.size() == 0) {
                 player.updatePlayerState(Idle, true);
@@ -123,27 +111,7 @@ void Game::tick (float deltaTime) {
         break;
     case GameStateEnums::StartScreen:
         currentWorld->background.draw(pauseScreenWorldPos);
-        gameUI.draw();
-        for (Button* &button : gameUI.getMenuButton()) {
-            if (checkButtonClick (button->getButtonRec()).isCollide) {
-                MenuActionEnums actionType = button->getAction();
-                switch (actionType)
-                {
-                case MenuActionEnums::Start:
-                    startGame();
-                    break;
-                case MenuActionEnums::Save:
-                    saveGame();
-                    break;
-                case MenuActionEnums::Load:
-                    loadGame();
-                    break;
-                default:
-                    break;
-                }
-                break;
-            }
-        }
+        handleStartMenuTick();
         break;
     
     case GameStateEnums::GameOver :
@@ -173,9 +141,6 @@ void Game::checkSwitchWorldInteraction(Player& player) {
                 for (Drawing* propSet : currentWorld->getAllDrawableProps()) {
                     allDrawableObjects.push_back(propSet);
                 }
-                // for (auto &[key, value] : (*currentWorld->getMapSwitchersList())) {
-                //     allDrawableObjects.push_back(&value);
-                // }
                 return;
             }
         }
@@ -210,8 +175,6 @@ void Game::checkShopInteraction(Player &player, Vector2 mapPos) {
         }
         for (Shop& shop: *currentWorld->getCurrentWorldShops()) {
             Rectangle screenShopDimension = shop.getShopDimension(mapPos);
-            // std::cout << "rrr " << screenShopDimension.width<< " kk " << screenShopDimension.height;
-            // DrawRectangle(screenShopDimension.x, screenShopDimension.y, screenShopDimension.width, screenShopDimension.height, PURPLE);
             if (checkIsCollide(player.getCharacterCollision(), screenShopDimension).isCollide) {
                 gameUIState = GameUIStateEnums::OpenShop;
                 return;
@@ -219,8 +182,28 @@ void Game::checkShopInteraction(Player &player, Vector2 mapPos) {
         }
     }
 }
-void Game::handleMenuClick () {
-
+void Game::handleStartMenuTick () {
+    gameUI.draw();
+    for (Button* &button : gameUI.getMenuButton()) {
+            if (checkButtonClick (button->getButtonRec()).isCollide) {
+                MenuActionEnums actionType = button->getAction();
+                switch (actionType)
+                {
+                case MenuActionEnums::Start:
+                    startGame();
+                    break;
+                case MenuActionEnums::Save:
+                    saveGame();
+                    break;
+                case MenuActionEnums::Load:
+                    loadGame();
+                    break;
+                default:
+                    break;
+                }
+                break;
+            }
+        }
 }
 void Game::startGame () {
     gameState = GameStateEnums::Playing;
@@ -261,5 +244,20 @@ void Game::loadWorld(WorldEnums targetMap, Vector2 targetLocation) {
     allDrawableObjects.push_back(&player);
     for (Drawing* propSet : currentWorld->getAllDrawableProps()) {
         allDrawableObjects.push_back(propSet);
+    }
+}
+void Game::handleGamePlayUIInteraction () {
+    switch (gameUIState)
+    {
+    case GameUIStateEnums::OpenShop:
+        shopUI.draw();
+        shopUI.handleInteraction(player);
+        break;
+    case GameUIStateEnums::OpenInventory:
+        player.getPlayerInventory()->draw();
+        player.handleInteraction();
+        break;
+    default:
+        break;
     }
 }

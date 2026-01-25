@@ -8,6 +8,7 @@ int main () {
     bool isMultiPlayer = false;
     
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Office Gang");
+    SetExitKey(KEY_NULL);
     SetTargetFPS(60);
     Game game;
     if (!isMultiPlayer) {

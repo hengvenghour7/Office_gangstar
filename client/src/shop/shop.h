@@ -18,12 +18,15 @@ class ShopUIItem {
     public:
         Texture2D* texture;
         std::string name;
+        int index;
         int heal;
         int energyHeal;
         Rectangle dimension;
-        ShopUIItem(Texture2D* texture, std::string name, int heal, int energyHeal, Rectangle dimension);
+        ShopUIItem(Texture2D* texture, std::string name, int heal, int energyHeal, Rectangle dimension, int index);
         Rectangle getDimension();
+        int getIndex();
         void changeDimension(Rectangle dimension);
+        void changeIndex (int index);
         void draw();
 };
 class Inventory {
@@ -34,6 +37,7 @@ class Inventory {
         Inventory(std::vector<ShopItem> shopItems);
         void AddItems(ShopUIItem item);
         std::vector<ShopUIItem>* getItems();
+        void reArrangeItems();
         void draw();
 };
 

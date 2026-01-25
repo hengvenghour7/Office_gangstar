@@ -47,11 +47,13 @@ void ShopUI::setShopItems(std::vector<ShopItem>* shop_items) {
     shopItems = {};
     int column{0};
     int row{0};
+    int temp_index{0};
     Rectangle tempDimension{location.x + 40 + 70*column, location.y + 50, 50, 50};
     for (ShopItem &item: *shop_items) {
-        shopItems.emplace_back(&item.texture, item.name, item.heal, item.energyHeal, tempDimension);
+        shopItems.emplace_back(&item.texture, item.name, item.heal, item.energyHeal, tempDimension, temp_index);
         column++;
         tempDimension.x = location.x + 40 + 70*column;
+        temp_index++;
     };
 };
 void ShopUI::draw () {
@@ -67,7 +69,6 @@ void ShopUI::handleInteraction(Player& player) {
     for (ShopUIItem &item: shopItems) {
         if (checkButtonClick(item.dimension).isCollide) {
             player.getPlayerInventory()->AddItems(item);
-            player.getHealthComponent()->heal(item.heal);
             std::cout<< (*player.getPlayerInventory()->getItems()).size();
         }
     }
