@@ -329,12 +329,10 @@ void Player::handleInteraction() {
     std::vector<ShopUIItem>*  temp_item = playerInventory.getItems();
     for (size_t i = 0; i < (*temp_item).size(); i++) {
         if (checkButtonClick((*temp_item)[i].getDimension()).isCollide) {
-            std::cout << "Removing item at index " << i << std::endl;
             getHealthComponent()->heal((*temp_item)[i].heal);
             temp_item->erase(temp_item->begin() + i);
             playerInventory.reArrangeItems();
-            std::cout<<"kklllll" <<std::flush;
-            break; // remove only the first clicked item
+            break;
         }
     }
 }
