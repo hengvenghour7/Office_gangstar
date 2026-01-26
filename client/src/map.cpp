@@ -42,9 +42,8 @@ WorldSet::WorldSet(const char* backgroundTexture, const char* foregroundTexture,
         std::vector<int>::iterator tempCollision = std::find_if(collisionData->begin(), collisionData->end(), [](int data) {
             return data != 0;
         });
-        std::cout<<"temp collision "<< *tempCollision << " check end ";
         if (tempCollision != collisionData->end()) {
-            collisionCode = *tempCollision;
+            collisionCode = *tempCollision != 0 ? *tempCollision : 1;
         }
         auto spawnPointLayer = std::find_if(layers.begin(), layers.end(), [](const json& layer) {
                 return layer["name"].get<std::string>() == "entry point";
@@ -93,7 +92,6 @@ WorldSet::WorldSet(const char* backgroundTexture, const char* foregroundTexture,
                 if (!isAuto) {
                     mapSwitchersList.emplace(spawnIndex, MapSwitcherProp(inputLocation, inputSwitchToMap, spawnIndex , spawnToIndex, width, height));
                 } else {
-                    std::cout<< " thyyyy width " << width << std::flush;
                     autoMapSwitcherList.emplace(spawnIndex, AutoMapSwitcherProp(inputLocation, inputSwitchToMap, spawnIndex , spawnToIndex, width, height, direction));
                 }
             }
@@ -136,7 +134,6 @@ std::vector<ShopItem>* WorldSet::getShopItems (std::string name) {
     auto shopToOpen = std::find_if(shops.begin(), shops.end(), [name](Shop shop){
         return shop.getShopName() == name;
     });
-    std::cout<< "first shop item is "<< (*(*shopToOpen).getShopItems())[0].name;
     std::vector<ShopItem>* shopItems = (*shopToOpen).getShopItems();
     return shopItems;
 };
@@ -184,7 +181,12 @@ Vector2 WorldSet::getSpawnLocation(int spawnIndex) {
         // spawnLocation = {0 - SCREEN_WIDTH/2, 0 - SCREEN_HEIGHT/2};
         
     } else {
-        std::cout<<"can't find spawn point";
+        auto it2 = autoMapSwitcherList.find(spawnIndex);
+        if (it2 != autoMapSwitcherList.end()) {
+            spawnLocation = Vector2Subtract(it2->second.getSpawnLocation(), {SCREEN_WIDTH/2, SCREEN_HEIGHT/2}) ;
+        } else {
+            std::cout<<"can't find spawn point";
+        }
     }
     return spawnLocation;
 };
@@ -196,7 +198,6 @@ std::vector<AIPlayer>* WorldSet::getAIPlayers() {
 }
 MapSwitcherProp::MapSwitcherProp (Vector2 location, std::string switchToMap, int spawnIndex, int spawnToIndex, int width, int height) : location(location), screenPos(location), switchToMap(switchToMap),
 spawnIndex(spawnIndex), spawnToIndex(spawnToIndex), width(width), height(height) {
-    std::cout << "yyyy pp" << this->width << std::flush;
 };
 void MapSwitcherProp::draw(Vector2 des) {
     DrawRectangle(location.x + des.x, location.y + des.y, width, height, GREEN);
@@ -214,7 +215,6 @@ Rectangle MapSwitcherProp::getCollision() {
 AutoMapSwitcherProp::AutoMapSwitcherProp(Vector2 location, std::string switchToMap, int spawnIndex, int spawnToIndex, int width, int height, SwitchDirectionEnum direction):
     MapSwitcherProp(location, switchToMap, spawnIndex, spawnToIndex, width, height),
     direction(direction) {
-        std::cout << " tesss width" << width << std::flush;
 }
 SwitchDirectionEnum AutoMapSwitcherProp::getDirection() {
     return direction;

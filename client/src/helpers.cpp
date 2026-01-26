@@ -167,15 +167,12 @@ CollisionProperty checkAutoSwitchMap (Rectangle playerRec, Rectangle switchRec, 
     switch (direction)
     {
         case SwitchDirectionEnum::Top:
-            // std::cout<<" TOP" << switchRec.x << ", " << switchRec.y << ", " << switchRec.width << std::endl;
             if (playerRec.x + playerRec.width > switchRec.x && playerRec.x < switchRec.x + switchRec.width
                 && playerRec.y + playerRec.height > switchRec.y && playerRec.y < switchRec.y + switchRec.height) {
-                std::cout<<"is collid haha" << std::flush;
                 collisionObject.isCollide = true;
             }
             break;
         case SwitchDirectionEnum::Bottom:
-            
             break;
         case SwitchDirectionEnum::Left:
             break;

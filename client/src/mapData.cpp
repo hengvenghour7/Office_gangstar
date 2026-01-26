@@ -164,10 +164,8 @@ WorldSet& getUpperMap() {
     std::vector<int> mapCollisionData;
     std::fstream file("resources/maps/upper_map.tmj");
     if (!file.is_open()) {
-        std::cout << "cannnnnnn't ope at " << "resources/maps/upper_map.tmj";
     }
     if (file.is_open()) {
-        std::cout <<" file is oooo";
         json j;
         file >> j;
         mapCollisionData = getArrayFromJson(j, "Collision");

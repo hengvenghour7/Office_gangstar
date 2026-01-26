@@ -12,6 +12,7 @@ class Game {
         bool isMenuOpen;
         bool isOpenInteractionDialog;
         bool isCanSwitch{true};
+        float switchCooldownTime {0};
         const char* interactionText{""};
         GameStateEnums gameState;
         GameUIStateEnums gameUIState;
@@ -37,9 +38,10 @@ class Game {
         void startGame();
         void saveGame();
         void loadGame();
-        void checkSwitchWorldInteraction(Player& player);
+        void checkSwitchWorldInteraction(float deltaTime);
         void checkPropsInteraction(Player& player, Vector2 mapPos);
         void checkShopInteraction(Player& player, Vector2 mapPos);
         void loadWorld(WorldEnums targetMap, Vector2 targetLocation);
         void handleGamePlayUIInteraction();
+        void prepareWorld(SpawnToDetail& spawnToDetail);
 };

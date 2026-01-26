@@ -69,7 +69,6 @@ void ShopUI::handleInteraction(Player& player) {
     for (ShopUIItem &item: shopItems) {
         if (checkButtonClick(item.dimension).isCollide) {
             player.getPlayerInventory()->AddItems(item);
-            std::cout<< (*player.getPlayerInventory()->getItems()).size();
         }
     }
 };

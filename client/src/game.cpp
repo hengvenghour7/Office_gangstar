@@ -91,7 +91,7 @@ void Game::tick (float deltaTime) {
             }),
             enemies.end()
             );
-            checkSwitchWorldInteraction(player);
+            checkSwitchWorldInteraction(deltaTime);
             checkPropsInteraction(player, mapPos);
             if (player.getHealthComponent()->currentHealth <= 0) gameState = GameStateEnums::GameOver;
             if (IsKeyReleased(KEY_P)) {
@@ -123,30 +123,19 @@ void Game::tick (float deltaTime) {
     }
     EndDrawing();
 }
-void Game::checkSwitchWorldInteraction(Player& player) {
-    // std::cout<< "auto switch amount " <<  <<std::endl;
+void Game::checkSwitchWorldInteraction(float deltaTime) {
     for (auto &[key, value] : (*currentWorld->getAutoMapSwitcherList())) {
         Rectangle temp_dimension = value.getCollision();
         DrawRectangle(temp_dimension.x, temp_dimension.y, temp_dimension.width, temp_dimension.height, PURPLE);
-        if (checkIsCollide(player.getCharacterCollision(), value.getCollision()).isCollide) {
-            std::cout<< "is auto switch " << (*currentWorld->getAutoMapSwitcherList()).size() << std::flush;
-            if (isCanSwitch) {
-                isCanSwitch = false;
-                SpawnToDetail spawnToDetail = value.getSwitchDestination();
-                currentWorld->saveAIPlayers(enemies);
-                currentWorld = &getWorld(spawnToDetail.targetMap);
-                allDrawableObjects = {};
-                enemies = *currentWorld->getAIPlayers();
-                player.setPlayerWorldPos(currentWorld->getSpawnLocation(spawnToDetail.targetSpawnPoint));
-                player.changeCollisionCheck(currentWorld->getWorldCollisionArray(), currentWorld->getCollisionCode());
-                currentWorld->foreground.setY(100*TILE_SIZE*MAP_SCALE);
-                allDrawableObjects.push_back(&currentWorld->background);
-                allDrawableObjects.push_back(&currentWorld->foreground);
-                allDrawableObjects.push_back(&player);
-                for (Drawing* propSet : currentWorld->getAllDrawableProps()) {
-                    allDrawableObjects.push_back(propSet);
-                }
-                return;
+        if (checkIsCollide(player.getCharacterCollision(), value.getCollision()).isCollide && switchCooldownTime <= 0) {
+            switchCooldownTime = 2;
+            isCanSwitch = false;
+            SpawnToDetail spawnToDetail = value.getSwitchDestination();
+            prepareWorld(spawnToDetail);
+            return;
+        } else {
+            if (switchCooldownTime > 0) {
+                switchCooldownTime -= deltaTime;
             }
         }
     }
@@ -154,22 +143,25 @@ void Game::checkSwitchWorldInteraction(Player& player) {
         for (auto &[key, value] : (*currentWorld->getMapSwitchersList())) {
             if (checkIsCollide(player.getCharacterCollision(), value.getCollision()).isCollide) {
                 SpawnToDetail spawnToDetail = value.getSwitchDestination();
-                currentWorld->saveAIPlayers(enemies);
-                currentWorld = &getWorld(spawnToDetail.targetMap);
-                allDrawableObjects = {};
-                enemies = *currentWorld->getAIPlayers();
-                player.setPlayerWorldPos(currentWorld->getSpawnLocation(spawnToDetail.targetSpawnPoint));
-                player.changeCollisionCheck(currentWorld->getWorldCollisionArray(), currentWorld->getCollisionCode());
-                currentWorld->foreground.setY(100*TILE_SIZE*MAP_SCALE);
-                allDrawableObjects.push_back(&currentWorld->background);
-                allDrawableObjects.push_back(&currentWorld->foreground);
-                allDrawableObjects.push_back(&player);
-                for (Drawing* propSet : currentWorld->getAllDrawableProps()) {
-                    allDrawableObjects.push_back(propSet);
-                }
+                prepareWorld(spawnToDetail);
                 return;
             }
         }
+    }
+}
+void Game::prepareWorld (SpawnToDetail& spawnToDetail) {
+    currentWorld->saveAIPlayers(enemies);
+    currentWorld = &getWorld(spawnToDetail.targetMap);
+    allDrawableObjects = {};
+    enemies = *currentWorld->getAIPlayers();
+    player.setPlayerWorldPos(currentWorld->getSpawnLocation(spawnToDetail.targetSpawnPoint));
+    player.changeCollisionCheck(currentWorld->getWorldCollisionArray(), currentWorld->getCollisionCode());
+    currentWorld->foreground.setY(100*TILE_SIZE*MAP_SCALE);
+    allDrawableObjects.push_back(&currentWorld->background);
+    allDrawableObjects.push_back(&currentWorld->foreground);
+    allDrawableObjects.push_back(&player);
+    for (Drawing* propSet : currentWorld->getAllDrawableProps()) {
+        allDrawableObjects.push_back(propSet);
     }
 }
 void Game::checkPropsInteraction(Player& player, Vector2 mapPos) {
@@ -242,12 +234,10 @@ void Game::saveGame () {
     save["world"]["worldName"] = currentWorld->getWorldName();
     std::ofstream file("saved/save.json");
     file << save.dump(4);
-    std::cout<< "file saved";
 }
 void Game::loadGame () {
     std::ifstream file ("saved/save.json");
     if (!file.is_open()) {
-        std::cout<<"no save";
         return;
     }
     json save;
