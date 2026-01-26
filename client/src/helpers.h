@@ -8,6 +8,12 @@
 
 using json = nlohmann::json;
 
+enum class SwitchDirectionEnum {
+    Top = 1,
+    Bottom = 2,
+    Left = 3,
+    Right = 4
+};
 struct Location {
     int x;
     int y;
@@ -54,5 +60,6 @@ CollisionProperty checkButtonClick(Rectangle buttonRec);
 CollisionProperty checkMouseOnHover(Rectangle buttonRec);
 CollisionProperty checkCircleInteraction(Vector2 CenterPoint_1, Vector2 CenterPoint_2, float desireDistance);
 void drawButtonBackground (Rectangle DestinationRec, Color color, float marginX, float marginY);
+CollisionProperty checkAutoSwitchMap (Rectangle playerRec, Rectangle switchRec, SwitchDirectionEnum direction);
 
 #endif

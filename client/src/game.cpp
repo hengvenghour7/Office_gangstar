@@ -124,6 +124,32 @@ void Game::tick (float deltaTime) {
     EndDrawing();
 }
 void Game::checkSwitchWorldInteraction(Player& player) {
+    // std::cout<< "auto switch amount " <<  <<std::endl;
+    for (auto &[key, value] : (*currentWorld->getAutoMapSwitcherList())) {
+        Rectangle temp_dimension = value.getCollision();
+        DrawRectangle(temp_dimension.x, temp_dimension.y, temp_dimension.width, temp_dimension.height, PURPLE);
+        if (checkIsCollide(player.getCharacterCollision(), value.getCollision()).isCollide) {
+            std::cout<< "is auto switch " << (*currentWorld->getAutoMapSwitcherList()).size() << std::flush;
+            if (isCanSwitch) {
+                isCanSwitch = false;
+                SpawnToDetail spawnToDetail = value.getSwitchDestination();
+                currentWorld->saveAIPlayers(enemies);
+                currentWorld = &getWorld(spawnToDetail.targetMap);
+                allDrawableObjects = {};
+                enemies = *currentWorld->getAIPlayers();
+                player.setPlayerWorldPos(currentWorld->getSpawnLocation(spawnToDetail.targetSpawnPoint));
+                player.changeCollisionCheck(currentWorld->getWorldCollisionArray(), currentWorld->getCollisionCode());
+                currentWorld->foreground.setY(100*TILE_SIZE*MAP_SCALE);
+                allDrawableObjects.push_back(&currentWorld->background);
+                allDrawableObjects.push_back(&currentWorld->foreground);
+                allDrawableObjects.push_back(&player);
+                for (Drawing* propSet : currentWorld->getAllDrawableProps()) {
+                    allDrawableObjects.push_back(propSet);
+                }
+                return;
+            }
+        }
+    }
     if (IsKeyReleased(KEY_I)) {
         for (auto &[key, value] : (*currentWorld->getMapSwitchersList())) {
             if (checkIsCollide(player.getCharacterCollision(), value.getCollision()).isCollide) {

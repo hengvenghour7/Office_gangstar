@@ -158,6 +158,33 @@ WorldSet& getSunnaInterior() {
 
     return sunnaInterior;
 }
+WorldSet& getUpperMap() {
+    static std::vector<MapProp*> upperMapProps = {
+    };
+    std::vector<int> mapCollisionData;
+    std::fstream file("resources/maps/upper_map.tmj");
+    if (!file.is_open()) {
+        std::cout << "cannnnnnn't ope at " << "resources/maps/upper_map.tmj";
+    }
+    if (file.is_open()) {
+        std::cout <<" file is oooo";
+        json j;
+        file >> j;
+        mapCollisionData = getArrayFromJson(j, "Collision");
+    }
+    static WorldSet upperMap(
+        "resources/image/upper_map.png",
+        "",
+        150,
+        100,
+        &mapCollisionData,
+        &upperMapProps,
+        "resources/maps/upper_map.tmj",
+        WorldEnums::UpperMap
+    );
+
+    return upperMap;
+}
 WorldSet& getWorld(WorldEnums world) {
     switch (world)
     {
@@ -173,6 +200,8 @@ WorldSet& getWorld(WorldEnums world) {
         return getHardwareInterior();
     case InteriorSunna:
         return getSunnaInterior();
+    case WorldEnums::UpperMap:
+        return getUpperMap();
     default:
         return getCenterWorld();
         break;

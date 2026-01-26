@@ -9,7 +9,8 @@ enum WorldEnums {
     InteriorShop = 3,
     InteriorOffice2 = 4,
     InteriorHardware = 5,
-    InteriorSunna = 6
+    InteriorSunna = 6,
+    UpperMap = 7,
 };
 
 #endif

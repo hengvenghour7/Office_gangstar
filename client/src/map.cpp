@@ -42,6 +42,7 @@ WorldSet::WorldSet(const char* backgroundTexture, const char* foregroundTexture,
         std::vector<int>::iterator tempCollision = std::find_if(collisionData->begin(), collisionData->end(), [](int data) {
             return data != 0;
         });
+        std::cout<<"temp collision "<< *tempCollision << " check end ";
         if (tempCollision != collisionData->end()) {
             collisionCode = *tempCollision;
         }
@@ -52,6 +53,8 @@ WorldSet::WorldSet(const char* backgroundTexture, const char* foregroundTexture,
             for (auto &obj : (*spawnPointLayer)["objects"]) {
                 int spawnIndex{};
                 int spawnToIndex{};
+                bool isAuto{false};
+                SwitchDirectionEnum direction = SwitchDirectionEnum::Top;
                 int width{(int)(obj["width"].get<float>()*MAP_SCALE)};
                 int height{(int)(obj["height"].get<float>()*MAP_SCALE)};
                 std::string inputSwitchToMap{};
@@ -67,9 +70,32 @@ WorldSet::WorldSet(const char* backgroundTexture, const char* foregroundTexture,
                         if (property["name"] == "switchToMap") {
                             inputSwitchToMap = property["value"].get<std::string>();
                         }
+                        if (property["name"] == "isAuto") {
+                            isAuto = property["value"].get<bool>();
+                        }
+                        if (property["name"] == "direction") {
+                            std::string temp_direction = property["value"].get<std::string>();
+                            if (temp_direction == "top") {
+                                direction = SwitchDirectionEnum::Top;
+                            }
+                            if (temp_direction == "bottom") {
+                                direction = SwitchDirectionEnum::Bottom;
+                            }
+                            if (temp_direction == "left") {
+                                direction = SwitchDirectionEnum::Left;
+                            }
+                            if (temp_direction == "right") {
+                                direction = SwitchDirectionEnum::Right;
+                            }
+                        }
                     }
                 }
-                mapSwitchersList.emplace(spawnIndex, MapSwitcherProp(inputLocation, inputSwitchToMap, spawnIndex , spawnToIndex, width, height));
+                if (!isAuto) {
+                    mapSwitchersList.emplace(spawnIndex, MapSwitcherProp(inputLocation, inputSwitchToMap, spawnIndex , spawnToIndex, width, height));
+                } else {
+                    std::cout<< " thyyyy width " << width << std::flush;
+                    autoMapSwitcherList.emplace(spawnIndex, AutoMapSwitcherProp(inputLocation, inputSwitchToMap, spawnIndex , spawnToIndex, width, height, direction));
+                }
             }
         }
         auto shopLocationLayer = std::find_if(layers.begin(), layers.end(), [](const json& layer) {
@@ -170,6 +196,7 @@ std::vector<AIPlayer>* WorldSet::getAIPlayers() {
 }
 MapSwitcherProp::MapSwitcherProp (Vector2 location, std::string switchToMap, int spawnIndex, int spawnToIndex, int width, int height) : location(location), screenPos(location), switchToMap(switchToMap),
 spawnIndex(spawnIndex), spawnToIndex(spawnToIndex), width(width), height(height) {
+    std::cout << "yyyy pp" << this->width << std::flush;
 };
 void MapSwitcherProp::draw(Vector2 des) {
     DrawRectangle(location.x + des.x, location.y + des.y, width, height, GREEN);
@@ -181,16 +208,30 @@ Vector2 MapSwitcherProp::getSpawnLocation () {
     return location;
 }
 Rectangle MapSwitcherProp::getCollision() {
-    Rectangle collisionBox = {screenPos.x, screenPos.y, width * MAP_SCALE, height * MAP_SCALE};
+    Rectangle collisionBox = {screenPos.x, screenPos.y, (float)width, (float)height};
     return collisionBox;
+}
+AutoMapSwitcherProp::AutoMapSwitcherProp(Vector2 location, std::string switchToMap, int spawnIndex, int spawnToIndex, int width, int height, SwitchDirectionEnum direction):
+    MapSwitcherProp(location, switchToMap, spawnIndex, spawnToIndex, width, height),
+    direction(direction) {
+        std::cout << " tesss width" << width << std::flush;
+}
+SwitchDirectionEnum AutoMapSwitcherProp::getDirection() {
+    return direction;
 }
 void WorldSet::setSwitchersPos (Vector2 mapPos) {
     for (auto &[key, value] : mapSwitchersList) {
         value.setScreenPos(mapPos);
     }
+    for (auto &[key, value] : autoMapSwitcherList) {
+        value.setScreenPos(mapPos);
+    }
 }
 std::unordered_map<int , MapSwitcherProp>* WorldSet::getMapSwitchersList(){
     return &mapSwitchersList;
+};
+std::unordered_map<int, AutoMapSwitcherProp>* WorldSet::getAutoMapSwitcherList() {
+    return &autoMapSwitcherList;
 };
 SpawnToDetail MapSwitcherProp::getSwitchDestination() {
     SpawnToDetail spawnToDetail{};
@@ -201,5 +242,6 @@ SpawnToDetail MapSwitcherProp::getSwitchDestination() {
     if (switchToMap == "office_interior_2") spawnToDetail.targetMap = InteriorOffice2;
     if (switchToMap == "hardware_interior") spawnToDetail.targetMap = InteriorHardware;
     if (switchToMap == "sunna_interior") spawnToDetail.targetMap = InteriorSunna;
+    if (switchToMap == "upper_map") spawnToDetail.targetMap = WorldEnums::UpperMap;
     return spawnToDetail;
 };

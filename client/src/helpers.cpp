@@ -97,6 +97,7 @@ CollisionProperty checkCollisionTile(std::vector<std::vector<int>>* tileArray, R
 CollisionProperty checkPlayerCollisionTile(std::vector<std::vector<int>>* tileArray, Rectangle characterCollision, Vector2 worldPos, Vector2 direction, int colorCode) {
 
     CollisionProperty collision {false, {}};
+        // std::cout<< "world color code " <<colorCode <<std::flush;
     Vector2 charCollisionScreenPos{direction.x > 0 ?  characterCollision.x + characterCollision.width : characterCollision.x,direction.y > 0 ? characterCollision.y + characterCollision.height : characterCollision.y};
     Vector2 playerWorldPos = Vector2Add(charCollisionScreenPos, worldPos);
     Vector2 currentTile {(float)(int)((playerWorldPos.x)/TILE_SIZE/MAP_SCALE), (float)(int)((playerWorldPos.y)/TILE_SIZE/MAP_SCALE)};
@@ -160,4 +161,29 @@ CollisionProperty checkCircleInteraction(Vector2 CenterPoint_1, Vector2 CenterPo
 void drawButtonBackground (Rectangle DestinationRec, Color color, float marginX, float marginY) {
     Rectangle update_rectangle = {DestinationRec.x - marginX, DestinationRec.y - marginY, DestinationRec.width + marginX*2, DestinationRec.height + marginY*2};
     DrawRectangleRounded(update_rectangle, 0.4, 3, color);
+}
+CollisionProperty checkAutoSwitchMap (Rectangle playerRec, Rectangle switchRec, SwitchDirectionEnum direction) {
+    CollisionProperty collisionObject {false, {}};
+    switch (direction)
+    {
+        case SwitchDirectionEnum::Top:
+            // std::cout<<" TOP" << switchRec.x << ", " << switchRec.y << ", " << switchRec.width << std::endl;
+            if (playerRec.x + playerRec.width > switchRec.x && playerRec.x < switchRec.x + switchRec.width
+                && playerRec.y + playerRec.height > switchRec.y && playerRec.y < switchRec.y + switchRec.height) {
+                std::cout<<"is collid haha" << std::flush;
+                collisionObject.isCollide = true;
+            }
+            break;
+        case SwitchDirectionEnum::Bottom:
+            
+            break;
+        case SwitchDirectionEnum::Left:
+            break;
+        case SwitchDirectionEnum::Right:
+            break;
+        default:
+            std::cout << "no where to be found";
+            break;
+    }
+    return collisionObject;
 }

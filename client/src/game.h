@@ -11,6 +11,7 @@ class Game {
         bool isGameOver;
         bool isMenuOpen;
         bool isOpenInteractionDialog;
+        bool isCanSwitch{true};
         const char* interactionText{""};
         GameStateEnums gameState;
         GameUIStateEnums gameUIState;
