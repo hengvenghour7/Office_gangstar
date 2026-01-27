@@ -14,6 +14,15 @@ enum class SwitchDirectionEnum {
     Left = 3,
     Right = 4
 };
+class ObjectDetail {
+    Rectangle dimension;
+    std::unordered_map<std::string, json> properties{};
+
+    public:
+        ObjectDetail(Rectangle dimension, std::unordered_map<std::string, json> properties);
+        Rectangle getDimension();
+        json getProperty(std::string propertyKey);
+};
 struct Location {
     int x;
     int y;
@@ -61,5 +70,6 @@ CollisionProperty checkMouseOnHover(Rectangle buttonRec);
 CollisionProperty checkCircleInteraction(Vector2 CenterPoint_1, Vector2 CenterPoint_2, float desireDistance);
 void drawButtonBackground (Rectangle DestinationRec, Color color, float marginX, float marginY);
 CollisionProperty checkAutoSwitchMap (Rectangle playerRec, Rectangle switchRec, SwitchDirectionEnum direction);
+std::vector<ObjectDetail> getObjectsFromJson(json& jObject, std::string layerName, std::vector<std::string> requestedProperties);
 
 #endif

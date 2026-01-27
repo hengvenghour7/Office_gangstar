@@ -34,13 +34,13 @@
          "y":0
         }, 
         {
-         "data":[0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+         "data":[0, 0, 0, 7, 8, 9, 0, 0, 0, 0,
+            0, 0, 0, 23, 24, 25, 0, 0, 0, 0,
+            0, 0, 0, 39, 40, 41, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 7, 8, 9,
+            0, 0, 0, 0, 0, 0, 0, 23, 24, 25,
+            0, 0, 0, 0, 0, 0, 0, 39, 40, 41,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -245,7 +245,7 @@
          "name":"collision",
          "opacity":1,
          "type":"tilelayer",
-         "visible":true,
+         "visible":false,
          "width":10,
          "x":0,
          "y":0
@@ -256,7 +256,7 @@
          "name":"entry point",
          "objects":[
                 {
-                 "height":38.9305658512478,
+                 "height":17.5814,
                  "id":1,
                  "name":"",
                  "properties":[
@@ -279,35 +279,8 @@
                  "type":"",
                  "visible":true,
                  "width":19.0536,
-                 "x":18.5433899925871,
-                 "y":269.143214974055
-                }, 
-                {
-                 "height":53.1636928589078,
-                 "id":3,
-                 "name":"",
-                 "properties":[
-                        {
-                         "name":"spawn index",
-                         "type":"int",
-                         "value":1
-                        }, 
-                        {
-                         "name":"spawn target",
-                         "type":"int",
-                         "value":1
-                        }, 
-                        {
-                         "name":"switchToMap",
-                         "type":"string",
-                         "value":"office_gang_map"
-                        }],
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":19.0536,
-                 "x":17.3573116876699,
-                 "y":120.687735977267
+                 "x":25.2644,
+                 "y":300.376
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -315,6 +288,45 @@
          "x":0,
          "y":0
         }, 
+        {
+         "draworder":"topdown",
+         "id":11,
+         "name":"pickable_items",
+         "objects":[
+                {
+                 "height":16.6753517457009,
+                 "id":4,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"imageSrc",
+                         "type":"string",
+                         "value":"\"of the god\""
+                        }, 
+                        {
+                         "name":"name",
+                         "type":"string",
+                         "value":""
+                        }, 
+                        {
+                         "name":"quantity",
+                         "type":"string",
+                         "value":""
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":22.5117248566962,
+                 "x":58.3637311099531,
+                 "y":15.8415841584158
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        },
+    
         {
          "data":[0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -346,8 +358,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":11,
- "nextobjectid":4,
+ "nextlayerid":12,
+ "nextobjectid":5,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.2",
@@ -360,6 +372,10 @@
         {
          "firstgid":849,
          "source":"..\/..\/..\/..\/..\/Game Builder\/Tileset\/collision tile.tsx"
+        }, 
+        {
+         "firstgid":858,
+         "source":"..\/..\/..\/..\/..\/Game Builder\/Tileset\/Modern_Exteriors_Complete_Tileset.tsx"
         }],
  "tilewidth":16,
  "type":"map",

@@ -24,6 +24,23 @@ CollisionProperty checkIsCollide (Rectangle firstCollider, Rectangle secondColli
     };
     return collision1;
 }
+ObjectDetail::ObjectDetail(Rectangle dimension, std::unordered_map<std::string, json> properties): dimension(dimension),
+    properties(properties) {
+
+}
+json ObjectDetail::getProperty (std::string propertyKey) {
+    json property{};
+    auto propertyIterator = properties.find(propertyKey);
+    if (propertyIterator != properties.end()) {
+        property = propertyIterator->second;
+    } else {
+        std::cout<< "property dose not exist";
+    }
+    return property;
+}
+Rectangle ObjectDetail::getDimension() {
+    return dimension;
+}
 std::vector<std::vector<int>> arrayTo2DArray (std::vector<int>* arrayData, int mapWidth) {
     std::vector<std::vector<int>> array2D {};
     for (int j=0 ; j < (int)arrayData->size(); j+= mapWidth) {
@@ -183,4 +200,33 @@ CollisionProperty checkAutoSwitchMap (Rectangle playerRec, Rectangle switchRec, 
             break;
     }
     return collisionObject;
+}
+std::vector<ObjectDetail> getObjectsFromJson(json& jObject, std::string layerName, std::vector<std::string> requestedProperties) {
+    std::vector<ObjectDetail> ObjArray{};
+    auto layers = jObject["layers"];
+    auto choosenLayer = std::find_if(layers.begin(), layers.end(), [layerName](json& layer) {
+        return layer["name"] == layerName;
+    });
+    if (choosenLayer != layers.end()) {
+        for (auto& obj : (*choosenLayer)["objects"]) {
+            std::unordered_map<std::string, json> objProperties{};
+            Rectangle temp_dimension{
+                std::round(obj["x"].get<float>()*MAP_SCALE), 
+                std::round(obj["y"].get<float>()*MAP_SCALE), 
+                std::round(obj["width"].get<float>()*MAP_SCALE), 
+                std::round(obj["height"].get<float>()*MAP_SCALE)
+            };
+            if (obj.contains("properties")) {
+                for (auto& property: obj["properties"]) {
+                    for (std::string reqProperty: requestedProperties) {
+                        if (property["name"] == reqProperty) objProperties[reqProperty] = property["value"];
+                    }
+                }
+            }
+            ObjArray.emplace_back(temp_dimension, objProperties);
+        }
+    } else {
+        std::cout<<"can't find requested layer";
+    }
+    return ObjArray;
 }

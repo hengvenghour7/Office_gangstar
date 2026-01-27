@@ -322,6 +322,9 @@ Player::Player (const char * imageTexture, std::vector<std::vector<int>>* worldC
 void Player::setPlayerWorldPos(Vector2 worldPos) {
     this->worldPos = worldPos;
 }
+void Player::replaceHoldingItems (InteractableItem item) {
+    holdingItems[0] = item;
+}
 Inventory* Player::getPlayerInventory() {
     return &playerInventory;
 }
@@ -391,6 +394,16 @@ void Player::tick (float deltaTime) {
     } 
         Character::tick(deltaTime);
     }
+void Player::draw(Vector2 mapPos) {
+    Character::draw(mapPos);
+    if (holdingItems.size() > 0) {
+        InteractableItem& temp_holdingItem = holdingItems[0];
+        DrawTexturePro(*temp_holdingItem.getTexture(), {0,0, 16, 32}, 
+        {characterRecDes.x + 50, characterRecDes.y, temp_holdingItem.getDimension().width, temp_holdingItem.getDimension().height},
+        {0,0}, 0, WHITE
+        );
+    }
+}
 void Player::drawHealth(int x, int y) {
     Vector2 startingPoint = {x - 32.f, y - 5.f};
     float segmentWidth = TILE_SIZE;

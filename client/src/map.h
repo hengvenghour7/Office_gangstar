@@ -10,6 +10,7 @@
 #include <unordered_map>
 #include "shop/shopData.h"
 #include "UIHandler/UI.h"
+#include "item/item.h"
 
 struct SpawnToDetail {
     WorldEnums targetMap;
@@ -73,10 +74,11 @@ class WorldSet {
     int collisionCode{1};
     WorldEnums worldName;
     std::vector<Shop> shops;
+    std::vector<InteractableItem> interactableItemList{};
 
     public:
         WorldSet(const char* backgroundTexture, const char* foregroundTexture, int mapWidth, int mapHeight, 
-            std::vector<int>* collisionData, std::vector<MapProp*>* worldProps, std::string mapPropertyPath, WorldEnums worldName);
+        std::vector<int>* collisionData, std::vector<MapProp*>* worldProps, std::string mapPropertyPath, WorldEnums worldName);
         WorldDrawProperty drawProperty;
         World background;
         World foreground;
@@ -94,6 +96,8 @@ class WorldSet {
         int getCollisionCode();
         WorldEnums getWorldName();
         std::vector<Shop>* getCurrentWorldShops();
+        std::vector<InteractableItem>* getInteractableItem();
+        void handleItemPickUp(Player& player);
         std::vector<ShopItem>* getShopItems(std::string name);
 };
 

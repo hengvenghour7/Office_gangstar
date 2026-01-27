@@ -38,6 +38,10 @@ WorldSet::WorldSet(const char* backgroundTexture, const char* foregroundTexture,
     } else {
         json j;
         file >> j;
+        auto temp_interactable_items = getObjectsFromJson(j, "pickable_items", {"imageSrc"});
+        for (ObjectDetail obj: temp_interactable_items) {
+            interactableItemList.emplace_back(obj.getProperty("imageSrc").get<std::string>().c_str(), obj.getDimension());
+        }
         auto layers = j["layers"];
         std::vector<int>::iterator tempCollision = std::find_if(collisionData->begin(), collisionData->end(), [](int data) {
             return data != 0;
@@ -165,6 +169,9 @@ std::vector<Drawing*> WorldSet::getAllDrawableProps () {
     for (Drawing* propSet : *worldProps) {
         allWorldProps.push_back(propSet);
     }
+    for (Drawing &item : interactableItemList) {
+        allWorldProps.push_back(&item);
+    }
     return allWorldProps;
 };
 void WorldSet::animateWorldProps(float deltaTime) {
@@ -196,6 +203,9 @@ void WorldSet::saveAIPlayers(std::vector<AIPlayer> currentAIPlayers) {
 std::vector<AIPlayer>* WorldSet::getAIPlayers() {
     return &AIPlayers;
 }
+std::vector<InteractableItem>* WorldSet::getInteractableItem() {
+    return &interactableItemList;
+};
 MapSwitcherProp::MapSwitcherProp (Vector2 location, std::string switchToMap, int spawnIndex, int spawnToIndex, int width, int height) : location(location), screenPos(location), switchToMap(switchToMap),
 spawnIndex(spawnIndex), spawnToIndex(spawnToIndex), width(width), height(height) {
 };

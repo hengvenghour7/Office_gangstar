@@ -9,6 +9,7 @@
 #include "helpers.h"
 #include "drawing.h"
 #include "shop/shop.h"
+#include "item/item.h"
 
 using namespace std;
 
@@ -90,6 +91,7 @@ class Player: public Character
         Texture2D healthBarTexture;
         Texture2D coinTexture;
         Inventory playerInventory;
+        std::vector<InteractableItem> holdingItems{};
     public:
         Player (const char * imageTexture, std::vector<std::vector<int>>* worldCollisionArray, float speed, float damage);
         virtual void tick(float deltaTime) override;
@@ -100,7 +102,9 @@ class Player: public Character
         void changeCollisionCheck(std::vector<std::vector<int>>* newWorldCollisionArray, int newCollisionCode);
         virtual Vector2 getCenter(Vector2 mapPos) override;
         Inventory* getPlayerInventory();
+        void replaceHoldingItems(InteractableItem item);
         void handleInteraction();
+        virtual void draw(Vector2 mapPos = {0,0}) override;
 };
     
 class AIPlayer : public Character {
