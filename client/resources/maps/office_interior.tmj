@@ -294,14 +294,14 @@
          "name":"pickable_items",
          "objects":[
                 {
-                 "height":16.6753517457009,
+                 "height":16.6754,
                  "id":4,
                  "name":"",
                  "properties":[
                         {
                          "name":"imageSrc",
                          "type":"string",
-                         "value":"\"of the god\""
+                         "value":"resources\/image\/UI\/shop\/cookies_icon.png"
                         }, 
                         {
                          "name":"name",
@@ -316,9 +316,9 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":22.5117248566962,
-                 "x":58.3637311099531,
-                 "y":15.8415841584158
+                 "width":22.5117,
+                 "x":58.3637,
+                 "y":15.8416
                 }],
          "opacity":1,
          "type":"objectgroup",

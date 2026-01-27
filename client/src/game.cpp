@@ -169,6 +169,9 @@ void Game::checkPropsInteraction(Player& player, Vector2 mapPos) {
         DrawTexturePro(speechBackground, {0,0, 320, 96}, {speechLocation.x, speechLocation.y, 320, 96}, {0,0}, 0, WHITE);
         DrawText(interactionText, speechLocation.x + 50, speechLocation.y + 50, 16, GetColor(THEMECOLOR));
     }
+    if (IsKeyReleased(KEY_J)) {
+        currentWorld->handleItemPickUp(player, mapPos);
+    }
     if (IsKeyReleased(KEY_I)) {
         if (!isOpenInteractionDialog) {
             for (MapProp* mapProp: *(currentWorld->worldProps)) {

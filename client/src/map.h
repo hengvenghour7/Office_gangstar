@@ -97,7 +97,7 @@ class WorldSet {
         WorldEnums getWorldName();
         std::vector<Shop>* getCurrentWorldShops();
         std::vector<InteractableItem>* getInteractableItem();
-        void handleItemPickUp(Player& player);
+        void handleItemPickUp(Player& player, Vector2 mapPos);
         std::vector<ShopItem>* getShopItems(std::string name);
 };
 

@@ -12,3 +12,8 @@ Texture2D* InteractableItem::getTexture() {
 Rectangle InteractableItem::getDimension() {
     return dimension;
 }
+Vector2 InteractableItem::getCenter(Vector2 mapPos) {
+    Vector2 center{dimension.x + dimension.width*0.5f + mapPos.x, 
+        dimension.y + dimension.height*0.5f + mapPos.y};
+    return center;
+}

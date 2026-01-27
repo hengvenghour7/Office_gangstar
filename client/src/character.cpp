@@ -323,17 +323,21 @@ void Player::setPlayerWorldPos(Vector2 worldPos) {
     this->worldPos = worldPos;
 }
 void Player::replaceHoldingItems (InteractableItem item) {
-    holdingItems[0] = item;
+    if (holdingItems.size() > 0) {
+        holdingItems[0] = item;
+    } else {
+        holdingItems.push_back(item);
+    }
 }
 Inventory* Player::getPlayerInventory() {
     return &playerInventory;
 }
 void Player::handleInteraction() {
-    std::vector<ShopUIItem>*  temp_item = playerInventory.getItems();
-    for (size_t i = 0; i < (*temp_item).size(); i++) {
-        if (checkButtonClick((*temp_item)[i].getDimension()).isCollide) {
-            getHealthComponent()->heal((*temp_item)[i].heal);
-            temp_item->erase(temp_item->begin() + i);
+    std::vector<ShopUIItem>*  inventoryItems = playerInventory.getItems();
+    for (size_t i = 0; i < (*inventoryItems).size(); i++) {
+        if (checkButtonClick((*inventoryItems)[i].getDimension()).isCollide) {
+            getHealthComponent()->heal((*inventoryItems)[i].heal);
+            inventoryItems->erase(inventoryItems->begin() + i);
             playerInventory.reArrangeItems();
             break;
         }

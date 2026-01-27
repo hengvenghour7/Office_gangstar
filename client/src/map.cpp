@@ -200,6 +200,13 @@ Vector2 WorldSet::getSpawnLocation(int spawnIndex) {
 void WorldSet::saveAIPlayers(std::vector<AIPlayer> currentAIPlayers) {
     AIPlayers = currentAIPlayers;
 };
+void WorldSet::handleItemPickUp(Player& player, Vector2 mapPos) {
+    for (InteractableItem& item: interactableItemList) {
+        if (checkCircleInteraction(player.getCenter(mapPos), item.getCenter(mapPos), 100).isCollide) {
+            player.replaceHoldingItems(item);
+        }
+    }
+}
 std::vector<AIPlayer>* WorldSet::getAIPlayers() {
     return &AIPlayers;
 }
