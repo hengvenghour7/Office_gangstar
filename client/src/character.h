@@ -104,6 +104,7 @@ class Player: public Character
         Inventory* getPlayerInventory();
         void replaceHoldingItems(InteractableItem item);
         void handleInteraction();
+        std::vector<InteractableItem>* getHoldingItems();
         virtual void draw(Vector2 mapPos = {0,0}) override;
 };
     

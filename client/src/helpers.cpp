@@ -201,7 +201,7 @@ CollisionProperty checkAutoSwitchMap (Rectangle playerRec, Rectangle switchRec, 
     }
     return collisionObject;
 }
-std::vector<ObjectDetail> getObjectsFromJson(json& jObject, std::string layerName, std::vector<std::string> requestedProperties) {
+std::vector<ObjectDetail> getObjectsFromJsonLayer(json& jObject, std::string layerName, std::vector<std::string> requestedProperties) {
     std::vector<ObjectDetail> ObjArray{};
     auto layers = jObject["layers"];
     auto choosenLayer = std::find_if(layers.begin(), layers.end(), [layerName](json& layer) {

@@ -99,6 +99,7 @@ class WorldSet {
         std::vector<InteractableItem>* getInteractableItem();
         void handleItemPickUp(Player& player, Vector2 mapPos);
         std::vector<ShopItem>* getShopItems(std::string name);
+        void addItemtoWorld(InteractableItem item);
 };
 
 #endif

@@ -70,6 +70,6 @@ CollisionProperty checkMouseOnHover(Rectangle buttonRec);
 CollisionProperty checkCircleInteraction(Vector2 CenterPoint_1, Vector2 CenterPoint_2, float desireDistance);
 void drawButtonBackground (Rectangle DestinationRec, Color color, float marginX, float marginY);
 CollisionProperty checkAutoSwitchMap (Rectangle playerRec, Rectangle switchRec, SwitchDirectionEnum direction);
-std::vector<ObjectDetail> getObjectsFromJson(json& jObject, std::string layerName, std::vector<std::string> requestedProperties);
+std::vector<ObjectDetail> getObjectsFromJsonLayer(json& jObject, std::string layerName, std::vector<std::string> requestedProperties);
 
 #endif

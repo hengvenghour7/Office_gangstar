@@ -41,9 +41,9 @@ player("resources/image/character/workingman2.png", currentWorld->getWorldCollis
     allDrawableObjects.push_back(&currentWorld->background);
     allDrawableObjects.push_back(&currentWorld->foreground);
     allDrawableObjects.push_back(&player);
-    for (Drawing* propSet : currentWorld->getAllDrawableProps()) {
-        allDrawableObjects.push_back(propSet);
-    }
+    // for (Drawing* propSet : currentWorld->getAllDrawableProps()) {
+    //     allDrawableObjects.push_back(propSet);
+    // }
     shopUI.setShopItems(currentWorld->getShopItems("shop1"));
 
 }
@@ -56,6 +56,9 @@ void Game::tick (float deltaTime) {
         {
             Vector2 mapPos = (Vector2Scale(player.getWorldPos(), -1.f));
             std::vector<Drawing*> allDrawableObjects2 = allDrawableObjects;
+            for (Drawing* propSet : currentWorld->getAllDrawableProps()) {
+                allDrawableObjects2.push_back(propSet);
+            }
             for (Drawing &enemy : enemies) {
                 allDrawableObjects2.push_back(&enemy);
             }
@@ -160,9 +163,9 @@ void Game::prepareWorld (SpawnToDetail& spawnToDetail) {
     allDrawableObjects.push_back(&currentWorld->background);
     allDrawableObjects.push_back(&currentWorld->foreground);
     allDrawableObjects.push_back(&player);
-    for (Drawing* propSet : currentWorld->getAllDrawableProps()) {
-        allDrawableObjects.push_back(propSet);
-    }
+    // for (Drawing* propSet : currentWorld->getAllDrawableProps()) {
+    //     allDrawableObjects.push_back(propSet);
+    // }
 }
 void Game::checkPropsInteraction(Player& player, Vector2 mapPos) {
     if (isOpenInteractionDialog) {

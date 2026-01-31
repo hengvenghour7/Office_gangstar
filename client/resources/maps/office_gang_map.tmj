@@ -2914,7 +2914,7 @@
          "name":"pickable_items",
          "objects":[
                 {
-                 "height":16.6754,
+                 "height":32,
                  "id":17,
                  "name":"",
                  "properties":[
@@ -2932,11 +2932,21 @@
                          "name":"quantity",
                          "type":"string",
                          "value":""
+                        }, 
+                        {
+                         "name":"textureHeight",
+                         "type":"int",
+                         "value":32
+                        }, 
+                        {
+                         "name":"textureWidth",
+                         "type":"int",
+                         "value":16
                         }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":22.5117,
+                 "width":16,
                  "x":1117.16,
                  "y":701.664
                 }],

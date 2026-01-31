@@ -294,7 +294,7 @@
          "name":"pickable_items",
          "objects":[
                 {
-                 "height":16.6754,
+                 "height":32,
                  "id":4,
                  "name":"",
                  "properties":[
@@ -312,13 +312,23 @@
                          "name":"quantity",
                          "type":"string",
                          "value":""
+                        }, 
+                        {
+                         "name":"textureHeight",
+                         "type":"int",
+                         "value":32
+                        }, 
+                        {
+                         "name":"textureWidth",
+                         "type":"int",
+                         "value":16
                         }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":22.5117,
-                 "x":58.3637,
-                 "y":15.8416
+                 "width":16,
+                 "x":61.102675623117,
+                 "y":10.3636487537661
                 }],
          "opacity":1,
          "type":"objectgroup",

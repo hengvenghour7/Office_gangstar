@@ -347,6 +347,14 @@ Vector2 Player::getCenter (Vector2 mapPos) {
     Vector2 center {characterCollision.x + width*scale_factor*0.5f, characterCollision.y + height*scale_factor*0.5f};
     return center;
 }
+std::vector<InteractableItem>* Player::getHoldingItems() {
+    if (holdingItems.size() > 0) {
+        Vector2 platerRealLocation = Vector2Add(getWorldPos(), screenPos);
+        Vector2 itemDesireLocation = Vector2Add(platerRealLocation, {20, 0});
+        holdingItems[0].changeLocation(itemDesireLocation);
+    }
+    return &holdingItems;
+}
 void Player::tick (float deltaTime) {
     // DrawRectangle(characterHitBox.x, characterHitBox.y, characterHitBox.width, characterHitBox.height, GREEN);
     if (playerState != Hurt) {
@@ -402,7 +410,7 @@ void Player::draw(Vector2 mapPos) {
     Character::draw(mapPos);
     if (holdingItems.size() > 0) {
         InteractableItem& temp_holdingItem = holdingItems[0];
-        DrawTexturePro(*temp_holdingItem.getTexture(), {0,0, 16, 32}, 
+        DrawTexturePro(*temp_holdingItem.getTexture(), {0,0, (float)temp_holdingItem.getTextureWidth(), (float)temp_holdingItem.getTextureHeight()}, 
         {characterRecDes.x + 50, characterRecDes.y, temp_holdingItem.getDimension().width, temp_holdingItem.getDimension().height},
         {0,0}, 0, WHITE
         );

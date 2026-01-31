@@ -38,9 +38,13 @@ WorldSet::WorldSet(const char* backgroundTexture, const char* foregroundTexture,
     } else {
         json j;
         file >> j;
-        auto temp_interactable_items = getObjectsFromJson(j, "pickable_items", {"imageSrc"});
+        auto temp_interactable_items = getObjectsFromJsonLayer(j, "pickable_items", {"imageSrc", "textureWidth", "textureHeight"});
         for (ObjectDetail obj: temp_interactable_items) {
-            interactableItemList.emplace_back(obj.getProperty("imageSrc").get<std::string>().c_str(), obj.getDimension());
+            interactableItemList.emplace_back(
+                obj.getProperty("textureWidth").get<int>(),
+                obj.getProperty("textureHeight").get<int>(),
+                obj.getProperty("imageSrc").get<std::string>().c_str(),
+                obj.getDimension());
         }
         auto layers = j["layers"];
         std::vector<int>::iterator tempCollision = std::find_if(collisionData->begin(), collisionData->end(), [](int data) {
@@ -201,9 +205,18 @@ void WorldSet::saveAIPlayers(std::vector<AIPlayer> currentAIPlayers) {
     AIPlayers = currentAIPlayers;
 };
 void WorldSet::handleItemPickUp(Player& player, Vector2 mapPos) {
-    for (InteractableItem& item: interactableItemList) {
+    if (player.getHoldingItems()->size() > 0) {
+        interactableItemList.push_back((*player.getHoldingItems())[0]);
+        player.getHoldingItems()->pop_back();
+        std::cout<< " player item " << (*player.getHoldingItems())[0].getDimension().width << " world item " << interactableItemList.size() <<std::flush;
+        return;
+    }
+    for (int i =0; i < interactableItemList.size() ; i++) {
+        InteractableItem& item = interactableItemList[i];
         if (checkCircleInteraction(player.getCenter(mapPos), item.getCenter(mapPos), 100).isCollide) {
             player.replaceHoldingItems(item);
+            interactableItemList.erase(interactableItemList.begin() + i);
+            return;
         }
     }
 }
@@ -244,6 +257,9 @@ void WorldSet::setSwitchersPos (Vector2 mapPos) {
         value.setScreenPos(mapPos);
     }
 }
+void WorldSet::addItemtoWorld (InteractableItem item) {
+
+};
 std::unordered_map<int , MapSwitcherProp>* WorldSet::getMapSwitchersList(){
     return &mapSwitchersList;
 };
