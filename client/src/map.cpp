@@ -208,7 +208,6 @@ void WorldSet::handleItemPickUp(Player& player, Vector2 mapPos) {
     if (player.getHoldingItems()->size() > 0) {
         interactableItemList.push_back((*player.getHoldingItems())[0]);
         player.getHoldingItems()->pop_back();
-        std::cout<< " player item " << (*player.getHoldingItems())[0].getDimension().width << " world item " << interactableItemList.size() <<std::flush;
         return;
     }
     for (int i =0; i < interactableItemList.size() ; i++) {

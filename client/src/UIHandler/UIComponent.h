@@ -1,5 +1,6 @@
 #include <iostream>
 #include <raylib.h>
+#include <functional>
 
 class UIComponent {
         std::function<void()> action;
