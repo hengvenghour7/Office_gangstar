@@ -129,7 +129,7 @@ void Game::tick (float deltaTime) {
 void Game::checkSwitchWorldInteraction(float deltaTime) {
     for (auto &[key, value] : (*currentWorld->getAutoMapSwitcherList())) {
         Rectangle temp_dimension = value.getCollision();
-        DrawRectangle(temp_dimension.x, temp_dimension.y, temp_dimension.width, temp_dimension.height, PURPLE);
+        // DrawRectangle(temp_dimension.x, temp_dimension.y, temp_dimension.width, temp_dimension.height, PURPLE);
         if (checkIsCollide(player.getCharacterCollision(), value.getCollision()).isCollide && switchCooldownTime <= 0) {
             switchCooldownTime = 2;
             isCanSwitch = false;
@@ -163,9 +163,6 @@ void Game::prepareWorld (SpawnToDetail& spawnToDetail) {
     allDrawableObjects.push_back(&currentWorld->background);
     allDrawableObjects.push_back(&currentWorld->foreground);
     allDrawableObjects.push_back(&player);
-    // for (Drawing* propSet : currentWorld->getAllDrawableProps()) {
-    //     allDrawableObjects.push_back(propSet);
-    // }
 }
 void Game::checkPropsInteraction(Player& player, Vector2 mapPos) {
     if (isOpenInteractionDialog) {
