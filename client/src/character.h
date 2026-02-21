@@ -90,6 +90,7 @@ class Player: public Character
         int collisionCode{79732};
         Texture2D healthBarTexture;
         Texture2D coinTexture;
+        int coinAmount{0};
         Inventory playerInventory;
         std::vector<InteractableItem> holdingItems{};
     public:
@@ -105,6 +106,9 @@ class Player: public Character
         void replaceHoldingItems(InteractableItem item);
         void handleInteraction();
         std::vector<InteractableItem>* getHoldingItems();
+        int& getCoinAmount();
+        void increaseCoin(int amount);
+        void decreaseCoin(int amount);
         virtual void draw(Vector2 mapPos = {0,0}) override;
 };
     

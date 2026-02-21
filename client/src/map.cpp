@@ -15,7 +15,7 @@ Shop::Shop(Rectangle shopDimension, std::string name, std::vector<ShopItemProper
     shopDimension(shopDimension),
     name(name) {
         for (ShopItemProperties property: allShopItemProperties) {
-            shopItems.emplace_back(property.textureSrc, property.name, property.heal, property.energyHeal);
+            shopItems.emplace_back(property.textureSrc, property.name, property.heal, property.energyHeal, property.price, property.description);
         }
 };
 std::vector<ShopItem>* Shop::getShopItems(){

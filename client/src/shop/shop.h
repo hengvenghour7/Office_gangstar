@@ -12,7 +12,9 @@ class ShopItem {
         int heal;
         int energyHeal;
         Rectangle dimension;
-        ShopItem(const char* textureSrc, std::string name, int heal, int energyHeal);
+        int price;
+        std::string description;
+        ShopItem(const char* textureSrc, std::string name, int heal, int energyHeal, int price, std::string description);
 };
 class ShopUIItem {
     public:
@@ -21,8 +23,10 @@ class ShopUIItem {
         int index;
         int heal;
         int energyHeal;
+        int price;
+        std::string description;
         Rectangle dimension;
-        ShopUIItem(Texture2D* texture, std::string name, int heal, int energyHeal, Rectangle dimension, int index);
+        ShopUIItem(Texture2D* texture, std::string name, int heal, int energyHeal, Rectangle dimension, int index, int price, std::string description);
         Rectangle getDimension();
         int getIndex();
         void changeDimension(Rectangle dimension);

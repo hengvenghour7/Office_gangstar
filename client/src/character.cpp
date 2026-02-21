@@ -431,7 +431,7 @@ void Player::drawHealth(int x, int y) {
         {startingPoint.x + segmentWidth*healthScaleFactor + characterHealth.maxHealth,startingPoint.y, segmentWidth*3, TILE_SIZE*3}, 
         {0,0}, 0, WHITE);
     characterHealth.drawHealth(x + segmentWidth, startingPoint.y + 20, characterHealth.currentHealth, 12, GREEN);
-    DrawText("220", SCREEN_WIDTH - 32*3 - 10, startingPoint.y + 20, 20, WHITE);
+    DrawText((std::to_string(coinAmount)).c_str(), SCREEN_WIDTH - 32*3 - 10, startingPoint.y + 20, 20, WHITE);
     DrawTexturePro(coinTexture, {0,0, 32, 32}, 
         {SCREEN_WIDTH - 32*2, 0, 32*scale_factor, 32*scale_factor}, 
         {0,0}, 0, WHITE);
@@ -442,6 +442,15 @@ Vector2 Player::getWorldPos () {
 Vector2 Player::getScreenPos () {
             return screenPos;
         };
+void Player::increaseCoin(int amount) {
+    coinAmount+= amount;
+}
+void Player::decreaseCoin(int amount) {
+    coinAmount-= amount;
+}
+int& Player::getCoinAmount() {
+    return coinAmount;
+}
 void Player::changeCollisionCheck (std::vector<std::vector<int>>* newWorldCollisionArray, int newCollisionCode) {
     worldCollisionArray = newWorldCollisionArray;
     collisionCode = newCollisionCode;

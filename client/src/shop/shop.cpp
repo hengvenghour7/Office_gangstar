@@ -2,14 +2,15 @@
 #include "../globalVar.h"
 #include "../helpers.h"
 
-ShopItem::ShopItem (const char* textureSrc, std::string name, int heal, int energyHeal): texture(LoadTexture(textureSrc)),
-    name(name), heal(heal), energyHeal(energyHeal) {
+ShopItem::ShopItem (const char* textureSrc, std::string name, int heal, int energyHeal, int price, std::string description): texture(LoadTexture(textureSrc)),
+    name(name), heal(heal), energyHeal(energyHeal), price(price), description(description) {
 
 }
 
-ShopUIItem::ShopUIItem(Texture2D* texture, std::string name, int heal, int energyHeal, Rectangle dimension, int index):
+ShopUIItem::ShopUIItem(Texture2D* texture, std::string name, int heal, int energyHeal, Rectangle dimension, int index, int price, std::string description):
     texture(texture), name(name), heal(heal), energyHeal(energyHeal),
-    dimension(dimension), index(index) {
+    dimension(dimension), index(index),
+    price(price), description(description) {
 }
 Rectangle ShopUIItem::getDimension() {
     return dimension;
@@ -33,7 +34,7 @@ Inventory::Inventory (std::vector<ShopItem> shopItems): backgroundTexture(LoadTe
     int temp_index{0};
     Rectangle temp_dimension = {dimension.x + 40 + 70*column, dimension.y + 50, 50,50};
     for (ShopItem item: shopItems) {
-        items.emplace_back(&item.texture, item.name, item.heal, item.energyHeal, temp_dimension, temp_index);
+        items.emplace_back(&item.texture, item.name, item.heal, item.energyHeal, temp_dimension, temp_index, item.price, item.description);
         column++;
         temp_dimension.x = temp_dimension.x + 40 + 70*column;
         temp_index++;

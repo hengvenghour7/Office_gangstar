@@ -50,7 +50,7 @@ void ShopUI::setShopItems(std::vector<ShopItem>* shop_items) {
     int temp_index{0};
     Rectangle tempDimension{location.x + 40 + 70*column, location.y + 50, 50, 50};
     for (ShopItem &item: *shop_items) {
-        shopItems.emplace_back(&item.texture, item.name, item.heal, item.energyHeal, tempDimension, temp_index);
+        shopItems.emplace_back(&item.texture, item.name, item.heal, item.energyHeal, tempDimension, temp_index, item.price, item.description);
         column++;
         tempDimension.x = location.x + 40 + 70*column;
         temp_index++;
@@ -67,8 +67,9 @@ void ShopUI::draw () {
 }
 void ShopUI::handleInteraction(Player& player) {
     for (ShopUIItem &item: shopItems) {
-        if (checkButtonClick(item.dimension).isCollide) {
+        if (checkButtonClick(item.dimension).isCollide && player.getCoinAmount() >= item.price) {
             player.getPlayerInventory()->AddItems(item);
+            player.decreaseCoin(item.price);
         }
     }
 };

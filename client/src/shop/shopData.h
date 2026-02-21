@@ -15,6 +15,8 @@ struct ShopItemProperties {
     const char* textureSrc;
     int heal;
     int energyHeal;
+    int price = 0;
+    std::string description = "item";
 };
 using AllShopProperties = std::unordered_map<std::string ,std::vector<ShopItemProperties>>;
 extern std::unordered_map<WorldEnums , AllShopProperties> allShopItems;

@@ -11,31 +11,37 @@ std::unordered_map<WorldEnums , AllShopProperties> allShopItems = {
                         "meat",
                         "resources/image/UI/shop/meat_icon.png",
                         50,
-                        10
+                        10,
+                        50,
+                        "give you alot of protient"
                     },
                     {
                         "cake",
                         "resources/image/UI/shop/cake_icon.png",
                         20,
-                        10
+                        10,
+                        30
                     },
                     {
                         "cookies",
                         "resources/image/UI/shop/cookies_icon.png",
                         20,
-                        10
+                        10,
+                        30
                     },
                     {
                         "meat4",
                         "resources/image/UI/shop/meat_icon.png",
                         50,
-                        10
+                        10,
+                        30
                     },
                     {
                         "meat5",
                         "resources/image/UI/shop/meat_icon.png",
                         20,
-                        10
+                        10,
+                        30
                     },
                 }
             },

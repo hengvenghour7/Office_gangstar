@@ -83,6 +83,9 @@ void Game::tick (float deltaTime) {
             for (AIPlayer &enemy : enemies) {
         
                 enemy.AITick(deltaTime, &enemies);
+                if (enemy.getHealthComponent()->currentHealth <= 0) {
+                    player.increaseCoin(50);
+                }
             }
             if (enemies.size() == 0) {
                 player.updatePlayerState(Idle, true);
