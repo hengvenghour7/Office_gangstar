@@ -230,3 +230,6 @@ std::vector<ObjectDetail> getObjectsFromJsonLayer(json& jObject, std::string lay
     }
     return ObjArray;
 }
+void drawItemDescription (Rectangle DestinationRec, std::string description) {
+    DrawText(description.c_str(), DestinationRec.x, DestinationRec.y + DestinationRec.height + 30, 14, WHITE);
+}

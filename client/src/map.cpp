@@ -3,6 +3,7 @@
 #include "helpers.h"
 #include <fstream>
 #include <nlohmann/json.hpp>
+#include <random>
 
 using json = nlohmann::json;
 
@@ -29,9 +30,22 @@ Rectangle Shop::getShopDimension(Vector2 mapPos) {
     return screenShopDimension;
 }
 WorldSet::WorldSet(const char* backgroundTexture, const char* foregroundTexture, int mapWidth, int mapHeight, 
-    std::vector<int>* collisionData, std::vector<MapProp*>* worldProps, std::string mapPropertyPath, WorldEnums worldName): 
+    std::vector<int>* collisionData, std::vector<MapProp*>* worldProps, std::string mapPropertyPath, WorldEnums worldName, Player& player, int AI_amount): 
     drawProperty(mapWidth, mapHeight, collisionData), background(backgroundTexture, &drawProperty), foreground(foregroundTexture, &drawProperty), worldProps(worldProps),
     worldName(worldName)  {
+        if (AI_amount > 0) {
+            std::random_device rd;
+
+            // Create a Mersenne Twister generator seeded with rd
+            std::mt19937 gen(rd());
+
+            std::uniform_real_distribution<float> dis(1.f, 4.0f);
+            // Generate a random number
+            float randomValue = dis(gen);
+            for (int i = 0; i< AI_amount; i++) {
+                AIPlayers.emplace_back("resources/image/character/workingman.png", &player, i, dis(gen)/4, dis(gen) + 20);
+            }
+        }
         std::fstream file (mapPropertyPath);
     if (!file.is_open()) {
         std::cout<<"error, can't open file";

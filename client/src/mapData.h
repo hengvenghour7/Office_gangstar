@@ -1,5 +1,5 @@
 #include "worldEnums.h"
 #include "map.h"
 
-WorldSet& getCenterWorld();
-WorldSet& getWorld(WorldEnums world);
+WorldSet& getCenterWorld(Player& player);
+WorldSet& getWorld(WorldEnums world, Player& player);

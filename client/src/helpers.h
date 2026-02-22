@@ -38,6 +38,7 @@ enum PlayerState {
     Jumping,
     Attacking,
     Hurt,
+    Swimming,
     Dead
 };
 enum PlayerDirection {
@@ -71,5 +72,6 @@ CollisionProperty checkCircleInteraction(Vector2 CenterPoint_1, Vector2 CenterPo
 void drawButtonBackground (Rectangle DestinationRec, Color color, float marginX, float marginY);
 CollisionProperty checkAutoSwitchMap (Rectangle playerRec, Rectangle switchRec, SwitchDirectionEnum direction);
 std::vector<ObjectDetail> getObjectsFromJsonLayer(json& jObject, std::string layerName, std::vector<std::string> requestedProperties);
+void drawItemDescription (Rectangle DestinationRec, std::string description);
 
 #endif

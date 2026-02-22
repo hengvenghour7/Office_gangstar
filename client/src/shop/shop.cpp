@@ -41,6 +41,7 @@ Inventory::Inventory (std::vector<ShopItem> shopItems): backgroundTexture(LoadTe
     }
 }
 void Inventory::draw () {
+    DrawText("Inventory", dimension.x + 20, dimension.y - 20, 20, WHITE);
     DrawTexturePro(backgroundTexture, {0,0, 480, 320}, {dimension.x, dimension.y, 480, 320 }, {0,0}, 0, WHITE);
     for (ShopUIItem item: items) {
         Rectangle button_dimension = item.getDimension();

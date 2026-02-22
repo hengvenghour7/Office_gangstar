@@ -23,7 +23,7 @@ shopUI(),
 mapBoundary1(collisionData, 150, 100, 16, 79732) , 
 NPC("resources/image/character/workingman.png", &player, 11, 1, 30), 
 worldDrawProperty(150, 100, &collisionData),
-currentWorld(&getCenterWorld()),
+currentWorld(&getCenterWorld(player)),
 player("resources/image/character/workingman2.png", currentWorld->getWorldCollisionArray(), 3, 50)
 {
     std::random_device rd;
@@ -157,7 +157,7 @@ void Game::checkSwitchWorldInteraction(float deltaTime) {
 }
 void Game::prepareWorld (SpawnToDetail& spawnToDetail) {
     currentWorld->saveAIPlayers(enemies);
-    currentWorld = &getWorld(spawnToDetail.targetMap);
+    currentWorld = &getWorld(spawnToDetail.targetMap, player);
     allDrawableObjects = {};
     enemies = *currentWorld->getAIPlayers();
     player.setPlayerWorldPos(currentWorld->getSpawnLocation(spawnToDetail.targetSpawnPoint));
@@ -255,7 +255,7 @@ void Game::loadGame () {
 }
 void Game::loadWorld(WorldEnums targetMap, Vector2 targetLocation) {
     currentWorld->saveAIPlayers(enemies);
-    currentWorld = &getWorld(targetMap);
+    currentWorld = &getWorld(targetMap, player);
     allDrawableObjects = {};
     enemies = *currentWorld->getAIPlayers();
     player.setPlayerWorldPos(targetLocation);

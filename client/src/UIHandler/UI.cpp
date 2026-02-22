@@ -61,6 +61,7 @@ void ShopUI::draw () {
         for (ShopUIItem &item: shopItems) {
             if (checkMouseOnHover(item.dimension).isCollide) {
                 drawButtonBackground(item.dimension, GetColor(HOVER_BACKGROUND_COLOR), 5, 5);
+                drawItemDescription(item.dimension, item.description);
             }
             item.draw();
         }

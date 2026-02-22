@@ -78,7 +78,7 @@ class WorldSet {
 
     public:
         WorldSet(const char* backgroundTexture, const char* foregroundTexture, int mapWidth, int mapHeight, 
-        std::vector<int>* collisionData, std::vector<MapProp*>* worldProps, std::string mapPropertyPath, WorldEnums worldName);
+        std::vector<int>* collisionData, std::vector<MapProp*>* worldProps, std::string mapPropertyPath, WorldEnums worldName, Player& player, int AI_amount = 0);
         WorldDrawProperty drawProperty;
         World background;
         World foreground;

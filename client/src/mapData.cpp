@@ -8,7 +8,7 @@
 
 using json = nlohmann::json;
 
-WorldSet& getCenterWorld() {
+WorldSet& getCenterWorld(Player& player) {
     static std::vector<PropDrawCondition> animatedObjectPropCondition{
         {79735, LoadTexture("resources/image/Fishing_Boat_2_left.png"), 0, 0, 8, 0, 768/8, 64},
         {79736, LoadTexture("resources/image/Fishing_Boat_left_2.png"), 0, 0, 8, 0, 640/8,48}
@@ -43,12 +43,13 @@ WorldSet& getCenterWorld() {
         &collisionData,
         &centerWorldProps,
         "resources/maps/office_gang_map.tmj",
-        WorldEnums::CenterWorld
+        WorldEnums::CenterWorld,
+        player
     );
 
     return centerWorld;
 }
-WorldSet& getMarketInterior() {
+WorldSet& getMarketInterior(Player& player) {
 
     static std::vector<MapProp*> marketInteriorProps = {
     };
@@ -61,12 +62,13 @@ WorldSet& getMarketInterior() {
         &supermarketBoundary,
         &marketInteriorProps,
         "resources/maps/supermarket_map.tmj",
-        WorldEnums::InteriorSuperMarket
+        WorldEnums::InteriorSuperMarket,
+        player
     );
 
     return marketInterior;
 }
-WorldSet& getOfficeInterior() {
+WorldSet& getOfficeInterior(Player& player) {
     static std::vector<MapProp*> officeInteriorProps = {
     };
     std::vector<int> mapCollisionData;
@@ -76,7 +78,7 @@ WorldSet& getOfficeInterior() {
         file >> j;
         mapCollisionData = getArrayFromJson(j, "collision");
     }
-    static WorldSet centerWorld(
+    static WorldSet officeInterior(
         "resources/image/office_interior.png",
         "",
         10,
@@ -84,12 +86,14 @@ WorldSet& getOfficeInterior() {
         &mapCollisionData,
         &officeInteriorProps,
         "resources/maps/office_interior.tmj",
-        WorldEnums::InteriorOffice1
+        WorldEnums::InteriorOffice1,
+        player,
+        2
     );
 
-    return centerWorld;
+    return officeInterior;
 }
-WorldSet& getOfficeInterior2() {
+WorldSet& getOfficeInterior2(Player& player) {
     static std::vector<MapProp*> officeInteriorProps = {
     };
     std::vector<int> mapCollisionData;
@@ -107,12 +111,13 @@ WorldSet& getOfficeInterior2() {
         &mapCollisionData,
         &officeInteriorProps,
         "resources/maps/office_interior_2.tmj",
-        WorldEnums::InteriorOffice2
+        WorldEnums::InteriorOffice2,
+        player
     );
 
     return officeInterior2;
 }
-WorldSet& getHardwareInterior() {
+WorldSet& getHardwareInterior(Player& player) {
     static std::vector<MapProp*> hardwareInteriorProps = {
     };
     std::vector<int> mapCollisionData;
@@ -130,12 +135,13 @@ WorldSet& getHardwareInterior() {
         &mapCollisionData,
         &hardwareInteriorProps,
         "resources/maps/sunna_interior.tmj",
-        WorldEnums::InteriorHardware
+        WorldEnums::InteriorHardware,
+        player
     );
 
     return hardwareInterior;
 }
-WorldSet& getSunnaInterior() {
+WorldSet& getSunnaInterior(Player& player) {
     static std::vector<MapProp*> sunnaInteriorProps = {
     };
     std::vector<int> mapCollisionData;
@@ -153,12 +159,13 @@ WorldSet& getSunnaInterior() {
         &mapCollisionData,
         &sunnaInteriorProps,
         "resources/maps/sunna_interior.tmj",
-        WorldEnums::InteriorSunna
+        WorldEnums::InteriorSunna,
+        player
     );
 
     return sunnaInterior;
 }
-WorldSet& getUpperMap() {
+WorldSet& getUpperMap(Player& player) {
     static std::vector<MapProp*> upperMapProps = {
     };
     std::vector<int> mapCollisionData;
@@ -178,30 +185,32 @@ WorldSet& getUpperMap() {
         &mapCollisionData,
         &upperMapProps,
         "resources/maps/upper_map.tmj",
-        WorldEnums::UpperMap
+        WorldEnums::UpperMap,
+        player,
+        5
     );
 
     return upperMap;
 }
-WorldSet& getWorld(WorldEnums world) {
+WorldSet& getWorld(WorldEnums world, Player& player) {
     switch (world)
     {
     case CenterWorld:
-        return getCenterWorld();
+        return getCenterWorld(player);
     case InteriorSuperMarket: 
-        return getMarketInterior();
+        return getMarketInterior(player);
     case InteriorOffice1:
-        return getOfficeInterior();
+        return getOfficeInterior(player);
     case InteriorOffice2:
-        return getOfficeInterior2();
+        return getOfficeInterior2(player);
     case InteriorHardware:
-        return getHardwareInterior();
+        return getHardwareInterior(player);
     case InteriorSunna:
-        return getSunnaInterior();
+        return getSunnaInterior(player);
     case WorldEnums::UpperMap:
-        return getUpperMap();
+        return getUpperMap(player);
     default:
-        return getCenterWorld();
+        return getCenterWorld(player);
         break;
     }
 }
