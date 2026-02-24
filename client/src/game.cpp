@@ -148,7 +148,8 @@ void Game::checkSwitchWorldInteraction(float deltaTime, Vector2& mapPos) {
     }
     for (auto &[key, value] : (*currentWorld->getAutoLevelSwitcherList())) {
         value.draw(mapPos);
-        if (checkIsCollide(player.getCharacterCollision(), value.getScreenPosDimension(mapPos)).isCollide && switchCooldownTime <= 0) {
+        if (checkIsCollide(player.getCharacterCollision(), value.getScreenPosDimension(mapPos)).isCollide && player.getCanSwitchLevel().isCanSwitch) {
+            player.setCanSwitchLevel(false, key);
             int switchToLevel;
             if (player.getCurrentLevel() == value.option1) {
                 switchToLevel = value.option2;
@@ -158,6 +159,10 @@ void Game::checkSwitchWorldInteraction(float deltaTime, Vector2& mapPos) {
             player.changeCurrentLevel(switchToLevel, 
                 (*currentWorld->getLevelDataList()).at(switchToLevel).collisionCode,
                 &(*currentWorld->getLevelDataList()).at(switchToLevel).collisionArray);
+                return;
+        }
+        if (!checkIsCollide(player.getCharacterCollision(), value.getScreenPosDimension(mapPos)).isCollide && player.getCanSwitchLevel().isCanSwitch == false && player.getCanSwitchLevel().key == key) {
+            player.setCanSwitchLevel(true, key);
         }
     }
     if (IsKeyReleased(KEY_I)) {

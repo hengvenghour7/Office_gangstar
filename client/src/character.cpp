@@ -63,11 +63,18 @@ void Character::updatePlayerState (enum PlayerState state, bool specialUpdate) {
 }
 void Character::changeCurrentLevel (int level, int collisionCode, std::vector<std::vector<int>>* collisionArray) {
     currentLevel = level;
+    std::cout<< "this level__ " << currentLevel <<std::flush ;
     this->collisionCode = collisionCode;
     worldCollisionArray = collisionArray;
 }
 int Character::getCurrentLevel () {
     return currentLevel;
+}
+void Character::setCanSwitchLevel(bool isCanSwitch, int key) {
+    canSwitchLevel = {isCanSwitch, key};
+}
+IsCanSwtichSet Character::getCanSwitchLevel() {
+    return canSwitchLevel;
 }
 void Character::updateDirectionState (Vector2 newDirection) {
     if (newDirection.x > 0) directionState = Right;

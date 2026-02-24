@@ -9,5 +9,7 @@ float Drawing::getY() {
 void Drawing::setY(float Y) {
     this->Y = Y;
 }
-
+void Drawing::setDrawLevel(int level) {
+    drawLevel = level;
+}
 void Drawing::draw(Vector2 des) {};

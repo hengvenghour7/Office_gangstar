@@ -13,6 +13,10 @@
 
 using namespace std;
 
+struct IsCanSwtichSet {
+    bool isCanSwitch;
+    int key;
+};
 class HealthComponent {
     protected:
     public:
@@ -57,6 +61,7 @@ class Character : public Drawing
         int collisionCode{79732};
         std::vector<std::vector<int>>* worldCollisionArray{};
         float damage;
+        IsCanSwtichSet canSwitchLevel {true, 0};
     public:
         virtual void tick (float deltaTime);
         Character (const char * imageTexture, float speed, float damage, std::vector<std::vector<int>>* worldCollisionArray);
@@ -86,6 +91,8 @@ class Character : public Drawing
         }
         void changeCurrentLevel(int level, int collisionCode, std::vector<std::vector<int>>* collisionArray);
         HealthComponent* getHealthComponent();
+        void setCanSwitchLevel(bool isCanSwitch, int key);
+        IsCanSwtichSet getCanSwitchLevel();
     };
 class Player: public Character
 {
