@@ -16,6 +16,10 @@ struct SpawnToDetail {
     WorldEnums targetMap;
     int targetSpawnPoint;
 };
+struct LevelData {
+    std::vector<std::vector<int>> collisionArray;
+    int collisionCode = 1;
+};
 class Shop {
     Rectangle shopDimension;
     std::string name;
@@ -48,6 +52,15 @@ class AutoMapSwitcherProp: public MapSwitcherProp {
         AutoMapSwitcherProp(Vector2 location, std::string switchToMap, int spawnIndex, int spawnToIndex, int width, int height, SwitchDirectionEnum direction);
         SwitchDirectionEnum getDirection();
 };
+class LevelSwitcher: public Drawing {
+    public:
+        int option1;
+        int option2;
+        virtual void draw(Vector2 mapPos) override;
+        Rectangle getScreenPosDimension(Vector2 mapPos);
+        Rectangle dimension;
+        LevelSwitcher(int option1, int option2, Rectangle dimension);
+};
 struct WorldDrawProperty {
     int width;
     int height;
@@ -70,15 +83,18 @@ class WorldSet {
     std::string worldPropertySrc;
     std::unordered_map<int , MapSwitcherProp> mapSwitchersList{};
     std::unordered_map<int , AutoMapSwitcherProp> autoMapSwitcherList{};
+    std::unordered_map<int , LevelSwitcher> autoLevelSwitcherList{};
     std::vector<AIPlayer> AIPlayers;
     int collisionCode{1};
     WorldEnums worldName;
     std::vector<Shop> shops;
+    std::unordered_map<int , LevelData> levelDataList{};
     std::vector<InteractableItem> interactableItemList{};
 
     public:
         WorldSet(const char* backgroundTexture, const char* foregroundTexture, int mapWidth, int mapHeight, 
-        std::vector<int>* collisionData, std::vector<MapProp*>* worldProps, std::string mapPropertyPath, WorldEnums worldName, Player& player, int AI_amount = 0);
+        std::vector<int>* collisionData, std::vector<MapProp*>* worldProps, std::string mapPropertyPath, 
+        WorldEnums worldName, Player& player, int levelAmount = 0, int AI_amount = 0);
         WorldDrawProperty drawProperty;
         World background;
         World foreground;
@@ -93,6 +109,7 @@ class WorldSet {
         Vector2 getSpawnLocation(int spawnIndex);
         std::unordered_map<int , MapSwitcherProp>* getMapSwitchersList();
         std::unordered_map<int, AutoMapSwitcherProp>* getAutoMapSwitcherList();
+        std::unordered_map<int , LevelSwitcher>* getAutoLevelSwitcherList();
         int getCollisionCode();
         WorldEnums getWorldName();
         std::vector<Shop>* getCurrentWorldShops();
@@ -100,6 +117,7 @@ class WorldSet {
         void handleItemPickUp(Player& player, Vector2 mapPos);
         std::vector<ShopItem>* getShopItems(std::string name);
         void addItemtoWorld(InteractableItem item);
+        std::unordered_map<int , LevelData>* getLevelDataList();
 };
 
 #endif

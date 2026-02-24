@@ -29,6 +29,7 @@ class Character : public Drawing
     protected:
         float width;
         float height;
+        int currentLevel{0};
         Vector2 worldPos{static_cast<float>((rand() % 500) + 10), static_cast<float>((rand() % 200) + 100)};
         Vector2 screenPos{0,0};
         Vector2 direction{0,0};
@@ -53,10 +54,12 @@ class Character : public Drawing
         enum PlayerDirection directionState;
         enum PlayerDirection oldDirectionState;
         bool isNeedResetCols{false};
+        int collisionCode{79732};
+        std::vector<std::vector<int>>* worldCollisionArray{};
         float damage;
     public:
         virtual void tick (float deltaTime);
-        Character (const char * imageTexture, float speed, float damage);
+        Character (const char * imageTexture, float speed, float damage, std::vector<std::vector<int>>* worldCollisionArray);
         void updateAnimation (float deltaTime);
         virtual void draw (Vector2 des) override;
         void updateCharacterProgess (float deltaTime) {
@@ -77,17 +80,17 @@ class Character : public Drawing
         enum PlayerState getPlayerState () {
             return playerState;
         }
+        int getCurrentLevel();
         float getDamage () {
             return damage;
         }
+        void changeCurrentLevel(int level, int collisionCode, std::vector<std::vector<int>>* collisionArray);
         HealthComponent* getHealthComponent();
     };
 class Player: public Character
 {
     private:
         Vector2 direction{0,0};
-        std::vector<std::vector<int>>* worldCollisionArray;
-        int collisionCode{79732};
         Texture2D healthBarTexture;
         Texture2D coinTexture;
         int coinAmount{0};
@@ -122,7 +125,7 @@ class AIPlayer : public Character {
         virtual void draw (Vector2 des) override;
         // Vector2 currentDirection {0,0};
     public:
-        AIPlayer (const char * imageTexture, Player* inputTarget, int id, float speed, float damage);
+        AIPlayer (const char * imageTexture, Player* inputTarget, int id, float speed, float damage, std::vector<std::vector<int>>* worldCollisionArray);
         void doDamage ();
         void AITick(float deltaTime, std::vector<AIPlayer>* allAIPlayer);
     void appraochTarget (std::vector<AIPlayer>* allAIPlayer, float deltaTime) ;

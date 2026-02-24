@@ -21,7 +21,9 @@ void HealthComponent::heal(float healAmount) {
 void HealthComponent::drawHealth(float locationX, float locationY, float width, float height, Color inputColor){
     DrawRectangle(locationX, locationY, width, height, inputColor);
 };
-Character::Character (const char * imageTexture, float speed, float damage) : characterHealth(200), speed(speed), takeDamageTimeCap(1.f), stunTimeCap(takeDamageTimeCap + 0.5f), directionState(Right), damage(damage) {
+Character::Character (const char * imageTexture, float speed, float damage, std::vector<std::vector<int>>* worldCollisionArray) : 
+            characterHealth(200), speed(speed), takeDamageTimeCap(1.f), stunTimeCap(takeDamageTimeCap + 0.5f), directionState(Right), damage(damage),
+            worldCollisionArray(worldCollisionArray) {
             width = 896/56;
             height = 640/20;
             maxCols = 6;
@@ -58,6 +60,14 @@ void Character::updatePlayerState (enum PlayerState state, bool specialUpdate) {
         return;
     }
     playerState = state;
+}
+void Character::changeCurrentLevel (int level, int collisionCode, std::vector<std::vector<int>>* collisionArray) {
+    currentLevel = level;
+    this->collisionCode = collisionCode;
+    worldCollisionArray = collisionArray;
+}
+int Character::getCurrentLevel () {
+    return currentLevel;
 }
 void Character::updateDirectionState (Vector2 newDirection) {
     if (newDirection.x > 0) directionState = Right;
@@ -307,8 +317,7 @@ Rectangle Character::getCharacterHitBox ()  {
 HealthComponent* Character::getHealthComponent () {
     return &characterHealth;
 }
-Player::Player (const char * imageTexture, std::vector<std::vector<int>>* worldCollisionArray, float speed, float damage): Character(imageTexture, speed, damage), 
-        worldCollisionArray(worldCollisionArray),
+Player::Player (const char * imageTexture, std::vector<std::vector<int>>* worldCollisionArray, float speed, float damage): Character(imageTexture, speed, damage, worldCollisionArray), 
         healthBarTexture(LoadTexture("resources/image/UI/healthUI.png")),
         coinTexture(LoadTexture("resources/image/UI/coin.png")),
         playerInventory({}) {
@@ -455,7 +464,8 @@ void Player::changeCollisionCheck (std::vector<std::vector<int>>* newWorldCollis
     worldCollisionArray = newWorldCollisionArray;
     collisionCode = newCollisionCode;
 }
-AIPlayer::AIPlayer (const char * imageTexture, Player* inputPlayer, int id, float speed, float damage): Character(imageTexture, speed, damage), id(id) {
+AIPlayer::AIPlayer (const char * imageTexture, Player* inputPlayer, int id, float speed, float damage, std::vector<std::vector<int>>* worldCollisionArray): 
+    Character(imageTexture, speed, damage, worldCollisionArray), id(id) {
     player = inputPlayer;
 }
 void AIPlayer::AITick(float deltaTime, std::vector<AIPlayer>* allAIPlayer) {

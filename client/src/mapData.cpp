@@ -187,6 +187,7 @@ WorldSet& getUpperMap(Player& player) {
         "resources/maps/upper_map.tmj",
         WorldEnums::UpperMap,
         player,
+        3,
         5
     );
 

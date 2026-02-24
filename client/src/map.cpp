@@ -30,7 +30,8 @@ Rectangle Shop::getShopDimension(Vector2 mapPos) {
     return screenShopDimension;
 }
 WorldSet::WorldSet(const char* backgroundTexture, const char* foregroundTexture, int mapWidth, int mapHeight, 
-    std::vector<int>* collisionData, std::vector<MapProp*>* worldProps, std::string mapPropertyPath, WorldEnums worldName, Player& player, int AI_amount): 
+    std::vector<int>* collisionData, std::vector<MapProp*>* worldProps, std::string mapPropertyPath,
+    WorldEnums worldName, Player& player, int levelAmount, int AI_amount): 
     drawProperty(mapWidth, mapHeight, collisionData), background(backgroundTexture, &drawProperty), foreground(foregroundTexture, &drawProperty), worldProps(worldProps),
     worldName(worldName)  {
         if (AI_amount > 0) {
@@ -43,7 +44,7 @@ WorldSet::WorldSet(const char* backgroundTexture, const char* foregroundTexture,
             // Generate a random number
             float randomValue = dis(gen);
             for (int i = 0; i< AI_amount; i++) {
-                AIPlayers.emplace_back("resources/image/character/workingman.png", &player, i, dis(gen)/4, dis(gen) + 20);
+                AIPlayers.emplace_back("resources/image/character/workingman.png", &player, i, dis(gen)/4, dis(gen) + 20, getWorldCollisionArray());
             }
         }
         std::fstream file (mapPropertyPath);
@@ -60,6 +61,25 @@ WorldSet::WorldSet(const char* backgroundTexture, const char* foregroundTexture,
                 obj.getProperty("imageSrc").get<std::string>().c_str(),
                 obj.getDimension());
         }
+        auto temp_level_switchers = getObjectsFromJsonLayer(j, "level_switcher", {"option_1", "option_2"});
+        for (int i =0 ; i < temp_level_switchers.size(); i++) {
+            ObjectDetail obj = temp_level_switchers[i];
+            autoLevelSwitcherList.emplace(i, 
+                LevelSwitcher(obj.getProperty("option_1").get<int>(), obj.getProperty("option_2").get<int>(), obj.getDimension()));
+        }
+        if (levelAmount > 0) {
+            for (int i = 0; i < levelAmount; i++) {
+                std::vector<int> tmpDataArray = getArrayFromJson(j, "collision_lvl_" + std::to_string(i + 1));
+                std::vector<std::vector<int>> tmpCollisionArray = arrayTo2DArray( &tmpDataArray, mapWidth);
+                std::vector<int>::iterator tmpCollisionCode = std::find_if(tmpDataArray.begin(), tmpDataArray.end(), [](int data) {
+                    return data != 0;
+                });
+                if (tmpCollisionCode != tmpDataArray.end()) {
+                    levelDataList[i + 1] = {tmpCollisionArray, *tmpCollisionCode};
+                }
+            }
+            std::cout<< "all level are sssss " << levelDataList.size() <<std::flush;
+        }
         auto layers = j["layers"];
         std::vector<int>::iterator tempCollision = std::find_if(collisionData->begin(), collisionData->end(), [](int data) {
             return data != 0;
@@ -67,6 +87,7 @@ WorldSet::WorldSet(const char* backgroundTexture, const char* foregroundTexture,
         if (tempCollision != collisionData->end()) {
             collisionCode = *tempCollision != 0 ? *tempCollision : 1;
         }
+        levelDataList[0] = {drawProperty.collisionArray, collisionCode};
         auto spawnPointLayer = std::find_if(layers.begin(), layers.end(), [](const json& layer) {
                 return layer["name"].get<std::string>() == "entry point";
             });
@@ -218,6 +239,12 @@ Vector2 WorldSet::getSpawnLocation(int spawnIndex) {
 void WorldSet::saveAIPlayers(std::vector<AIPlayer> currentAIPlayers) {
     AIPlayers = currentAIPlayers;
 };
+std::unordered_map<int , LevelSwitcher>* WorldSet::getAutoLevelSwitcherList() {
+    return &autoLevelSwitcherList;
+};
+std::unordered_map<int , LevelData>* WorldSet::getLevelDataList() {
+    return &levelDataList;
+};
 void WorldSet::handleItemPickUp(Player& player, Vector2 mapPos) {
     if (player.getHoldingItems()->size() > 0) {
         interactableItemList.push_back((*player.getHoldingItems())[0]);
@@ -258,6 +285,17 @@ Rectangle MapSwitcherProp::getCollision() {
 AutoMapSwitcherProp::AutoMapSwitcherProp(Vector2 location, std::string switchToMap, int spawnIndex, int spawnToIndex, int width, int height, SwitchDirectionEnum direction):
     MapSwitcherProp(location, switchToMap, spawnIndex, spawnToIndex, width, height),
     direction(direction) {
+}
+LevelSwitcher::LevelSwitcher(int option1, int option2, Rectangle dimension): option1(option1), option2(option2),
+    dimension(dimension) {
+}
+Rectangle LevelSwitcher::getScreenPosDimension(Vector2 mapPos) {
+    Rectangle screenPosDimension = {dimension.x + mapPos.x, dimension.y + mapPos.y, dimension.width, dimension.height};
+    return screenPosDimension;
+}
+void LevelSwitcher::draw(Vector2 mapPos) {
+    Rectangle screenPosDimension = {dimension.x + mapPos.x, dimension.y + mapPos.y, dimension.width, dimension.height};
+    DrawRectangle(screenPosDimension.x, screenPosDimension.y, screenPosDimension.width, screenPosDimension.height, GREEN);
 }
 SwitchDirectionEnum AutoMapSwitcherProp::getDirection() {
     return direction;

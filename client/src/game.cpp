@@ -21,7 +21,7 @@ gameUIState(GameUIStateEnums::Playing),
 gameUI(),
 shopUI(),
 mapBoundary1(collisionData, 150, 100, 16, 79732) , 
-NPC("resources/image/character/workingman.png", &player, 11, 1, 30), 
+NPC("resources/image/character/workingman.png", &player, 11, 1, 30, currentWorld->getWorldCollisionArray()), 
 worldDrawProperty(150, 100, &collisionData),
 currentWorld(&getCenterWorld(player)),
 player("resources/image/character/workingman2.png", currentWorld->getWorldCollisionArray(), 3, 50)
@@ -35,7 +35,7 @@ player("resources/image/character/workingman2.png", currentWorld->getWorldCollis
     // Generate a random number
     float randomValue = dis(gen);
     for (int i = 0; i< 5; i++) {
-        enemies.emplace_back("resources/image/character/workingman.png", &player, i, dis(gen)/4, dis(gen) + 20);
+        enemies.emplace_back("resources/image/character/workingman.png", &player, i, dis(gen)/4, dis(gen) + 20, currentWorld->getWorldCollisionArray());
     }
     currentWorld->foreground.setY(100*TILE_SIZE*MAP_SCALE);
     allDrawableObjects.push_back(&currentWorld->background);
@@ -97,7 +97,7 @@ void Game::tick (float deltaTime) {
             }),
             enemies.end()
             );
-            checkSwitchWorldInteraction(deltaTime);
+            checkSwitchWorldInteraction(deltaTime, mapPos);
             checkPropsInteraction(player, mapPos);
             if (player.getHealthComponent()->currentHealth <= 0) gameState = GameStateEnums::GameOver;
             if (IsKeyReleased(KEY_P)) {
@@ -129,8 +129,9 @@ void Game::tick (float deltaTime) {
     }
     EndDrawing();
 }
-void Game::checkSwitchWorldInteraction(float deltaTime) {
+void Game::checkSwitchWorldInteraction(float deltaTime, Vector2& mapPos) {
     for (auto &[key, value] : (*currentWorld->getAutoMapSwitcherList())) {
+        value.draw(mapPos);
         Rectangle temp_dimension = value.getCollision();
         // DrawRectangle(temp_dimension.x, temp_dimension.y, temp_dimension.width, temp_dimension.height, PURPLE);
         if (checkIsCollide(player.getCharacterCollision(), value.getCollision()).isCollide && switchCooldownTime <= 0) {
@@ -143,6 +144,20 @@ void Game::checkSwitchWorldInteraction(float deltaTime) {
             if (switchCooldownTime > 0) {
                 switchCooldownTime -= deltaTime;
             }
+        }
+    }
+    for (auto &[key, value] : (*currentWorld->getAutoLevelSwitcherList())) {
+        value.draw(mapPos);
+        if (checkIsCollide(player.getCharacterCollision(), value.getScreenPosDimension(mapPos)).isCollide && switchCooldownTime <= 0) {
+            int switchToLevel;
+            if (player.getCurrentLevel() == value.option1) {
+                switchToLevel = value.option2;
+            } else {
+                switchToLevel = value.option1;
+            }
+            player.changeCurrentLevel(switchToLevel, 
+                (*currentWorld->getLevelDataList()).at(switchToLevel).collisionCode,
+                &(*currentWorld->getLevelDataList()).at(switchToLevel).collisionArray);
         }
     }
     if (IsKeyReleased(KEY_I)) {

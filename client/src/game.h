@@ -20,6 +20,7 @@ class Game {
         UI gameUI;
         MapBoundary mapBoundary1;
         std::vector<AIPlayer> enemies{};
+        WorldSet* currentWorld;
         AIPlayer NPC;
         std::vector<Prop> signProps{};
         std::vector<Prop> mapProps{};
@@ -29,7 +30,6 @@ class Game {
         Texture2D mapTexture = LoadTexture("resources/image/office_gang_map.png");
         WorldDrawProperty worldDrawProperty;
         Vector2 pauseScreenWorldPos{0,0};
-        WorldSet* currentWorld;
         Player player;
     public:
         Game();
@@ -38,7 +38,7 @@ class Game {
         void startGame();
         void saveGame();
         void loadGame();
-        void checkSwitchWorldInteraction(float deltaTime);
+        void checkSwitchWorldInteraction(float deltaTime, Vector2& mapPos);
         void checkPropsInteraction(Player& player, Vector2 mapPos);
         void checkShopInteraction(Player& player, Vector2 mapPos);
         void loadWorld(WorldEnums targetMap, Vector2 targetLocation);
