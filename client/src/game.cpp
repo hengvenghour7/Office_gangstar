@@ -44,6 +44,9 @@ player("resources/image/character/workingman2.png", currentWorld->getWorldCollis
     // for (Drawing* propSet : currentWorld->getAllDrawableProps()) {
     //     allDrawableObjects.push_back(propSet);
     // }
+    for (Drawing* layer: currentWorld->getMapLayers()) {
+        allDrawableObjects.push_back(layer);
+    }
     shopUI.setShopItems(currentWorld->getShopItems("shop1"));
 
 }
@@ -63,6 +66,9 @@ void Game::tick (float deltaTime) {
                 allDrawableObjects2.push_back(&enemy);
             }
             std::sort(allDrawableObjects2.begin(), allDrawableObjects2.end(), [](Drawing* a, Drawing* b) {
+                if (a->getDrawLevel() != b->getDrawLevel()) {
+                    return a->getDrawLevel() < b->getDrawLevel();
+                }
                 return a->getY() < b->getY();
             });
             currentWorld->setSwitchersPos(mapPos);
@@ -185,6 +191,9 @@ void Game::prepareWorld (SpawnToDetail& spawnToDetail) {
     currentWorld->foreground.setY(100*TILE_SIZE*MAP_SCALE);
     allDrawableObjects.push_back(&currentWorld->background);
     allDrawableObjects.push_back(&currentWorld->foreground);
+    for (Drawing* layer: currentWorld->getMapLayers()) {
+        allDrawableObjects.push_back(layer);
+    }
     allDrawableObjects.push_back(&player);
 }
 void Game::checkPropsInteraction(Player& player, Vector2 mapPos) {

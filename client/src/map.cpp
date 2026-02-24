@@ -29,11 +29,14 @@ Rectangle Shop::getShopDimension(Vector2 mapPos) {
     Rectangle screenShopDimension = {shopDimension.x + mapPos.x, shopDimension.y + mapPos.y, shopDimension.width, shopDimension.height};
     return screenShopDimension;
 }
-WorldSet::WorldSet(const char* backgroundTexture, const char* foregroundTexture, int mapWidth, int mapHeight, 
+WorldSet::WorldSet(const char* backgroundTexture, const char* foregroundTexture, std::vector<DrawingDataSet> drawingDataSet, int mapWidth, int mapHeight, 
     std::vector<int>* collisionData, std::vector<MapProp*>* worldProps, std::string mapPropertyPath,
     WorldEnums worldName, Player& player, int levelAmount, int AI_amount): 
     drawProperty(mapWidth, mapHeight, collisionData), background(backgroundTexture, &drawProperty), foreground(foregroundTexture, &drawProperty), worldProps(worldProps),
     worldName(worldName)  {
+        for (DrawingDataSet obj: drawingDataSet) {
+            mapLayers.emplace_back(obj.imgSrc, obj.level);
+        }
         if (AI_amount > 0) {
             std::random_device rd;
 
@@ -167,6 +170,13 @@ WorldSet::WorldSet(const char* backgroundTexture, const char* foregroundTexture,
         }
     }
 }
+std::vector<Drawing*> WorldSet::getMapLayers() {
+    std::vector<Drawing*> layers{};
+    for (MapLayer& layer: mapLayers) {
+        layers.push_back(&layer);
+    }
+    return layers;
+};
 WorldEnums WorldSet::getWorldName() {
     return worldName;
 }
@@ -202,6 +212,12 @@ std::vector<std::vector<int>>* World::getWorldCollisionArray() {
 }
 void World::draw(Vector2 des) {
     DrawTextureEx(worldTexture, des, 0,MAP_SCALE,WHITE);
+}
+MapLayer::MapLayer(const char* imgSrc, int level): Drawing(0, level) , layerTexture(LoadTexture(imgSrc)) {
+
+}
+void MapLayer::draw(Vector2 mapPos) {
+    DrawTextureEx(layerTexture, mapPos, 0,MAP_SCALE,WHITE);
 }
 std::vector<Drawing*> WorldSet::getAllDrawableProps () {
     std::vector<Drawing*> allWorldProps{};

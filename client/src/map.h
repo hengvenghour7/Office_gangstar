@@ -16,6 +16,10 @@ struct SpawnToDetail {
     WorldEnums targetMap;
     int targetSpawnPoint;
 };
+struct DrawingDataSet {
+    const char* imgSrc;
+    int level;
+};
 struct LevelData {
     std::vector<std::vector<int>> collisionArray;
     int collisionCode = 1;
@@ -79,6 +83,13 @@ class World : public Drawing {
     std::vector<std::vector<int>>* getWorldCollisionArray ();
     virtual void draw(Vector2 des) override;
 };
+class MapLayer : public Drawing {
+    Texture2D layerTexture;
+
+    public:
+    MapLayer(const char* imgSrc, int level);
+    virtual void draw(Vector2 mapPos) override;
+};
 class WorldSet {
     std::string worldPropertySrc;
     std::unordered_map<int , MapSwitcherProp> mapSwitchersList{};
@@ -90,9 +101,10 @@ class WorldSet {
     std::vector<Shop> shops;
     std::unordered_map<int , LevelData> levelDataList{};
     std::vector<InteractableItem> interactableItemList{};
+    std::vector<MapLayer> mapLayers{};
 
     public:
-        WorldSet(const char* backgroundTexture, const char* foregroundTexture, int mapWidth, int mapHeight, 
+        WorldSet(const char* backgroundTexture, const char* foregroundTexture, std::vector<DrawingDataSet> drawingDataSet, int mapWidth, int mapHeight, 
         std::vector<int>* collisionData, std::vector<MapProp*>* worldProps, std::string mapPropertyPath, 
         WorldEnums worldName, Player& player, int levelAmount = 0, int AI_amount = 0);
         WorldDrawProperty drawProperty;
@@ -118,6 +130,7 @@ class WorldSet {
         std::vector<ShopItem>* getShopItems(std::string name);
         void addItemtoWorld(InteractableItem item);
         std::unordered_map<int , LevelData>* getLevelDataList();
+        std::vector<Drawing*> getMapLayers();
 };
 
 #endif

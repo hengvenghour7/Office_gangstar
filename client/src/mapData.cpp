@@ -34,10 +34,11 @@ WorldSet& getCenterWorld(Player& player) {
     static std::vector<MapProp*> centerWorldProps = {
         &boatProp, &arrowProp, &carProp, &characterProp
     };
-
+    std::vector<DrawingDataSet> drawingDataSet = {};
     static WorldSet centerWorld(
         "resources/image/office_gang_map.png",
         "resources/image/office_gang_map_3.png",
+        drawingDataSet,
         150,
         100,
         &collisionData,
@@ -53,10 +54,11 @@ WorldSet& getMarketInterior(Player& player) {
 
     static std::vector<MapProp*> marketInteriorProps = {
     };
-
+    std::vector<DrawingDataSet> drawingDataSet = {};
     static WorldSet marketInterior(
         "resources/image/supermarket_map.png",
         "",
+        drawingDataSet,
         50,
         20,
         &supermarketBoundary,
@@ -78,9 +80,11 @@ WorldSet& getOfficeInterior(Player& player) {
         file >> j;
         mapCollisionData = getArrayFromJson(j, "collision");
     }
+    std::vector<DrawingDataSet> drawingDataSet = {};
     static WorldSet officeInterior(
         "resources/image/office_interior.png",
         "",
+        drawingDataSet,
         10,
         20,
         &mapCollisionData,
@@ -103,9 +107,11 @@ WorldSet& getOfficeInterior2(Player& player) {
         file >> j;
         mapCollisionData = getArrayFromJson(j, "collision");
     }
+    std::vector<DrawingDataSet> drawingDataSet = {};
     static WorldSet officeInterior2(
         "resources/image/office_interior_2.png",
         "resources/image/office_interior_2_top.png",
+        drawingDataSet,
         40,
         20,
         &mapCollisionData,
@@ -127,9 +133,11 @@ WorldSet& getHardwareInterior(Player& player) {
         file >> j;
         mapCollisionData = getArrayFromJson(j, "collision");
     }
+    std::vector<DrawingDataSet> drawingDataSet = {};
     static WorldSet hardwareInterior(
         "resources/image/sunna_interior.png",
         "",
+        drawingDataSet,
         20,
         20,
         &mapCollisionData,
@@ -151,9 +159,11 @@ WorldSet& getSunnaInterior(Player& player) {
         file >> j;
         mapCollisionData = getArrayFromJson(j, "collision");
     }
+    std::vector<DrawingDataSet> drawingDataSet = {};
     static WorldSet sunnaInterior(
         "resources/image/sunna_interior.png",
         "",
+        drawingDataSet,
         20,
         30,
         &mapCollisionData,
@@ -177,9 +187,13 @@ WorldSet& getUpperMap(Player& player) {
         file >> j;
         mapCollisionData = getArrayFromJson(j, "Collision");
     }
+    std::vector<DrawingDataSet> drawingDataSet = {
+        {"resources/image/upper_map_2.png", 1}
+    };
     static WorldSet upperMap(
         "resources/image/upper_map.png",
         "",
+        drawingDataSet,
         150,
         100,
         &mapCollisionData,

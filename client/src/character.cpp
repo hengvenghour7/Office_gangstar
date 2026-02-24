@@ -63,6 +63,7 @@ void Character::updatePlayerState (enum PlayerState state, bool specialUpdate) {
 }
 void Character::changeCurrentLevel (int level, int collisionCode, std::vector<std::vector<int>>* collisionArray) {
     currentLevel = level;
+    setDrawLevel(level);
     std::cout<< "this level__ " << currentLevel <<std::flush ;
     this->collisionCode = collisionCode;
     worldCollisionArray = collisionArray;
