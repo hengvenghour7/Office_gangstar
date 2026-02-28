@@ -137,7 +137,7 @@ void Game::tick (float deltaTime) {
 }
 void Game::checkSwitchWorldInteraction(float deltaTime, Vector2& mapPos) {
     for (auto &[key, value] : (*currentWorld->getAutoMapSwitcherList())) {
-        value.draw(mapPos);
+        // value.draw(mapPos);
         Rectangle temp_dimension = value.getCollision();
         // DrawRectangle(temp_dimension.x, temp_dimension.y, temp_dimension.width, temp_dimension.height, PURPLE);
         if (checkIsCollide(player.getCharacterCollision(), value.getCollision()).isCollide && switchCooldownTime <= 0) {
@@ -153,7 +153,7 @@ void Game::checkSwitchWorldInteraction(float deltaTime, Vector2& mapPos) {
         }
     }
     for (auto &[key, value] : (*currentWorld->getAutoLevelSwitcherList())) {
-        value.draw(mapPos);
+        // value.draw(mapPos);
         if (checkIsCollide(player.getCharacterCollision(), value.getScreenPosDimension(mapPos)).isCollide && player.getCanSwitchLevel().isCanSwitch) {
             player.setCanSwitchLevel(false, key);
             int switchToLevel;
@@ -194,6 +194,10 @@ void Game::prepareWorld (SpawnToDetail& spawnToDetail) {
     for (Drawing* layer: currentWorld->getMapLayers()) {
         allDrawableObjects.push_back(layer);
     }
+    for (InteractablePropV2 &interactableProp : *currentWorld->getInteractableV2List()) {
+        Drawing* drawObj = &interactableProp;
+        allDrawableObjects.push_back(drawObj);
+    }
     allDrawableObjects.push_back(&player);
 }
 void Game::checkPropsInteraction(Player& player, Vector2 mapPos) {
@@ -217,6 +221,11 @@ void Game::checkPropsInteraction(Player& player, Vector2 mapPos) {
             }
         } else {
             isOpenInteractionDialog = false;
+        }
+        for (InteractablePropV2& prop : *currentWorld->getInteractableV2List()) {
+            if (checkCircleInteraction (prop.getCenter(mapPos), player.getCenter(mapPos), 100).isCollide) {
+                prop.doFunction();
+            }
         }
     }
 }

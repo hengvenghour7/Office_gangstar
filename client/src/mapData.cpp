@@ -45,7 +45,8 @@ WorldSet& getCenterWorld(Player& player) {
         &centerWorldProps,
         "resources/maps/office_gang_map.tmj",
         WorldEnums::CenterWorld,
-        player
+        player,
+        {}
     );
 
     return centerWorld;
@@ -65,7 +66,8 @@ WorldSet& getMarketInterior(Player& player) {
         &marketInteriorProps,
         "resources/maps/supermarket_map.tmj",
         WorldEnums::InteriorSuperMarket,
-        player
+        player,
+        {}
     );
 
     return marketInterior;
@@ -92,6 +94,8 @@ WorldSet& getOfficeInterior(Player& player) {
         "resources/maps/office_interior.tmj",
         WorldEnums::InteriorOffice1,
         player,
+        {},
+        2,
         2
     );
 
@@ -110,7 +114,7 @@ WorldSet& getOfficeInterior2(Player& player) {
     std::vector<DrawingDataSet> drawingDataSet = {};
     static WorldSet officeInterior2(
         "resources/image/office_interior_2.png",
-        "resources/image/office_interior_2_top.png",
+        "",
         drawingDataSet,
         40,
         20,
@@ -118,7 +122,10 @@ WorldSet& getOfficeInterior2(Player& player) {
         &officeInteriorProps,
         "resources/maps/office_interior_2.tmj",
         WorldEnums::InteriorOffice2,
-        player
+        player,
+        {},
+        0,
+        3
     );
 
     return officeInterior2;
@@ -144,7 +151,8 @@ WorldSet& getHardwareInterior(Player& player) {
         &hardwareInteriorProps,
         "resources/maps/sunna_interior.tmj",
         WorldEnums::InteriorHardware,
-        player
+        player,
+        {}
     );
 
     return hardwareInterior;
@@ -170,7 +178,8 @@ WorldSet& getSunnaInterior(Player& player) {
         &sunnaInteriorProps,
         "resources/maps/sunna_interior.tmj",
         WorldEnums::InteriorSunna,
-        player
+        player,
+        {}
     );
 
     return sunnaInterior;
@@ -190,6 +199,14 @@ WorldSet& getUpperMap(Player& player) {
     std::vector<DrawingDataSet> drawingDataSet = {
         {"resources/image/upper_map_2.png", 1}
     };
+    std::vector<InteractableInputProperties> Interactableproperties = {
+        {
+            "phoneBox",
+            [&player]() {
+                player.increaseCoin(150);
+            }
+        }
+    };
     static WorldSet upperMap(
         "resources/image/upper_map.png",
         "",
@@ -201,6 +218,7 @@ WorldSet& getUpperMap(Player& player) {
         "resources/maps/upper_map.tmj",
         WorldEnums::UpperMap,
         player,
+        Interactableproperties,
         3,
         5
     );

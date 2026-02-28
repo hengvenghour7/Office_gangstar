@@ -11,6 +11,7 @@
 #include "shop/shopData.h"
 #include "UIHandler/UI.h"
 #include "item/item.h"
+#include <functional>
 
 struct SpawnToDetail {
     WorldEnums targetMap;
@@ -19,6 +20,10 @@ struct SpawnToDetail {
 struct DrawingDataSet {
     const char* imgSrc;
     int level;
+};
+struct InteractableInputProperties {
+    std::string name;
+    std::function<void()> func;
 };
 struct LevelData {
     std::vector<std::vector<int>> collisionArray;
@@ -33,6 +38,23 @@ class Shop {
     std::vector<ShopItem>* getShopItems();
     std::string getShopName();
     Rectangle getShopDimension(Vector2 mapPos);
+};
+class InteractablePropV2: public Drawing {
+    Rectangle dimension;
+    std::function<void()> func;
+    Texture2D imgTexture;
+    int startFrame;
+    int endFrame;
+    bool isInteracted;
+    int currentFrame;
+    public:
+        InteractablePropV2 (Rectangle dimension, std::function<void()> function, std::string imgSrc, 
+        int startFrame, int endFrame);
+        virtual void draw (Vector2 mapPos) override;
+        void updateAnimation ();
+        void doFunction();
+        Vector2 getCenter(Vector2& mapPos);
+        Rectangle getDimension();
 };
 class MapSwitcherProp: public Drawing {
     Vector2 location;
@@ -102,11 +124,12 @@ class WorldSet {
     std::unordered_map<int , LevelData> levelDataList{};
     std::vector<InteractableItem> interactableItemList{};
     std::vector<MapLayer> mapLayers{};
+    std::vector<InteractablePropV2> interactableV2List{};
 
     public:
         WorldSet(const char* backgroundTexture, const char* foregroundTexture, std::vector<DrawingDataSet> drawingDataSet, int mapWidth, int mapHeight, 
         std::vector<int>* collisionData, std::vector<MapProp*>* worldProps, std::string mapPropertyPath, 
-        WorldEnums worldName, Player& player, int levelAmount = 0, int AI_amount = 0);
+        WorldEnums worldName, Player& player, std::vector<InteractableInputProperties> interactableProperties, int levelAmount = 0, int AI_amount = 0);
         WorldDrawProperty drawProperty;
         World background;
         World foreground;
@@ -131,6 +154,7 @@ class WorldSet {
         void addItemtoWorld(InteractableItem item);
         std::unordered_map<int , LevelData>* getLevelDataList();
         std::vector<Drawing*> getMapLayers();
+        std::vector<InteractablePropV2>* getInteractableV2List();
 };
 
 #endif

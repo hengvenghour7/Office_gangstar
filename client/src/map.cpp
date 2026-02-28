@@ -29,9 +29,37 @@ Rectangle Shop::getShopDimension(Vector2 mapPos) {
     Rectangle screenShopDimension = {shopDimension.x + mapPos.x, shopDimension.y + mapPos.y, shopDimension.width, shopDimension.height};
     return screenShopDimension;
 }
+InteractablePropV2::InteractablePropV2 (Rectangle dimension, std::function<void()> function, std::string imgSrc, 
+        int startFrame, int endFrame): 
+    dimension(dimension), func(function), imgTexture(LoadTexture(imgSrc.c_str())), startFrame(startFrame), endFrame(endFrame) {
+
+}
+Vector2 InteractablePropV2::getCenter(Vector2& mapPos) {
+    Vector2 center = {dimension.x + mapPos.x + dimension.width*0.5f,dimension.y + mapPos.y + dimension.height*0.5f};
+    return center;
+}
+void InteractablePropV2::doFunction() {
+    func();
+}
+Rectangle InteractablePropV2::getDimension() {
+    return dimension;
+}
+void InteractablePropV2::draw (Vector2 mapPos) {
+    DrawTexturePro(imgTexture, dimension, 
+        {dimension.x + mapPos.x, dimension.y + mapPos.y, dimension.width, dimension.height},
+        {0, 0}, 0, WHITE
+    );
+}
+void InteractablePropV2::updateAnimation () {
+    if (currentFrame < endFrame) {
+        currentFrame++;
+    } else {
+        currentFrame = startFrame;
+    }
+}
 WorldSet::WorldSet(const char* backgroundTexture, const char* foregroundTexture, std::vector<DrawingDataSet> drawingDataSet, int mapWidth, int mapHeight, 
     std::vector<int>* collisionData, std::vector<MapProp*>* worldProps, std::string mapPropertyPath,
-    WorldEnums worldName, Player& player, int levelAmount, int AI_amount): 
+    WorldEnums worldName, Player& player, std::vector<InteractableInputProperties> interactableProperties, int levelAmount, int AI_amount): 
     drawProperty(mapWidth, mapHeight, collisionData), background(backgroundTexture, &drawProperty), foreground(foregroundTexture, &drawProperty), worldProps(worldProps),
     worldName(worldName)  {
         for (DrawingDataSet obj: drawingDataSet) {
@@ -82,6 +110,20 @@ WorldSet::WorldSet(const char* backgroundTexture, const char* foregroundTexture,
                 }
             }
             std::cout<< "all level are sssss " << levelDataList.size() <<std::flush;
+        }
+        if (interactableProperties.size() > 0) {
+            std::vector<ObjectDetail> temp_objs = getObjectsFromJsonLayer(j, "interactable_items", {"imgSrc", "name", "startFrame", "endFrame"});
+            for (ObjectDetail obj : temp_objs) {
+                std::string name = obj.getProperty("name").get<std::string>();
+                for (InteractableInputProperties property : interactableProperties) {
+                    if (name == property.name) {
+                        std::string temp_imgSrc = obj.getProperty("imgSrc").get<std::string>();
+                        int temp_startFrame = obj.getProperty("startFrame").get<int>();
+                        int temp_endFrame = obj.getProperty("endFrame").get<int>();
+                        interactableV2List.emplace_back(obj.getDimension(), property.func, temp_imgSrc, temp_startFrame, temp_endFrame);
+                    }
+                }
+            }
         }
         auto layers = j["layers"];
         std::vector<int>::iterator tempCollision = std::find_if(collisionData->begin(), collisionData->end(), [](int data) {
@@ -170,6 +212,9 @@ WorldSet::WorldSet(const char* backgroundTexture, const char* foregroundTexture,
         }
     }
 }
+std::vector<InteractablePropV2>* WorldSet::getInteractableV2List() {
+    return &interactableV2List;
+}
 std::vector<Drawing*> WorldSet::getMapLayers() {
     std::vector<Drawing*> layers{};
     for (MapLayer& layer: mapLayers) {
@@ -232,6 +277,9 @@ std::vector<Drawing*> WorldSet::getAllDrawableProps () {
 void WorldSet::animateWorldProps(float deltaTime) {
     for (MapProp* propSet : *worldProps) {
         propSet->updateAnimation(deltaTime);
+    }
+    for (InteractablePropV2 &prop : interactableV2List) {
+        prop.updateAnimation();
     }
 }
 Vector2 WorldSet::getSpawnLocation(int spawnIndex) {
