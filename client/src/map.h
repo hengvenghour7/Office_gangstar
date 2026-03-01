@@ -44,14 +44,22 @@ class InteractablePropV2: public Drawing {
     std::function<void()> func;
     Texture2D imgTexture;
     int startFrame;
+    int midFrame;
     int endFrame;
-    bool isInteracted;
+    bool isInteracted {false};
+    bool isActionFinished {true};
+    bool isContinueAnimation {false};
     int currentFrame;
+    int srcWidth;
+    int srcHeight;
+    float animationUpdateTime{0};
+    int interactableDistance;
     public:
         InteractablePropV2 (Rectangle dimension, std::function<void()> function, std::string imgSrc, 
-        int startFrame, int endFrame);
+        int startFrame, int midFrame, int endFrame, int srcWidth, int srcHeight, int interactableDistance);
         virtual void draw (Vector2 mapPos) override;
-        void updateAnimation ();
+        void updateAnimation (float deltaTime);
+        void handleInteraction();
         void doFunction();
         Vector2 getCenter(Vector2& mapPos);
         Rectangle getDimension();

@@ -224,7 +224,7 @@ void Game::checkPropsInteraction(Player& player, Vector2 mapPos) {
         }
         for (InteractablePropV2& prop : *currentWorld->getInteractableV2List()) {
             if (checkCircleInteraction (prop.getCenter(mapPos), player.getCenter(mapPos), 100).isCollide) {
-                prop.doFunction();
+                prop.handleInteraction();
             }
         }
     }

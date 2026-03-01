@@ -30,8 +30,9 @@ Rectangle Shop::getShopDimension(Vector2 mapPos) {
     return screenShopDimension;
 }
 InteractablePropV2::InteractablePropV2 (Rectangle dimension, std::function<void()> function, std::string imgSrc, 
-        int startFrame, int endFrame): 
-    dimension(dimension), func(function), imgTexture(LoadTexture(imgSrc.c_str())), startFrame(startFrame), endFrame(endFrame) {
+        int startFrame, int midFrame, int endFrame, int srcWidth, int srcHeight, int interactableDistance): 
+    dimension(dimension), func(function), imgTexture(LoadTexture(imgSrc.c_str())), currentFrame(0), startFrame(startFrame), midFrame(midFrame), endFrame(endFrame),
+    srcWidth(srcWidth), srcHeight(srcHeight), interactableDistance(interactableDistance) {
 
 }
 Vector2 InteractablePropV2::getCenter(Vector2& mapPos) {
@@ -45,16 +46,47 @@ Rectangle InteractablePropV2::getDimension() {
     return dimension;
 }
 void InteractablePropV2::draw (Vector2 mapPos) {
-    DrawTexturePro(imgTexture, dimension, 
+    Rectangle srcDimension = {(float)currentFrame * srcWidth, 0, (float)srcWidth, (float)srcHeight};
+    DrawTexturePro(imgTexture, srcDimension, 
         {dimension.x + mapPos.x, dimension.y + mapPos.y, dimension.width, dimension.height},
         {0, 0}, 0, WHITE
     );
 }
-void InteractablePropV2::updateAnimation () {
-    if (currentFrame < endFrame) {
-        currentFrame++;
-    } else {
-        currentFrame = startFrame;
+void InteractablePropV2::updateAnimation (float deltaTime) {
+    if (isContinueAnimation) {
+        if (!isInteracted) {
+            if (animationUpdateTime > 0.1) {
+                animationUpdateTime = 0;
+                if (currentFrame < midFrame) {
+                    currentFrame++;
+                } else {
+                    isActionFinished = true;
+                    isContinueAnimation = false;
+                    isInteracted = true;
+                    // currentFrame = startFrame;
+                }
+            }
+        } else {
+            if (animationUpdateTime > 0.1) {
+                animationUpdateTime = 0;
+                if (currentFrame < endFrame) {
+                    currentFrame++;
+                } else {
+                    isActionFinished = true;
+                    isContinueAnimation = false;
+                    isInteracted = false;
+                    currentFrame = startFrame;
+                }
+            }
+        }
+        animationUpdateTime += deltaTime;
+    }
+}
+void InteractablePropV2::handleInteraction () {
+    if (isActionFinished) {
+        isActionFinished = false;
+        isContinueAnimation = true;
+        doFunction();
     }
 }
 WorldSet::WorldSet(const char* backgroundTexture, const char* foregroundTexture, std::vector<DrawingDataSet> drawingDataSet, int mapWidth, int mapHeight, 
@@ -112,15 +144,21 @@ WorldSet::WorldSet(const char* backgroundTexture, const char* foregroundTexture,
             std::cout<< "all level are sssss " << levelDataList.size() <<std::flush;
         }
         if (interactableProperties.size() > 0) {
-            std::vector<ObjectDetail> temp_objs = getObjectsFromJsonLayer(j, "interactable_items", {"imgSrc", "name", "startFrame", "endFrame"});
+            std::vector<ObjectDetail> temp_objs = getObjectsFromJsonLayer(j, "interactable_items", {"imgSrc", "name", 
+                "interactableDistance", "startFrame", "midFrame", "endFrame", "srcWidth", "srcHeight"});
             for (ObjectDetail obj : temp_objs) {
                 std::string name = obj.getProperty("name").get<std::string>();
                 for (InteractableInputProperties property : interactableProperties) {
                     if (name == property.name) {
                         std::string temp_imgSrc = obj.getProperty("imgSrc").get<std::string>();
                         int temp_startFrame = obj.getProperty("startFrame").get<int>();
+                        int temp_midFrame = obj.getProperty("midFrame").get<int>();
                         int temp_endFrame = obj.getProperty("endFrame").get<int>();
-                        interactableV2List.emplace_back(obj.getDimension(), property.func, temp_imgSrc, temp_startFrame, temp_endFrame);
+                        int temp_srcWidth = obj.getProperty("srcWidth").get<int>();
+                        int temp_srcHeight = obj.getProperty("srcHeight").get<int>();
+                        int temp_interactableDistance = obj.getProperty("interactableDistance").get<int>();
+                        interactableV2List.emplace_back(obj.getDimension(), property.func, temp_imgSrc, temp_startFrame, temp_midFrame, temp_endFrame,
+                            temp_srcWidth, temp_srcHeight, temp_interactableDistance);
                     }
                 }
             }
@@ -279,7 +317,7 @@ void WorldSet::animateWorldProps(float deltaTime) {
         propSet->updateAnimation(deltaTime);
     }
     for (InteractablePropV2 &prop : interactableV2List) {
-        prop.updateAnimation();
+        prop.updateAnimation(deltaTime);
     }
 }
 Vector2 WorldSet::getSpawnLocation(int spawnIndex) {

@@ -2817,14 +2817,14 @@
          "name":"interactable_items",
          "objects":[
                 {
-                 "height":50.6411,
+                 "height":80,
                  "id":6,
                  "name":"",
                  "properties":[
                         {
                          "name":"endFrame",
                          "type":"int",
-                         "value":19
+                         "value":20
                         }, 
                         {
                          "name":"imgSrc",
@@ -2832,9 +2832,29 @@
                          "value":"resources\/image\/animated\/Phone_Box_Door.png"
                         }, 
                         {
+                         "name":"interactableDistance",
+                         "type":"int",
+                         "value":100
+                        }, 
+                        {
+                         "name":"midFrame",
+                         "type":"int",
+                         "value":10
+                        }, 
+                        {
                          "name":"name",
                          "type":"string",
                          "value":"phoneBox"
+                        }, 
+                        {
+                         "name":"srcHeight",
+                         "type":"int",
+                         "value":80
+                        }, 
+                        {
+                         "name":"srcWidth",
+                         "type":"int",
+                         "value":48
                         }, 
                         {
                          "name":"startFrame",
@@ -2844,7 +2864,7 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":45.7925,
+                 "width":48,
                  "x":431.527,
                  "y":1263.33
                 }],
