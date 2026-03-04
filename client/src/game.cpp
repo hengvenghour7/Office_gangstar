@@ -198,6 +198,10 @@ void Game::prepareWorld (SpawnToDetail& spawnToDetail) {
         Drawing* drawObj = &interactableProp;
         allDrawableObjects.push_back(drawObj);
     }
+    for (Car &car : *currentWorld->getCarList()) {
+        Drawing* drawObj = &car;
+        allDrawableObjects.push_back(drawObj);
+    }
     allDrawableObjects.push_back(&player);
 }
 void Game::checkPropsInteraction(Player& player, Vector2 mapPos) {

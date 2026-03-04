@@ -205,6 +205,10 @@ WorldSet& getUpperMap(Player& player) {
             [&player]() {
                 player.increaseCoin(150);
             }
+        },
+        {
+            "orange_car",
+            []() { }
         }
     };
     static WorldSet upperMap(

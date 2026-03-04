@@ -29,6 +29,19 @@ struct LevelData {
     std::vector<std::vector<int>> collisionArray;
     int collisionCode = 1;
 };
+struct FrameSet {
+    int startFrame;
+    int endFrame;
+    int frameRow;
+    int frameWidth;
+    int frameHeight;
+};
+struct MovementFrameSet {
+    FrameSet leftMovementFrame;
+    FrameSet rightMovementFrame;
+    FrameSet downMovementFrame;
+    FrameSet upMovementFrame;
+};
 class Shop {
     Rectangle shopDimension;
     std::string name;
@@ -40,29 +53,45 @@ class Shop {
     Rectangle getShopDimension(Vector2 mapPos);
 };
 class InteractablePropV2: public Drawing {
-    Rectangle dimension;
-    std::function<void()> func;
-    Texture2D imgTexture;
-    int startFrame;
-    int midFrame;
-    int endFrame;
-    bool isInteracted {false};
-    bool isActionFinished {true};
-    bool isContinueAnimation {false};
-    int currentFrame;
-    int srcWidth;
-    int srcHeight;
-    float animationUpdateTime{0};
-    int interactableDistance;
+    protected:
+        Rectangle dimension;
+        std::function<void()> func;
+        Texture2D imgTexture;
+        int startFrame;
+        int midFrame;
+        int endFrame;
+        bool isInteracted {false};
+        bool isActionFinished {true};
+        bool isContinueAnimation {false};
+        int currentFrame;
+        int srcWidth;
+        int srcHeight;
+        int row;
+        int srcYOffset;
+        float animationUpdateTime{0};
+        int interactableDistance;
     public:
         InteractablePropV2 (Rectangle dimension, std::function<void()> function, std::string imgSrc, 
-        int startFrame, int midFrame, int endFrame, int srcWidth, int srcHeight, int interactableDistance);
+        int startFrame, int midFrame, int endFrame, int srcWidth, int srcHeight, int interactableDistance, int row,
+        int srcYOffset);
         virtual void draw (Vector2 mapPos) override;
-        void updateAnimation (float deltaTime);
+        virtual void updateAnimation (float deltaTime);
         void handleInteraction();
         void doFunction();
         Vector2 getCenter(Vector2& mapPos);
         Rectangle getDimension();
+};
+class Car : public InteractablePropV2 {
+    MovementFrameSet movementFrameSet;
+    Vector2 direction;
+    bool isTransitioning {false};
+    public:
+        Car(Rectangle dimension, std::function<void()> function, std::string imgSrc, 
+        int startFrame, int midFrame, int endFrame, int srcWidth, int srcHeight, int interactableDistance, int row,
+        int srcYOffset, MovementFrameSet movementFrameSet);
+        virtual void draw (Vector2 mapPos) override;
+        virtual void updateAnimation(float deltaTime) override;
+        void findDrivingPath(std::vector<std::vector<int>>* pathArray);
 };
 class MapSwitcherProp: public Drawing {
     Vector2 location;
@@ -133,6 +162,8 @@ class WorldSet {
     std::vector<InteractableItem> interactableItemList{};
     std::vector<MapLayer> mapLayers{};
     std::vector<InteractablePropV2> interactableV2List{};
+    std::vector<std::vector<int>> carPathArray{};
+    std::vector<Car> carList{};
 
     public:
         WorldSet(const char* backgroundTexture, const char* foregroundTexture, std::vector<DrawingDataSet> drawingDataSet, int mapWidth, int mapHeight, 
@@ -163,6 +194,7 @@ class WorldSet {
         std::unordered_map<int , LevelData>* getLevelDataList();
         std::vector<Drawing*> getMapLayers();
         std::vector<InteractablePropV2>* getInteractableV2List();
+        std::vector<Car>* getCarList();
 };
 
 #endif

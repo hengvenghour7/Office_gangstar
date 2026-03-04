@@ -30,9 +30,10 @@ Rectangle Shop::getShopDimension(Vector2 mapPos) {
     return screenShopDimension;
 }
 InteractablePropV2::InteractablePropV2 (Rectangle dimension, std::function<void()> function, std::string imgSrc, 
-        int startFrame, int midFrame, int endFrame, int srcWidth, int srcHeight, int interactableDistance): 
+        int startFrame, int midFrame, int endFrame, int srcWidth, int srcHeight, int interactableDistance, int row,
+        int srcYOffset): 
     dimension(dimension), func(function), imgTexture(LoadTexture(imgSrc.c_str())), currentFrame(0), startFrame(startFrame), midFrame(midFrame), endFrame(endFrame),
-    srcWidth(srcWidth), srcHeight(srcHeight), interactableDistance(interactableDistance) {
+    srcWidth(srcWidth), srcHeight(srcHeight), interactableDistance(interactableDistance), row(row), srcYOffset(srcYOffset) {
 
 }
 Vector2 InteractablePropV2::getCenter(Vector2& mapPos) {
@@ -46,7 +47,7 @@ Rectangle InteractablePropV2::getDimension() {
     return dimension;
 }
 void InteractablePropV2::draw (Vector2 mapPos) {
-    Rectangle srcDimension = {(float)currentFrame * srcWidth, 0, (float)srcWidth, (float)srcHeight};
+    Rectangle srcDimension = {(float)currentFrame * srcWidth, row + (float)srcYOffset, (float)srcWidth, (float)srcHeight};
     DrawTexturePro(imgTexture, srcDimension, 
         {dimension.x + mapPos.x, dimension.y + mapPos.y, dimension.width, dimension.height},
         {0, 0}, 0, WHITE
@@ -89,6 +90,43 @@ void InteractablePropV2::handleInteraction () {
         doFunction();
     }
 }
+Car::Car (Rectangle dimension, std::function<void()> function, std::string imgSrc, 
+        int startFrame, int midFrame, int endFrame, int srcWidth, int srcHeight, int interactableDistance, int row,
+        int srcYOffset, MovementFrameSet movementFrameSet): 
+        InteractablePropV2
+        (
+            dimension, function, imgSrc, startFrame, midFrame, endFrame, srcWidth, srcHeight, 
+            interactableDistance, row, srcYOffset
+        ),
+        movementFrameSet(movementFrameSet)
+        {
+            
+        }
+void Car::draw (Vector2 mapPos) {
+    Rectangle srcDimension = {(float)currentFrame * srcWidth, row + (float)srcYOffset, (float)srcWidth, (float)srcHeight};
+    DrawTexturePro(imgTexture, srcDimension, 
+        {dimension.x + mapPos.x, dimension.y + mapPos.y, dimension.width, dimension.height},
+        {0, 0}, 0, WHITE
+    );
+};
+void Car::updateAnimation (float deltaTime) {
+    // std::cout<< "direction y" << dimension.y << std::flush;
+    if (animationUpdateTime > 0.1) {
+        animationUpdateTime = 0;
+        if (currentFrame < movementFrameSet.rightMovementFrame.endFrame) {
+            currentFrame++;
+        } else {
+            currentFrame = movementFrameSet.rightMovementFrame.startFrame;
+        }
+    }
+    animationUpdateTime+= deltaTime;
+    dimension.x += direction.x;
+    dimension.y += direction.y;
+};
+void Car::findDrivingPath(std::vector<std::vector<int>>* pathArray) {
+    // std::cout<< "find car path" << std::flush;
+    findAllPath(pathArray, dimension, &direction, 90472);
+};
 WorldSet::WorldSet(const char* backgroundTexture, const char* foregroundTexture, std::vector<DrawingDataSet> drawingDataSet, int mapWidth, int mapHeight, 
     std::vector<int>* collisionData, std::vector<MapProp*>* worldProps, std::string mapPropertyPath,
     WorldEnums worldName, Player& player, std::vector<InteractableInputProperties> interactableProperties, int levelAmount, int AI_amount): 
@@ -145,7 +183,7 @@ WorldSet::WorldSet(const char* backgroundTexture, const char* foregroundTexture,
         }
         if (interactableProperties.size() > 0) {
             std::vector<ObjectDetail> temp_objs = getObjectsFromJsonLayer(j, "interactable_items", {"imgSrc", "name", 
-                "interactableDistance", "startFrame", "midFrame", "endFrame", "srcWidth", "srcHeight"});
+                "interactableDistance", "startFrame", "midFrame", "endFrame", "srcWidth", "srcHeight", "row", "srcYOffset"});
             for (ObjectDetail obj : temp_objs) {
                 std::string name = obj.getProperty("name").get<std::string>();
                 for (InteractableInputProperties property : interactableProperties) {
@@ -156,13 +194,73 @@ WorldSet::WorldSet(const char* backgroundTexture, const char* foregroundTexture,
                         int temp_endFrame = obj.getProperty("endFrame").get<int>();
                         int temp_srcWidth = obj.getProperty("srcWidth").get<int>();
                         int temp_srcHeight = obj.getProperty("srcHeight").get<int>();
+                        int temp_row = obj.getProperty("row").get<int>();
+                        int temp_srcYOffset = obj.getProperty("srcYOffset").get<int>();
                         int temp_interactableDistance = obj.getProperty("interactableDistance").get<int>();
                         interactableV2List.emplace_back(obj.getDimension(), property.func, temp_imgSrc, temp_startFrame, temp_midFrame, temp_endFrame,
-                            temp_srcWidth, temp_srcHeight, temp_interactableDistance);
+                            temp_srcWidth, temp_srcHeight, temp_interactableDistance, temp_row, temp_srcYOffset);
                     }
                 }
             }
         }
+        {
+            std::vector<ObjectDetail> temp_cars = getObjectsFromJsonLayer(j, "car_items", {"imgSrc", "name", 
+                    "interactableDistance", "startFrame", "midFrame", "endFrame", "srcWidth", "srcHeight", "row", "srcYOffset",
+                    "leftStartFrame", "leftEndFrame", 
+                    "rightStartFrame", "rightEndFrame", "rightFrameRow", "rightFrameWidth", "rightFrameHeight"
+                    "upStartFrame", "upEndFrame", "downStartFrame", "downEndFrame"});
+            for (ObjectDetail carObj : temp_cars) {
+                    std::string temp_imgSrc = carObj.getProperty("imgSrc").get<std::string>();
+                    int temp_startFrame = carObj.getProperty("startFrame").get<int>();
+                    int temp_midFrame = carObj.getProperty("midFrame").get<int>();
+                    int temp_endFrame = carObj.getProperty("endFrame").get<int>();
+                    int temp_srcWidth = carObj.getProperty("srcWidth").get<int>();
+                    int temp_srcHeight = carObj.getProperty("srcHeight").get<int>();
+                    int temp_row = carObj.getProperty("row").get<int>();
+                    int temp_srcYOffset = carObj.getProperty("srcYOffset").get<int>();
+                    MovementFrameSet temp_movementFrameSet = {
+                        {
+                            carObj.getProperty("leftStartFrame").get<int>(),
+                            carObj.getProperty("leftEndFrame").get<int>(),
+                            carObj.getProperty("leftFrameRow").get<int>(),
+                            carObj.getProperty("leftFrameWidth").get<int>(),
+                            carObj.getProperty("leftFrameHeight").get<int>(),
+                        },
+                        {
+                            carObj.getProperty("rightStartFrame").get<int>(),
+                            carObj.getProperty("rightEndFrame").get<int>(),
+                            carObj.getProperty("rightFrameRow").get<int>(),
+                            carObj.getProperty("rightFrameWidth").get<int>(),
+                            carObj.getProperty("rightFrameHeight").get<int>(),
+                        },
+                        {
+                            carObj.getProperty("upStartFrame").get<int>(),
+                            carObj.getProperty("upEndFrame").get<int>(),
+                            carObj.getProperty("upFrameRow").get<int>(),
+                            carObj.getProperty("upFrameWidth").get<int>(),
+                            carObj.getProperty("upFrameHeight").get<int>(),
+                        },
+                        {
+                            carObj.getProperty("downStartFrame").get<int>(),
+                            carObj.getProperty("downEndFrame").get<int>(),
+                            carObj.getProperty("downFrameRow").get<int>(),
+                            carObj.getProperty("downFrameWidth").get<int>(),
+                            carObj.getProperty("downFrameHeight").get<int>(),
+                        }
+                    };
+                    int temp_interactableDistance = carObj.getProperty("interactableDistance").get<int>();
+                carList.emplace_back(carObj.getDimension(), []() {}, temp_imgSrc, temp_startFrame, temp_midFrame, temp_endFrame,
+                            temp_srcWidth, temp_srcHeight, temp_interactableDistance, temp_row, temp_srcYOffset, temp_movementFrameSet);
+                // std::cout<< "yyy____ " << carList[0].getDimension().width << " __ " << std::flush;
+            }
+        }
+        if (carList.size() > 0) {
+            std::vector<int> mapCollisionData = getArrayFromJson(j, "car_path");
+            std::cout<< "car array is implemented___" << std::flush;
+            carPathArray = arrayTo2DArray(&mapCollisionData, mapWidth);
+        } else {
+            std::cout<< "no car____" <<std::flush;
+        };
         auto layers = j["layers"];
         std::vector<int>::iterator tempCollision = std::find_if(collisionData->begin(), collisionData->end(), [](int data) {
             return data != 0;
@@ -250,6 +348,9 @@ WorldSet::WorldSet(const char* backgroundTexture, const char* foregroundTexture,
         }
     }
 }
+std::vector<Car>* WorldSet::getCarList() {
+    return &carList;
+}
 std::vector<InteractablePropV2>* WorldSet::getInteractableV2List() {
     return &interactableV2List;
 }
@@ -318,6 +419,10 @@ void WorldSet::animateWorldProps(float deltaTime) {
     }
     for (InteractablePropV2 &prop : interactableV2List) {
         prop.updateAnimation(deltaTime);
+    }
+    for (Car &car : carList) {
+        car.findDrivingPath(&carPathArray);
+        car.updateAnimation(deltaTime);
     }
 }
 Vector2 WorldSet::getSpawnLocation(int spawnIndex) {

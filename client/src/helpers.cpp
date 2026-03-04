@@ -53,7 +53,7 @@ std::vector<std::vector<int>> arrayTo2DArray (std::vector<int>* arrayData, int m
     return array2D;
 }
 void findPath (std::vector<std::vector<int>>* tileArray, Vector2 actorPos, Vector2* direction, int colorCode, int startTileColorCode) {
-    int tileX = (int)((actorPos.x)/TILE_SIZE/MAP_SCALE); // x*16*1.5 + mapPos.x -- -mapPos.x/16/1.5
+    int tileX = (int)((actorPos.x)/TILE_SIZE/MAP_SCALE);
     int tileY = (int)((actorPos.y)/TILE_SIZE/MAP_SCALE);
     if (tileY >= (*tileArray).size() || tileX >= (*tileArray)[0].size() || tileX < 0 || tileY < 0) {
         return;
@@ -105,6 +105,68 @@ void findPath (std::vector<std::vector<int>>* tileArray, Vector2 actorPos, Vecto
         }
         direction->x = 1;
         direction->y = 0;
+    }
+};
+void findAllPath (std::vector<std::vector<int>>* path2DArray, Rectangle actorDim, Vector2* direction, int pathCode) {
+    int tileX = (int)((actorDim.x + actorDim.width*0.5)/TILE_SIZE/MAP_SCALE);
+    int tileY = (int)((actorDim.y + actorDim.height*0.5)/TILE_SIZE/MAP_SCALE);
+    // std::cout<< "tile Y__ " << tileY << " __ " << tileX << std::flush;
+    // std::cout << " This tile " << (*path2DArray)[0][3] << " " << std::flush;
+    if (tileY >= (*path2DArray).size() || tileX >= (*path2DArray)[0].size() || tileX < 0 || tileY < 0) {
+        return;
+    }
+    if (direction->x >= 0 && tileX >= 0 && tileY >= 0) {
+        // if ((*path2DArray)[tileY + 1][tileX] == pathCode) {
+        //     direction->y = 1;
+        // }
+        if ((*path2DArray)[tileY][tileX + 1] == pathCode) {
+            direction->x = 1;
+            direction->y = 0;
+            return;
+        }
+        if (direction->y <= 0) {
+            if ((*path2DArray)[tileY-1][tileX] == pathCode) {
+                direction->y = -1;
+                direction->x = 0;
+                return;
+            }
+            if ((*path2DArray)[tileY + 2][tileX] == pathCode) {
+                direction->y = 1;
+                direction->x = 0;
+                return;
+            }
+            direction->x = -1;
+            direction->y = 0;
+        }
+        if (direction->y > 0) {
+            if ((*path2DArray)[tileY+1][tileX] == pathCode) {
+                direction->y = 1;
+                direction->x = 0;
+                return;
+            }
+            if ((*path2DArray)[tileY][tileX - 1] == pathCode) {
+                direction->x = -1;
+                direction->y = 0;
+                return;
+            }
+            if ((*path2DArray)[tileY-1][tileX] == pathCode) {
+                direction->y = -1;
+                direction->x = 0;
+                return;
+            }
+        }
+    }
+    if (direction->x < 0 && tileX >= 0 && tileY >= 0) {
+        if ((*path2DArray)[tileY][tileX - 1] == pathCode && tileX - 1 >= 0) {
+            direction->x = -1;
+            direction->y = 0;
+            return;
+        }
+        direction->x = 1;
+        direction->y = 0;
+    }
+    if (tileY >= (*path2DArray).size() || tileX >= (*path2DArray)[0].size() || tileX < 0 || tileY < 0) {
+        return;
     }
 };
 CollisionProperty checkCollisionTile(std::vector<std::vector<int>>* tileArray, Rectangle characterCollision, Vector2 direction, int colorCode) {
@@ -216,6 +278,7 @@ std::vector<ObjectDetail> getObjectsFromJsonLayer(json& jObject, std::string lay
                 std::round(obj["width"].get<float>()*MAP_SCALE), 
                 std::round(obj["height"].get<float>()*MAP_SCALE)
             };
+            std::cout<< "this width__ " << obj["height"] << " __" << std::flush;
             if (obj.contains("properties")) {
                 for (auto& property: obj["properties"]) {
                     for (std::string reqProperty: requestedProperties) {
