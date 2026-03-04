@@ -34,7 +34,7 @@ json ObjectDetail::getProperty (std::string propertyKey) {
     if (propertyIterator != properties.end()) {
         property = propertyIterator->second;
     } else {
-        std::cout<< "property dose not exist";
+        std::cout<< "property " << propertyKey << " dose not exist";
     }
     return property;
 }

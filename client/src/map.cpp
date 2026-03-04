@@ -124,7 +124,14 @@ void Car::updateAnimation (float deltaTime) {
             row = movementFrameSet.leftMovementFrame.frameRow;
             srcHeight = movementFrameSet.leftMovementFrame.frameHeight;
             srcWidth = movementFrameSet.leftMovementFrame.frameWidth;
-            srcYOffset = 0;
+            srcXOffset = movementFrameSet.leftMovementFrame.XOffset;
+            srcYOffset = movementFrameSet.leftMovementFrame.YOffset;
+            startFrame = movementFrameSet.leftMovementFrame.startFrame;
+            endFrame = movementFrameSet.leftMovementFrame.endFrame;
+            dimension.x = dimension.x + dimension.width*0.5 - movementFrameSet.leftMovementFrame.desWidth*0.5 * MAP_SCALE;
+            dimension.y = dimension.y + dimension.height*0.5 - movementFrameSet.leftMovementFrame.desHeight*0.5 * MAP_SCALE;
+            dimension.width = movementFrameSet.leftMovementFrame.desWidth * MAP_SCALE;
+            dimension.height = movementFrameSet.leftMovementFrame.desHeight * MAP_SCALE;
             break;
         case CarDirectionState::Right:
             row = movementFrameSet.rightMovementFrame.frameRow;
@@ -274,7 +281,7 @@ WorldSet::WorldSet(const char* backgroundTexture, const char* foregroundTexture,
         {
             std::vector<ObjectDetail> temp_cars = getObjectsFromJsonLayer(j, "car_items", {"imgSrc", "name", 
                     "interactableDistance", "startFrame", "midFrame", "endFrame", "srcWidth", "srcHeight", "row", "srcYOffset",
-                    "leftStartFrame", "leftEndFrame", "leftFrameRow", "leftFrameWidth", "leftFrameHeight",
+                    "leftStartFrame", "leftEndFrame", "leftFrameRow", "leftFrameWidth", "leftFrameHeight", "leftFrameXOffset", "leftFrameYOffset", "leftDesWidth", "leftDesHeight",
                     "rightStartFrame", "rightEndFrame", "rightFrameRow", "rightFrameWidth", "rightFrameHeight", "rightFrameXOffset", "rightFrameYOffset", "rightDesWidth", "rightDesHeight",
                     "upStartFrame", "upEndFrame", "upFrameRow", "upFrameWidth", "upFrameHeight", "upFrameXOffset", "upFrameYOffset", "upDesWidth", "upDesHeight",
                     "downStartFrame", "downEndFrame", "downFrameRow", "downFrameWidth", "downFrameHeight", "downFrameXOffset", "downFrameYOffset", "downDesWidth", "downDesHeight"});
@@ -294,10 +301,10 @@ WorldSet::WorldSet(const char* backgroundTexture, const char* foregroundTexture,
                             carObj.getProperty("leftFrameRow").get<int>(),
                             carObj.getProperty("leftFrameWidth").get<int>(),
                             carObj.getProperty("leftFrameHeight").get<int>(),
-                            0,
-                            0,
-                            0,
-                            0
+                            carObj.getProperty("leftFrameXOffset").get<int>(),
+                            carObj.getProperty("leftFrameYOffset").get<int>(),
+                            carObj.getProperty("leftDesWidth").get<int>(),
+                            carObj.getProperty("leftDesHeight").get<int>(),
                         },
                         {
                             carObj.getProperty("rightStartFrame").get<int>(),
