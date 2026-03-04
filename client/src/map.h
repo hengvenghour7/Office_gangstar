@@ -35,6 +35,10 @@ struct FrameSet {
     int frameRow;
     int frameWidth;
     int frameHeight;
+    int XOffset;
+    int YOffset;
+    int desWidth;
+    int desHeight;
 };
 enum class CarDirectionState {
     Left = 0,
@@ -73,6 +77,7 @@ class InteractablePropV2: public Drawing {
         int srcWidth;
         int srcHeight;
         int row;
+        int srcXOffset{0};
         int srcYOffset;
         float animationUpdateTime{0};
         int interactableDistance;

@@ -103,7 +103,7 @@ Car::Car (Rectangle dimension, std::function<void()> function, std::string imgSr
             
         }
 void Car::draw (Vector2 mapPos) {
-    Rectangle srcDimension = {(float)currentFrame * srcWidth, row * srcHeight + (float)srcYOffset, (float)srcWidth, (float)srcHeight};
+    Rectangle srcDimension = {(float)currentFrame * srcWidth + srcXOffset, row * srcHeight + (float)srcYOffset, (float)srcWidth, (float)srcHeight};
     DrawTexturePro(imgTexture, srcDimension, 
         {dimension.x + mapPos.x, dimension.y + mapPos.y, dimension.width, dimension.height},
         {0, 0}, 0, WHITE
@@ -113,10 +113,10 @@ void Car::updateAnimation (float deltaTime) {
     // std::cout<< "direction y" << dimension.y << std::flush;
     if (animationUpdateTime > 0.1) {
         animationUpdateTime = 0;
-        if (currentFrame < movementFrameSet.rightMovementFrame.endFrame) {
+        if (currentFrame < endFrame) {
             currentFrame++;
         } else {
-            currentFrame = movementFrameSet.rightMovementFrame.startFrame;
+            currentFrame = startFrame;
         }
         switch (directionState)
         {
@@ -136,7 +136,10 @@ void Car::updateAnimation (float deltaTime) {
             row = movementFrameSet.upMovementFrame.frameRow;
             srcHeight = movementFrameSet.upMovementFrame.frameHeight;
             srcWidth = movementFrameSet.upMovementFrame.frameWidth;
-            srcYOffset = 0;
+            srcXOffset = movementFrameSet.upMovementFrame.XOffset;
+            srcYOffset = movementFrameSet.upMovementFrame.YOffset;
+            startFrame = movementFrameSet.upMovementFrame.startFrame;
+            endFrame = movementFrameSet.upMovementFrame.endFrame;
             break;
         case CarDirectionState::Down:
             row = movementFrameSet.downMovementFrame.frameRow;
@@ -155,11 +158,11 @@ void Car::updateAnimation (float deltaTime) {
 void Car::findDrivingPath(std::vector<std::vector<int>>* pathArray) {
     // std::cout<< "find car path" << std::flush;
     findAllPath(pathArray, dimension, &direction, 90472);
-    if (direction.y > 0) {
+    if (direction.y < 0) {
         directionState = CarDirectionState::Up;
         return;   
     }
-    if (direction.y < 0) {
+    if (direction.y > 0) {
         directionState = CarDirectionState::Down;
         return;
     }
@@ -253,8 +256,8 @@ WorldSet::WorldSet(const char* backgroundTexture, const char* foregroundTexture,
             std::vector<ObjectDetail> temp_cars = getObjectsFromJsonLayer(j, "car_items", {"imgSrc", "name", 
                     "interactableDistance", "startFrame", "midFrame", "endFrame", "srcWidth", "srcHeight", "row", "srcYOffset",
                     "leftStartFrame", "leftEndFrame", "leftFrameRow", "leftFrameWidth", "leftFrameHeight",
-                    "rightStartFrame", "rightEndFrame", "rightFrameRow", "rightFrameWidth", "rightFrameHeight",
-                    "upStartFrame", "upEndFrame", "upFrameRow", "upFrameWidth", "upFrameHeight",
+                    "rightStartFrame", "rightEndFrame", "rightFrameRow", "rightFrameWidth", "rightFrameHeight", "rightFrameXOffset", "rightFrameYOffset",
+                    "upStartFrame", "upEndFrame", "upFrameRow", "upFrameWidth", "upFrameHeight", "upFrameXOffset", "upFrameYOffset", "upDesWidth", "upDesHeight",
                     "downStartFrame", "downEndFrame", "downFrameRow", "downFrameWidth", "downFrameHeight"});
             for (ObjectDetail carObj : temp_cars) {
                     std::string temp_imgSrc = carObj.getProperty("imgSrc").get<std::string>();
@@ -272,6 +275,10 @@ WorldSet::WorldSet(const char* backgroundTexture, const char* foregroundTexture,
                             carObj.getProperty("leftFrameRow").get<int>(),
                             carObj.getProperty("leftFrameWidth").get<int>(),
                             carObj.getProperty("leftFrameHeight").get<int>(),
+                            0,
+                            0,
+                            0,
+                            0
                         },
                         {
                             carObj.getProperty("rightStartFrame").get<int>(),
@@ -279,13 +286,10 @@ WorldSet::WorldSet(const char* backgroundTexture, const char* foregroundTexture,
                             carObj.getProperty("rightFrameRow").get<int>(),
                             carObj.getProperty("rightFrameWidth").get<int>(),
                             carObj.getProperty("rightFrameHeight").get<int>(),
-                        },
-                        {
-                            carObj.getProperty("upStartFrame").get<int>(),
-                            carObj.getProperty("upEndFrame").get<int>(),
-                            carObj.getProperty("upFrameRow").get<int>(),
-                            carObj.getProperty("upFrameWidth").get<int>(),
-                            carObj.getProperty("upFrameHeight").get<int>(),
+                            carObj.getProperty("rightFrameHeight").get<int>(),
+                            carObj.getProperty("rightFrameHeight").get<int>(),
+                            0,
+                            0
                         },
                         {
                             carObj.getProperty("downStartFrame").get<int>(),
@@ -293,6 +297,21 @@ WorldSet::WorldSet(const char* backgroundTexture, const char* foregroundTexture,
                             carObj.getProperty("downFrameRow").get<int>(),
                             carObj.getProperty("downFrameWidth").get<int>(),
                             carObj.getProperty("downFrameHeight").get<int>(),
+                            0,
+                            0,
+                            0,
+                            0
+                        },
+                        {
+                            carObj.getProperty("upStartFrame").get<int>(),
+                            carObj.getProperty("upEndFrame").get<int>(),
+                            carObj.getProperty("upFrameRow").get<int>(),
+                            carObj.getProperty("upFrameWidth").get<int>(),
+                            carObj.getProperty("upFrameHeight").get<int>(),
+                            carObj.getProperty("upFrameXOffset").get<int>(),
+                            carObj.getProperty("upFrameYOffset").get<int>(),
+                            carObj.getProperty("upDesWidth").get<int>(),
+                            carObj.getProperty("upDesHeight").get<int>(),
                         }
                     };
                     int temp_interactableDistance = carObj.getProperty("interactableDistance").get<int>();
