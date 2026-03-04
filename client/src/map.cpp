@@ -130,7 +130,14 @@ void Car::updateAnimation (float deltaTime) {
             row = movementFrameSet.rightMovementFrame.frameRow;
             srcHeight = movementFrameSet.rightMovementFrame.frameHeight;
             srcWidth = movementFrameSet.rightMovementFrame.frameWidth;
-            srcYOffset = 0;
+            srcXOffset = movementFrameSet.rightMovementFrame.XOffset;
+            srcYOffset = movementFrameSet.rightMovementFrame.YOffset;
+            startFrame = movementFrameSet.rightMovementFrame.startFrame;
+            endFrame = movementFrameSet.rightMovementFrame.endFrame;
+            dimension.x = dimension.x + dimension.width*0.5 - movementFrameSet.rightMovementFrame.desWidth*0.5 * MAP_SCALE;
+            dimension.y = dimension.y + dimension.height*0.5 - movementFrameSet.rightMovementFrame.desHeight*0.5 * MAP_SCALE;
+            dimension.width = movementFrameSet.rightMovementFrame.desWidth * MAP_SCALE;
+            dimension.height = movementFrameSet.rightMovementFrame.desHeight * MAP_SCALE;
             break;
         case CarDirectionState::Up:
             row = movementFrameSet.upMovementFrame.frameRow;
@@ -140,12 +147,24 @@ void Car::updateAnimation (float deltaTime) {
             srcYOffset = movementFrameSet.upMovementFrame.YOffset;
             startFrame = movementFrameSet.upMovementFrame.startFrame;
             endFrame = movementFrameSet.upMovementFrame.endFrame;
+            dimension.x = dimension.x + dimension.width*0.5 - movementFrameSet.upMovementFrame.desWidth*0.5 * MAP_SCALE;
+            dimension.y = dimension.y + dimension.height*0.5 - movementFrameSet.upMovementFrame.desHeight*0.5 * MAP_SCALE;
+            dimension.width = movementFrameSet.upMovementFrame.desWidth * MAP_SCALE;
+            dimension.height = movementFrameSet.upMovementFrame.desHeight * MAP_SCALE;
             break;
         case CarDirectionState::Down:
             row = movementFrameSet.downMovementFrame.frameRow;
             srcHeight = movementFrameSet.downMovementFrame.frameHeight;
             srcWidth = movementFrameSet.downMovementFrame.frameWidth;
-            srcYOffset = 0;
+            srcXOffset = movementFrameSet.downMovementFrame.XOffset;
+            srcYOffset = movementFrameSet.downMovementFrame.YOffset;
+            startFrame = movementFrameSet.downMovementFrame.startFrame;
+            endFrame = movementFrameSet.downMovementFrame.endFrame;
+            dimension.x = dimension.x + dimension.width*0.5 - movementFrameSet.downMovementFrame.desWidth*0.5 * MAP_SCALE;
+            dimension.y = dimension.y + dimension.height*0.5 - movementFrameSet.downMovementFrame.desHeight*0.5 * MAP_SCALE;
+            dimension.width = movementFrameSet.downMovementFrame.desWidth * MAP_SCALE;
+            dimension.height = movementFrameSet.downMovementFrame.desHeight * MAP_SCALE;
+            // std::cout << "__is down__" <<std::flush;
             break;
         default:
             break;
@@ -256,9 +275,9 @@ WorldSet::WorldSet(const char* backgroundTexture, const char* foregroundTexture,
             std::vector<ObjectDetail> temp_cars = getObjectsFromJsonLayer(j, "car_items", {"imgSrc", "name", 
                     "interactableDistance", "startFrame", "midFrame", "endFrame", "srcWidth", "srcHeight", "row", "srcYOffset",
                     "leftStartFrame", "leftEndFrame", "leftFrameRow", "leftFrameWidth", "leftFrameHeight",
-                    "rightStartFrame", "rightEndFrame", "rightFrameRow", "rightFrameWidth", "rightFrameHeight", "rightFrameXOffset", "rightFrameYOffset",
+                    "rightStartFrame", "rightEndFrame", "rightFrameRow", "rightFrameWidth", "rightFrameHeight", "rightFrameXOffset", "rightFrameYOffset", "rightDesWidth", "rightDesHeight",
                     "upStartFrame", "upEndFrame", "upFrameRow", "upFrameWidth", "upFrameHeight", "upFrameXOffset", "upFrameYOffset", "upDesWidth", "upDesHeight",
-                    "downStartFrame", "downEndFrame", "downFrameRow", "downFrameWidth", "downFrameHeight"});
+                    "downStartFrame", "downEndFrame", "downFrameRow", "downFrameWidth", "downFrameHeight", "downFrameXOffset", "downFrameYOffset", "downDesWidth", "downDesHeight"});
             for (ObjectDetail carObj : temp_cars) {
                     std::string temp_imgSrc = carObj.getProperty("imgSrc").get<std::string>();
                     int temp_startFrame = carObj.getProperty("startFrame").get<int>();
@@ -286,21 +305,10 @@ WorldSet::WorldSet(const char* backgroundTexture, const char* foregroundTexture,
                             carObj.getProperty("rightFrameRow").get<int>(),
                             carObj.getProperty("rightFrameWidth").get<int>(),
                             carObj.getProperty("rightFrameHeight").get<int>(),
-                            carObj.getProperty("rightFrameHeight").get<int>(),
-                            carObj.getProperty("rightFrameHeight").get<int>(),
-                            0,
-                            0
-                        },
-                        {
-                            carObj.getProperty("downStartFrame").get<int>(),
-                            carObj.getProperty("downEndFrame").get<int>(),
-                            carObj.getProperty("downFrameRow").get<int>(),
-                            carObj.getProperty("downFrameWidth").get<int>(),
-                            carObj.getProperty("downFrameHeight").get<int>(),
-                            0,
-                            0,
-                            0,
-                            0
+                            carObj.getProperty("rightFrameXOffset").get<int>(),
+                            carObj.getProperty("rightFrameYOffset").get<int>(),
+                            carObj.getProperty("rightDesWidth").get<int>(),
+                            carObj.getProperty("rightDesHeight").get<int>(),
                         },
                         {
                             carObj.getProperty("upStartFrame").get<int>(),
@@ -312,6 +320,17 @@ WorldSet::WorldSet(const char* backgroundTexture, const char* foregroundTexture,
                             carObj.getProperty("upFrameYOffset").get<int>(),
                             carObj.getProperty("upDesWidth").get<int>(),
                             carObj.getProperty("upDesHeight").get<int>(),
+                        },
+                        {
+                            carObj.getProperty("downStartFrame").get<int>(),
+                            carObj.getProperty("downEndFrame").get<int>(),
+                            carObj.getProperty("downFrameRow").get<int>(),
+                            carObj.getProperty("downFrameWidth").get<int>(),
+                            carObj.getProperty("downFrameHeight").get<int>(),
+                            carObj.getProperty("downFrameXOffset").get<int>(),
+                            carObj.getProperty("downFrameYOffset").get<int>(),
+                            carObj.getProperty("downDesWidth").get<int>(),
+                            carObj.getProperty("downDesHeight").get<int>(),
                         }
                     };
                     int temp_interactableDistance = carObj.getProperty("interactableDistance").get<int>();

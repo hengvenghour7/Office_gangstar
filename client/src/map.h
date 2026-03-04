@@ -49,8 +49,8 @@ enum class CarDirectionState {
 struct MovementFrameSet {
     FrameSet leftMovementFrame;
     FrameSet rightMovementFrame;
-    FrameSet downMovementFrame;
     FrameSet upMovementFrame;
+    FrameSet downMovementFrame;
 };
 class Shop {
     Rectangle shopDimension;

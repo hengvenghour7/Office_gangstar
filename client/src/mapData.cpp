@@ -213,7 +213,7 @@ WorldSet& getUpperMap(Player& player) {
     };
     static WorldSet upperMap(
         "resources/image/upper_map.png",
-        "",
+        "resources/image/upper_map_front.png",
         drawingDataSet,
         150,
         100,
