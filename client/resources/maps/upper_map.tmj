@@ -3181,7 +3181,22 @@
                         {
                          "name":"downEndFrame",
                          "type":"int",
+                         "value":6
+                        }, 
+                        {
+                         "name":"downFrameHeight",
+                         "type":"int",
+                         "value":58
+                        }, 
+                        {
+                         "name":"downFrameRow",
+                         "type":"int",
                          "value":0
+                        }, 
+                        {
+                         "name":"downFrameWidth",
+                         "type":"int",
+                         "value":88
                         }, 
                         {
                          "name":"downStartFrame",
@@ -3207,6 +3222,21 @@
                          "name":"leftEndFrame",
                          "type":"int",
                          "value":0
+                        }, 
+                        {
+                         "name":"leftFrameHeight",
+                         "type":"int",
+                         "value":58
+                        }, 
+                        {
+                         "name":"leftFrameRow",
+                         "type":"int",
+                         "value":0
+                        }, 
+                        {
+                         "name":"leftFrameWidth",
+                         "type":"int",
+                         "value":88
                         }, 
                         {
                          "name":"leftStartFrame",
@@ -3281,12 +3311,27 @@
                         {
                          "name":"upEndFrame",
                          "type":"int",
-                         "value":0
+                         "value":18
+                        }, 
+                        {
+                         "name":"upFrameHeight",
+                         "type":"int",
+                         "value":78
+                        }, 
+                        {
+                         "name":"upFrameRow",
+                         "type":"int",
+                         "value":1
+                        }, 
+                        {
+                         "name":"upFrameWidth",
+                         "type":"int",
+                         "value":32
                         }, 
                         {
                          "name":"upStartFrame",
                          "type":"int",
-                         "value":0
+                         "value":12
                         }],
                  "rotation":0,
                  "type":"",

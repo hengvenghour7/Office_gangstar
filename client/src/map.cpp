@@ -103,7 +103,7 @@ Car::Car (Rectangle dimension, std::function<void()> function, std::string imgSr
             
         }
 void Car::draw (Vector2 mapPos) {
-    Rectangle srcDimension = {(float)currentFrame * srcWidth, row + (float)srcYOffset, (float)srcWidth, (float)srcHeight};
+    Rectangle srcDimension = {(float)currentFrame * srcWidth, row * srcHeight + (float)srcYOffset, (float)srcWidth, (float)srcHeight};
     DrawTexturePro(imgTexture, srcDimension, 
         {dimension.x + mapPos.x, dimension.y + mapPos.y, dimension.width, dimension.height},
         {0, 0}, 0, WHITE
@@ -118,6 +118,35 @@ void Car::updateAnimation (float deltaTime) {
         } else {
             currentFrame = movementFrameSet.rightMovementFrame.startFrame;
         }
+        switch (directionState)
+        {
+        case CarDirectionState::Left:
+            row = movementFrameSet.leftMovementFrame.frameRow;
+            srcHeight = movementFrameSet.leftMovementFrame.frameHeight;
+            srcWidth = movementFrameSet.leftMovementFrame.frameWidth;
+            srcYOffset = 0;
+            break;
+        case CarDirectionState::Right:
+            row = movementFrameSet.rightMovementFrame.frameRow;
+            srcHeight = movementFrameSet.rightMovementFrame.frameHeight;
+            srcWidth = movementFrameSet.rightMovementFrame.frameWidth;
+            srcYOffset = 0;
+            break;
+        case CarDirectionState::Up:
+            row = movementFrameSet.upMovementFrame.frameRow;
+            srcHeight = movementFrameSet.upMovementFrame.frameHeight;
+            srcWidth = movementFrameSet.upMovementFrame.frameWidth;
+            srcYOffset = 0;
+            break;
+        case CarDirectionState::Down:
+            row = movementFrameSet.downMovementFrame.frameRow;
+            srcHeight = movementFrameSet.downMovementFrame.frameHeight;
+            srcWidth = movementFrameSet.downMovementFrame.frameWidth;
+            srcYOffset = 0;
+            break;
+        default:
+            break;
+        }
     }
     animationUpdateTime+= deltaTime;
     dimension.x += direction.x;
@@ -126,6 +155,23 @@ void Car::updateAnimation (float deltaTime) {
 void Car::findDrivingPath(std::vector<std::vector<int>>* pathArray) {
     // std::cout<< "find car path" << std::flush;
     findAllPath(pathArray, dimension, &direction, 90472);
+    if (direction.y > 0) {
+        directionState = CarDirectionState::Up;
+        return;   
+    }
+    if (direction.y < 0) {
+        directionState = CarDirectionState::Down;
+        return;
+    }
+    if (direction.x > 0) {
+        directionState = CarDirectionState::Right;
+        return;
+    }
+    if (direction.x < 0) {
+        directionState = CarDirectionState::Left;
+        return;
+    }
+    directionState = CarDirectionState::Right;
 };
 WorldSet::WorldSet(const char* backgroundTexture, const char* foregroundTexture, std::vector<DrawingDataSet> drawingDataSet, int mapWidth, int mapHeight, 
     std::vector<int>* collisionData, std::vector<MapProp*>* worldProps, std::string mapPropertyPath,
@@ -206,9 +252,10 @@ WorldSet::WorldSet(const char* backgroundTexture, const char* foregroundTexture,
         {
             std::vector<ObjectDetail> temp_cars = getObjectsFromJsonLayer(j, "car_items", {"imgSrc", "name", 
                     "interactableDistance", "startFrame", "midFrame", "endFrame", "srcWidth", "srcHeight", "row", "srcYOffset",
-                    "leftStartFrame", "leftEndFrame", 
-                    "rightStartFrame", "rightEndFrame", "rightFrameRow", "rightFrameWidth", "rightFrameHeight"
-                    "upStartFrame", "upEndFrame", "downStartFrame", "downEndFrame"});
+                    "leftStartFrame", "leftEndFrame", "leftFrameRow", "leftFrameWidth", "leftFrameHeight",
+                    "rightStartFrame", "rightEndFrame", "rightFrameRow", "rightFrameWidth", "rightFrameHeight",
+                    "upStartFrame", "upEndFrame", "upFrameRow", "upFrameWidth", "upFrameHeight",
+                    "downStartFrame", "downEndFrame", "downFrameRow", "downFrameWidth", "downFrameHeight"});
             for (ObjectDetail carObj : temp_cars) {
                     std::string temp_imgSrc = carObj.getProperty("imgSrc").get<std::string>();
                     int temp_startFrame = carObj.getProperty("startFrame").get<int>();
@@ -256,11 +303,8 @@ WorldSet::WorldSet(const char* backgroundTexture, const char* foregroundTexture,
         }
         if (carList.size() > 0) {
             std::vector<int> mapCollisionData = getArrayFromJson(j, "car_path");
-            std::cout<< "car array is implemented___" << std::flush;
             carPathArray = arrayTo2DArray(&mapCollisionData, mapWidth);
-        } else {
-            std::cout<< "no car____" <<std::flush;
-        };
+        }
         auto layers = j["layers"];
         std::vector<int>::iterator tempCollision = std::find_if(collisionData->begin(), collisionData->end(), [](int data) {
             return data != 0;
