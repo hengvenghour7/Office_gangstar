@@ -6,6 +6,23 @@
 #include "UIHandler/UI.h"
 #include "gameEnums.h"
 
+enum class DayState {
+    AM,
+    PM,
+};
+class Time {
+    int hour;
+    int minute;
+    float countDownTime;
+    DayState dayState;
+    public:
+    Time();
+    void draw();
+    void tick(float deltaTime);
+    DayState& getDayState ();
+    int getHour();
+    int getMinute();
+};
 class Game {
     private:
         bool isGameOver;
@@ -31,6 +48,7 @@ class Game {
         WorldDrawProperty worldDrawProperty;
         Vector2 pauseScreenWorldPos{0,0};
         Player player;
+        Time time;
     public:
         Game();
         void tick(float deltaTime);

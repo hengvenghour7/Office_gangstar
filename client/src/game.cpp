@@ -12,6 +12,43 @@
 
 using json = nlohmann::json;
 
+Time::Time() : countDownTime(0), hour(11), minute(50), dayState(DayState::AM) {
+
+}
+void Time::tick(float deltaTime) {
+    // std::cout << "count down start " << minute << " _" << std::flush;
+    if (countDownTime > 2) {
+        countDownTime = 0;
+        minute += 10;
+        if (minute >= 60) {
+            hour += 1;
+            minute = 0;
+        }
+        if (hour >= 12) {
+            if (dayState == DayState::PM) {
+                hour = 0;
+            } else {
+                hour = 1;
+            }
+            dayState = dayState == DayState::AM ? DayState::PM : DayState::AM;
+        }
+    }
+    countDownTime += deltaTime;
+}
+void Time::draw() {
+    std::string displayDayState = dayState == DayState::AM ? "AM" : "PM";
+    std::string displayTime = (std::to_string(hour) + " : " + std::to_string(minute) + " " + displayDayState);
+    DrawText(displayTime.c_str(), SCREEN_WIDTH - 120, 60, 16, WHITE);
+}
+DayState& Time::getDayState() {
+    return dayState;
+}
+int Time::getHour() {
+    return hour;
+}
+int Time::getMinute() {
+    return minute;
+}
 Game::Game(): 
 isGameOver(false),
 isMenuOpen(true),
@@ -24,7 +61,8 @@ mapBoundary1(collisionData, 150, 100, 16, 79732) ,
 NPC("resources/image/character/workingman.png", &player, 11, 1, 30, currentWorld->getWorldCollisionArray()), 
 worldDrawProperty(150, 100, &collisionData),
 currentWorld(&getCenterWorld(player)),
-player("resources/image/character/workingman2.png", currentWorld->getWorldCollisionArray(), 3, 50)
+player("resources/image/character/workingman2.png", currentWorld->getWorldCollisionArray(), 3, 50),
+time()
 {
     std::random_device rd;
 
@@ -75,8 +113,19 @@ void Game::tick (float deltaTime) {
             for (Drawing* obj : allDrawableObjects2) {
                 obj->draw(mapPos);
             }
+            if (time.getDayState() == DayState::PM && time.getHour() >= 1) {
+                float screenAlphaValue = 0.15 * time.getHour();
+                DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, Fade(BLACK, screenAlphaValue <= 0.8 ? screenAlphaValue : 0.8));
+                BeginBlendMode(BLEND_ADDITIVE);
+                if (screenAlphaValue >= 0.4) {
+                    DrawCircleGradient(player.getCenter(mapPos).x, player.getCenter(mapPos).y, 250, Fade(WHITE, 0.2f), Fade(WHITE, 0.0f));
+                }
+                EndBlendMode();
+            }
             player.tick(deltaTime);
             player.drawHealth(0, 0);
+            time.draw();
+            time.tick(deltaTime);
             checkShopInteraction(player, mapPos);
             if (IsKeyReleased(KEY_U)) {
                 if (gameUIState == GameUIStateEnums::OpenInventory) {
@@ -87,7 +136,6 @@ void Game::tick (float deltaTime) {
             }
             handleGamePlayUIInteraction();
             for (AIPlayer &enemy : enemies) {
-        
                 enemy.AITick(deltaTime, &enemies);
                 if (enemy.getHealthComponent()->currentHealth <= 0) {
                     player.increaseCoin(50);
