@@ -40,12 +40,6 @@ struct FrameSet {
     int desWidth;
     int desHeight;
 };
-enum class CarDirectionState {
-    Left = 0,
-    Right = 1,
-    Up = 2,
-    Down = 3,
-};
 struct MovementFrameSet {
     FrameSet leftMovementFrame;
     FrameSet rightMovementFrame;
@@ -96,6 +90,7 @@ class Car : public InteractablePropV2 {
     MovementFrameSet movementFrameSet;
     Vector2 direction;
     bool isTransitioning {false};
+    Rectangle drawDesDimension;
     CarDirectionState directionState {CarDirectionState::Right};
     public:
         Car(Rectangle dimension, std::function<void()> function, std::string imgSrc, 

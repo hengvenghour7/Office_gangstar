@@ -47,9 +47,15 @@ enum PlayerDirection {
     Left = 2,
     Up = 3    
 };
+enum class CarDirectionState {
+    Left = 0,
+    Right = 1,
+    Up = 2,
+    Down = 3,
+};
 CollisionProperty checkIsCollide (Rectangle firstCollider, Rectangle secondCollider, float XOffset = 0, float YOffset = 0);
 void findPath (std::vector<std::vector<int>>* tileArray, Vector2 actorPos, Vector2* direction, int colorCode, int startTileColorCode);
-void findAllPath (std::vector<std::vector<int>>* path2DArray, Rectangle actorDim, Vector2* direction, int pathCode);
+void findAllPath (std::vector<std::vector<int>>* path2DArray, Rectangle actorDim, Vector2* direction);
 std::vector<std::vector<int>> arrayTo2DArray (std::vector<int>* arrayData, int mapWidth);
 CollisionProperty checkCollisionTile(std::vector<std::vector<int>>* tileArray, Rectangle characterCollision, Vector2 direction, int colorCode);
 CollisionProperty checkPlayerCollisionTile(

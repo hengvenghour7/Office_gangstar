@@ -49,6 +49,7 @@ class Game {
         Vector2 pauseScreenWorldPos{0,0};
         Player player;
         Time time;
+        RenderTexture2D lightMask;
     public:
         Game();
         void tick(float deltaTime);

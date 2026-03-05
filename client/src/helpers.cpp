@@ -107,30 +107,26 @@ void findPath (std::vector<std::vector<int>>* tileArray, Vector2 actorPos, Vecto
         direction->y = 0;
     }
 };
-void findAllPath (std::vector<std::vector<int>>* path2DArray, Rectangle actorDim, Vector2* direction, int pathCode) {
+void findAllPath (std::vector<std::vector<int>>* path2DArray, Rectangle actorDim, Vector2* direction) {
     int tileX = (int)((actorDim.x + actorDim.width*0.5)/TILE_SIZE/MAP_SCALE);
     int tileY = (int)((actorDim.y + actorDim.height*0.5)/TILE_SIZE/MAP_SCALE);
-    // std::cout<< "tile Y__ " << tileY << " __ " << tileX << std::flush;
-    // std::cout << " This tile " << (*path2DArray)[0][3] << " " << std::flush;
+    
     if (tileY >= (*path2DArray).size() || tileX >= (*path2DArray)[0].size() || tileX < 0 || tileY < 0) {
         return;
     }
     if (direction->x >= 0 && tileX >= 0 && tileY >= 0) {
-        // if ((*path2DArray)[tileY + 1][tileX] == pathCode) {
-        //     direction->y = 1;
-        // }
-        if ((*path2DArray)[tileY][tileX + 1] == pathCode) {
+        if ((*path2DArray)[tileY][tileX + 1] != 0) {
             direction->x = 1;
             direction->y = 0;
             return;
         }
         if (direction->y <= 0) {
-            if ((*path2DArray)[tileY-1][tileX] == pathCode) {
+            if ((*path2DArray)[tileY-1][tileX] != 0) {
                 direction->y = -1;
                 direction->x = 0;
                 return;
             }
-            if ((*path2DArray)[tileY + 2][tileX] == pathCode) {
+            if ((*path2DArray)[tileY + 2][tileX] != 0) {
                 direction->y = 1;
                 direction->x = 0;
                 return;
@@ -139,17 +135,18 @@ void findAllPath (std::vector<std::vector<int>>* path2DArray, Rectangle actorDim
             direction->y = 0;
         }
         if (direction->y > 0) {
-            if ((*path2DArray)[tileY+1][tileX] == pathCode) {
-                direction->y = 1;
-                direction->x = 0;
-                return;
-            }
-            if ((*path2DArray)[tileY][tileX - 1] == pathCode) {
+            // std::cout << "tile X " << tileX << " tile Y " << tileY << std::flush;
+            if ((*path2DArray)[tileY][tileX - 1] != 0) {
                 direction->x = -1;
                 direction->y = 0;
                 return;
             }
-            if ((*path2DArray)[tileY-1][tileX] == pathCode) {
+            if ((*path2DArray)[tileY+1][tileX] != 0) {
+                direction->y = 1;
+                direction->x = 0;
+                return;
+            }
+            if ((*path2DArray)[tileY-1][tileX] != 0) {
                 direction->y = -1;
                 direction->x = 0;
                 return;
@@ -157,7 +154,7 @@ void findAllPath (std::vector<std::vector<int>>* path2DArray, Rectangle actorDim
         }
     }
     if (direction->x < 0 && tileX >= 0 && tileY >= 0) {
-        if ((*path2DArray)[tileY][tileX - 1] == pathCode && tileX - 1 >= 0) {
+        if ((*path2DArray)[tileY][tileX - 1] != 0 && tileX - 1 >= 0) {
             direction->x = -1;
             direction->y = 0;
             return;

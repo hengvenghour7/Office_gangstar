@@ -24,20 +24,16 @@ void Time::tick(float deltaTime) {
             hour += 1;
             minute = 0;
         }
-        if (hour >= 12) {
-            if (dayState == DayState::PM) {
-                hour = 0;
-            } else {
-                hour = 1;
-            }
-            dayState = dayState == DayState::AM ? DayState::PM : DayState::AM;
+        dayState = hour > 11 ? DayState::PM : DayState::AM;
+        if (hour > 23) {
+            hour = 0;
         }
     }
     countDownTime += deltaTime;
 }
 void Time::draw() {
     std::string displayDayState = dayState == DayState::AM ? "AM" : "PM";
-    std::string displayTime = (std::to_string(hour) + " : " + std::to_string(minute) + " " + displayDayState);
+    std::string displayTime = (std::to_string(hour % 12 == 0 ? 12 : hour % 12) + " : " + (minute == 0 ? "00" : std::to_string(minute)) + " " + displayDayState);
     DrawText(displayTime.c_str(), SCREEN_WIDTH - 120, 60, 16, WHITE);
 }
 DayState& Time::getDayState() {
@@ -62,7 +58,8 @@ NPC("resources/image/character/workingman.png", &player, 11, 1, 30, currentWorld
 worldDrawProperty(150, 100, &collisionData),
 currentWorld(&getCenterWorld(player)),
 player("resources/image/character/workingman2.png", currentWorld->getWorldCollisionArray(), 3, 50),
-time()
+time(),
+lightMask(LoadRenderTexture(SCREEN_WIDTH, SCREEN_HEIGHT))
 {
     std::random_device rd;
 
@@ -113,13 +110,33 @@ void Game::tick (float deltaTime) {
             for (Drawing* obj : allDrawableObjects2) {
                 obj->draw(mapPos);
             }
-            if (time.getDayState() == DayState::PM && time.getHour() >= 1) {
-                float screenAlphaValue = 0.15 * time.getHour();
-                DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, Fade(BLACK, screenAlphaValue <= 0.8 ? screenAlphaValue : 0.8));
-                BeginBlendMode(BLEND_ADDITIVE);
-                if (screenAlphaValue >= 0.4) {
-                    DrawCircleGradient(player.getCenter(mapPos).x, player.getCenter(mapPos).y, 250, Fade(WHITE, 0.2f), Fade(WHITE, 0.0f));
+            if (time.getHour() > 15) {
+                BeginTextureMode(lightMask);
+                ClearBackground(WHITE); 
+                float darkIntensity = 0.3 * (time.getHour() - 14);
+                DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, Fade(BLACK, darkIntensity < 1 ? darkIntensity : 1.f));
+                if (time.getHour() > 16) {
+                    BeginBlendMode(BLEND_ALPHA);
+                    DrawCircleGradient(
+                        player.getCenter(mapPos).x,
+                        player.getCenter(mapPos).y,
+                        250,
+                        Fade(WHITE, 0.5f),
+                        BLANK 
+                    );
+                    EndBlendMode();
                 }
+
+                EndTextureMode();
+                BeginBlendMode(BLEND_MULTIPLIED);
+
+                DrawTextureRec(
+                    lightMask.texture,
+                    (Rectangle){0, 0, SCREEN_WIDTH, -SCREEN_HEIGHT},  // flip Y
+                    (Vector2){0, 0},
+                    WHITE
+                );
+
                 EndBlendMode();
             }
             player.tick(deltaTime);

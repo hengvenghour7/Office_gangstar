@@ -98,14 +98,15 @@ Car::Car (Rectangle dimension, std::function<void()> function, std::string imgSr
             dimension, function, imgSrc, startFrame, midFrame, endFrame, srcWidth, srcHeight, 
             interactableDistance, row, srcYOffset
         ),
-        movementFrameSet(movementFrameSet)
+        movementFrameSet(movementFrameSet),
+        drawDesDimension(dimension)
         {
             
         }
 void Car::draw (Vector2 mapPos) {
     Rectangle srcDimension = {(float)currentFrame * srcWidth + srcXOffset, row * srcHeight + (float)srcYOffset, (float)srcWidth, (float)srcHeight};
     DrawTexturePro(imgTexture, srcDimension, 
-        {dimension.x + mapPos.x, dimension.y + mapPos.y, dimension.width, dimension.height},
+        {drawDesDimension.x + mapPos.x, drawDesDimension.y + mapPos.y, drawDesDimension.width, drawDesDimension.height},
         {0, 0}, 0, WHITE
     );
 };
@@ -118,64 +119,64 @@ void Car::updateAnimation (float deltaTime) {
         } else {
             currentFrame = startFrame;
         }
-        switch (directionState)
-        {
-        case CarDirectionState::Left:
-            row = movementFrameSet.leftMovementFrame.frameRow;
-            srcHeight = movementFrameSet.leftMovementFrame.frameHeight;
-            srcWidth = movementFrameSet.leftMovementFrame.frameWidth;
-            srcXOffset = movementFrameSet.leftMovementFrame.XOffset;
-            srcYOffset = movementFrameSet.leftMovementFrame.YOffset;
-            startFrame = movementFrameSet.leftMovementFrame.startFrame;
-            endFrame = movementFrameSet.leftMovementFrame.endFrame;
-            dimension.x = dimension.x + dimension.width*0.5 - movementFrameSet.leftMovementFrame.desWidth*0.5 * MAP_SCALE;
-            dimension.y = dimension.y + dimension.height*0.5 - movementFrameSet.leftMovementFrame.desHeight*0.5 * MAP_SCALE;
-            dimension.width = movementFrameSet.leftMovementFrame.desWidth * MAP_SCALE;
-            dimension.height = movementFrameSet.leftMovementFrame.desHeight * MAP_SCALE;
-            break;
-        case CarDirectionState::Right:
-            row = movementFrameSet.rightMovementFrame.frameRow;
-            srcHeight = movementFrameSet.rightMovementFrame.frameHeight;
-            srcWidth = movementFrameSet.rightMovementFrame.frameWidth;
-            srcXOffset = movementFrameSet.rightMovementFrame.XOffset;
-            srcYOffset = movementFrameSet.rightMovementFrame.YOffset;
-            startFrame = movementFrameSet.rightMovementFrame.startFrame;
-            endFrame = movementFrameSet.rightMovementFrame.endFrame;
-            dimension.x = dimension.x + dimension.width*0.5 - movementFrameSet.rightMovementFrame.desWidth*0.5 * MAP_SCALE;
-            dimension.y = dimension.y + dimension.height*0.5 - movementFrameSet.rightMovementFrame.desHeight*0.5 * MAP_SCALE;
-            dimension.width = movementFrameSet.rightMovementFrame.desWidth * MAP_SCALE;
-            dimension.height = movementFrameSet.rightMovementFrame.desHeight * MAP_SCALE;
-            break;
-        case CarDirectionState::Up:
-            row = movementFrameSet.upMovementFrame.frameRow;
-            srcHeight = movementFrameSet.upMovementFrame.frameHeight;
-            srcWidth = movementFrameSet.upMovementFrame.frameWidth;
-            srcXOffset = movementFrameSet.upMovementFrame.XOffset;
-            srcYOffset = movementFrameSet.upMovementFrame.YOffset;
-            startFrame = movementFrameSet.upMovementFrame.startFrame;
-            endFrame = movementFrameSet.upMovementFrame.endFrame;
-            dimension.x = dimension.x + dimension.width*0.5 - movementFrameSet.upMovementFrame.desWidth*0.5 * MAP_SCALE;
-            dimension.y = dimension.y + dimension.height*0.5 - movementFrameSet.upMovementFrame.desHeight*0.5 * MAP_SCALE;
-            dimension.width = movementFrameSet.upMovementFrame.desWidth * MAP_SCALE;
-            dimension.height = movementFrameSet.upMovementFrame.desHeight * MAP_SCALE;
-            break;
-        case CarDirectionState::Down:
-            row = movementFrameSet.downMovementFrame.frameRow;
-            srcHeight = movementFrameSet.downMovementFrame.frameHeight;
-            srcWidth = movementFrameSet.downMovementFrame.frameWidth;
-            srcXOffset = movementFrameSet.downMovementFrame.XOffset;
-            srcYOffset = movementFrameSet.downMovementFrame.YOffset;
-            startFrame = movementFrameSet.downMovementFrame.startFrame;
-            endFrame = movementFrameSet.downMovementFrame.endFrame;
-            dimension.x = dimension.x + dimension.width*0.5 - movementFrameSet.downMovementFrame.desWidth*0.5 * MAP_SCALE;
-            dimension.y = dimension.y + dimension.height*0.5 - movementFrameSet.downMovementFrame.desHeight*0.5 * MAP_SCALE;
-            dimension.width = movementFrameSet.downMovementFrame.desWidth * MAP_SCALE;
-            dimension.height = movementFrameSet.downMovementFrame.desHeight * MAP_SCALE;
-            // std::cout << "__is down__" <<std::flush;
-            break;
-        default:
-            break;
-        }
+    }
+    switch (directionState)
+    {
+    case CarDirectionState::Left:
+        row = movementFrameSet.leftMovementFrame.frameRow;
+        srcHeight = movementFrameSet.leftMovementFrame.frameHeight;
+        srcWidth = movementFrameSet.leftMovementFrame.frameWidth;
+        srcXOffset = movementFrameSet.leftMovementFrame.XOffset;
+        srcYOffset = movementFrameSet.leftMovementFrame.YOffset;
+        startFrame = movementFrameSet.leftMovementFrame.startFrame;
+        endFrame = movementFrameSet.leftMovementFrame.endFrame;
+        drawDesDimension.x = dimension.x + dimension.width*0.5 - movementFrameSet.leftMovementFrame.desWidth*0.5 * MAP_SCALE;
+        drawDesDimension.y = dimension.y + dimension.height*0.5 - movementFrameSet.leftMovementFrame.desHeight*0.5 * MAP_SCALE;
+        drawDesDimension.width = movementFrameSet.leftMovementFrame.desWidth * MAP_SCALE;
+        drawDesDimension.height = movementFrameSet.leftMovementFrame.desHeight * MAP_SCALE;
+        break;
+    case CarDirectionState::Right:
+        row = movementFrameSet.rightMovementFrame.frameRow;
+        srcHeight = movementFrameSet.rightMovementFrame.frameHeight;
+        srcWidth = movementFrameSet.rightMovementFrame.frameWidth;
+        srcXOffset = movementFrameSet.rightMovementFrame.XOffset;
+        srcYOffset = movementFrameSet.rightMovementFrame.YOffset;
+        startFrame = movementFrameSet.rightMovementFrame.startFrame;
+        endFrame = movementFrameSet.rightMovementFrame.endFrame;
+        drawDesDimension.x = dimension.x + dimension.width*0.5 - movementFrameSet.rightMovementFrame.desWidth*0.5 * MAP_SCALE;
+        drawDesDimension.y = dimension.y + dimension.height*0.5 - movementFrameSet.rightMovementFrame.desHeight*0.5 * MAP_SCALE;
+        drawDesDimension.width = movementFrameSet.rightMovementFrame.desWidth * MAP_SCALE;
+        drawDesDimension.height = movementFrameSet.rightMovementFrame.desHeight * MAP_SCALE;
+        break;
+    case CarDirectionState::Up:
+        row = movementFrameSet.upMovementFrame.frameRow;
+        srcHeight = movementFrameSet.upMovementFrame.frameHeight;
+        srcWidth = movementFrameSet.upMovementFrame.frameWidth;
+        srcXOffset = movementFrameSet.upMovementFrame.XOffset;
+        srcYOffset = movementFrameSet.upMovementFrame.YOffset;
+        startFrame = movementFrameSet.upMovementFrame.startFrame;
+        endFrame = movementFrameSet.upMovementFrame.endFrame;
+        drawDesDimension.x = dimension.x + dimension.width*0.5 - movementFrameSet.upMovementFrame.desWidth*0.5 * MAP_SCALE;
+        drawDesDimension.y = dimension.y + dimension.height*0.5 - movementFrameSet.upMovementFrame.desHeight*0.5 * MAP_SCALE;
+        drawDesDimension.width = movementFrameSet.upMovementFrame.desWidth * MAP_SCALE;
+        drawDesDimension.height = movementFrameSet.upMovementFrame.desHeight * MAP_SCALE;
+        break;
+    case CarDirectionState::Down:
+        row = movementFrameSet.downMovementFrame.frameRow;
+        srcHeight = movementFrameSet.downMovementFrame.frameHeight;
+        srcWidth = movementFrameSet.downMovementFrame.frameWidth;
+        srcXOffset = movementFrameSet.downMovementFrame.XOffset;
+        srcYOffset = movementFrameSet.downMovementFrame.YOffset;
+        startFrame = movementFrameSet.downMovementFrame.startFrame;
+        endFrame = movementFrameSet.downMovementFrame.endFrame;
+        drawDesDimension.x = dimension.x + dimension.width*0.5 - movementFrameSet.downMovementFrame.desWidth*0.5 * MAP_SCALE;
+        drawDesDimension.y = dimension.y + dimension.height*0.5 - movementFrameSet.downMovementFrame.desHeight*0.5 * MAP_SCALE;
+        drawDesDimension.width = movementFrameSet.downMovementFrame.desWidth * MAP_SCALE;
+        drawDesDimension.height = movementFrameSet.downMovementFrame.desHeight * MAP_SCALE;
+        // std::cout << "__is down__" <<std::flush;
+        break;
+    default:
+        break;
     }
     animationUpdateTime+= deltaTime;
     dimension.x += direction.x;
@@ -183,10 +184,10 @@ void Car::updateAnimation (float deltaTime) {
 };
 void Car::findDrivingPath(std::vector<std::vector<int>>* pathArray) {
     // std::cout<< "find car path" << std::flush;
-    findAllPath(pathArray, dimension, &direction, 90472);
+    findAllPath(pathArray, dimension, &direction);
     if (direction.y < 0) {
         directionState = CarDirectionState::Up;
-        return;   
+        return;
     }
     if (direction.y > 0) {
         directionState = CarDirectionState::Down;
