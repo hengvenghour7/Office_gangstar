@@ -93,6 +93,15 @@ void Game::tick (float deltaTime) {
     case GameStateEnums::Playing:
         {
             Vector2 mapPos = (Vector2Scale(player.getWorldPos(), -1.f));
+            if (cameraShakeVector.x > 0 || cameraShakeVector.y > 0)
+            {
+                mapPos = Vector2Add(mapPos, handleCameraShake());
+            }
+            if (IsKeyPressed(KEY_B))
+            {
+                cameraShakeVector = {20, 20};
+                shakeAmplitudeFactor = 4;
+            }
             std::vector<Drawing*> allDrawableObjects2 = allDrawableObjects;
             for (Drawing* propSet : currentWorld->getAllDrawableProps()) {
                 allDrawableObjects2.push_back(propSet);
@@ -389,4 +398,20 @@ void Game::handleGamePlayUIInteraction () {
     default:
         break;
     }
+}
+Vector2 Game::handleCameraShake() {
+    if (cameraShakeVector.x > 0)
+    {
+        cameraShakeVector.x-= 0.5;
+    }
+    if (cameraShakeVector.y > 0)
+    {
+        cameraShakeVector.y-= 0.5;
+    }
+    if (shakeAmplitudeFactor > 1)
+    {
+        shakeAmplitudeFactor -= 0.2;
+    }
+    Vector2 shakeAmplitude = {sin(cameraShakeVector.y) * shakeAmplitudeFactor, sin(cameraShakeVector.y) * shakeAmplitudeFactor};
+    return shakeAmplitude;
 }

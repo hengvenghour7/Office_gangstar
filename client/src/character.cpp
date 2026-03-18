@@ -303,7 +303,8 @@ void Character::drawHealth () {
     characterHealth.drawHealth(characterHealth.healthDes.x, characterHealth.healthDes.y, characterHealth.currentHealth, 10, GREEN);
 }
 void Character::draw (Vector2 des) {
-            DrawTexturePro(characterTexture, characterRecSrc, characterRecDes, {0,0}, 0, WHITE);
+            Rectangle drawDes = {worldPos.x + des.x, worldPos.y + des.y, characterRecDes.width, characterRecDes.height};
+            DrawTexturePro(characterTexture, characterRecSrc, drawDes, {0,0}, 0, WHITE);
         }
 Vector2* Character::getWorldPosPointer () {
     return &worldPos;
@@ -424,7 +425,9 @@ void Player::tick (float deltaTime) {
         Character::tick(deltaTime);
     }
 void Player::draw(Vector2 mapPos) {
-    Character::draw(mapPos);
+    Vector2 shakePos = {this->worldPos.x + mapPos.x, this->worldPos.y + mapPos.y};
+    Rectangle drawDes = {characterRecDes.x + shakePos.x, characterRecDes.y + shakePos.y, characterRecDes.width, characterRecDes.height};
+    DrawTexturePro(characterTexture, characterRecSrc, drawDes, {0,0}, 0, WHITE);
     if (holdingItems.size() > 0) {
         InteractableItem& temp_holdingItem = holdingItems[0];
         DrawTexturePro(*temp_holdingItem.getTexture(), {0,0, (float)temp_holdingItem.getTextureWidth(), (float)temp_holdingItem.getTextureHeight()}, 

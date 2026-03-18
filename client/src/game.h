@@ -31,6 +31,8 @@ class Game {
         bool isCanSwitch{true};
         float switchCooldownTime {0};
         const char* interactionText{""};
+        Vector2 cameraShakeVector{0, 0};
+        float shakeAmplitudeFactor{1.0};
         GameStateEnums gameState;
         GameUIStateEnums gameUIState;
         ShopUI shopUI;
@@ -63,4 +65,5 @@ class Game {
         void loadWorld(WorldEnums targetMap, Vector2 targetLocation);
         void handleGamePlayUIInteraction();
         void prepareWorld(SpawnToDetail& spawnToDetail);
+        Vector2 handleCameraShake();
 };
