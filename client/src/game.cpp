@@ -97,8 +97,9 @@ void Game::tick (float deltaTime) {
             {
                 mapPos = Vector2Add(mapPos, handleCameraShake());
             }
-            if (IsKeyPressed(KEY_B))
+            if (player.getIsSetExplosion())
             {
+                player.setExplosion(false);
                 cameraShakeVector = {20, 20};
                 shakeAmplitudeFactor = 4;
             }

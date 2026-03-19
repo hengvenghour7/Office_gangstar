@@ -381,6 +381,12 @@ Rectangle Character::getCharacterHitBox ()  {
 HealthComponent* Character::getHealthComponent () {
     return &characterHealth;
 }
+void Character::setExplosion(bool isExplode) {
+    isSetExplosion = isExplode;
+}
+bool Character::getIsSetExplosion() {
+    return isSetExplosion;
+}
 Player::Player (const char * imageTexture, std::vector<std::vector<int>>* worldCollisionArray, float speed, float damage): Character(imageTexture, speed, damage, worldCollisionArray), 
         healthBarTexture(LoadTexture("resources/image/UI/healthUI.png")),
         coinTexture(LoadTexture("resources/image/UI/coin.png")),

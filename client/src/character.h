@@ -73,6 +73,7 @@ class Character : public Drawing
         IsCanSwtichSet canSwitchLevel {true, 0};
         FightAnimationFrameSet fightAnimationFrameSet;
         AnimationFrameSet currentFightFrameSet;
+        bool isSetExplosion;
     public:
         virtual void tick (float deltaTime);
         Character (const char * imageTexture, float speed, float damage, std::vector<std::vector<int>>* worldCollisionArray);
@@ -105,6 +106,8 @@ class Character : public Drawing
         void setCanSwitchLevel(bool isCanSwitch, int key);
         IsCanSwtichSet getCanSwitchLevel();
         void dash(Vector2 distance, int speed);
+        void setExplosion(bool isExplode);
+        bool getIsSetExplosion();
     };
 class Player: public Character
 {
@@ -147,8 +150,8 @@ class AIPlayer : public Character {
         AIPlayer (const char * imageTexture, Player* inputTarget, int id, float speed, float damage, std::vector<std::vector<int>>* worldCollisionArray);
         void doDamage ();
         void AITick(float deltaTime, std::vector<AIPlayer>* allAIPlayer);
-    void appraochTarget (std::vector<AIPlayer>* allAIPlayer, float deltaTime) ;
-    void drawHealth() ;
+        void appraochTarget (std::vector<AIPlayer>* allAIPlayer, float deltaTime) ;
+        void drawHealth();
 };
 
 #endif

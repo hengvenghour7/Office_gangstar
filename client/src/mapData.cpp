@@ -209,6 +209,12 @@ WorldSet& getUpperMap(Player& player) {
         {
             "orange_car",
             []() { }
+        },
+        {
+            "mine",
+            [&player]() {
+                player.setExplosion(true);
+             }
         }
     };
     static WorldSet upperMap(
