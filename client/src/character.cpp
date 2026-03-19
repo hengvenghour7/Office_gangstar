@@ -37,10 +37,11 @@ Character::Character (const char * imageTexture, float speed, float damage, std:
             characterHitBox = {screenPos.x + 20, screenPos.y, width*scale_factor, height*scale_factor};
         }
 void Character::takeDamage (Character* secondCollider, float damage, float deltaTime) {
-            const float TIME_CAP = 2.f;
-             if (checkIsCollide(getCharacterCollision(), secondCollider->getCharacterHitBox(), 0, 0).isCollide && secondCollider->getPlayerState2() == Attacking && takeDamageTimeCap >= TIME_CAP) {
+    const float TIME_CAP = 2.f;
+            if (checkIsCollide(getCharacterCollision(), secondCollider->getCharacterHitBox(), 0, 0).isCollide && secondCollider->getPlayerState2() == Attacking && takeDamageTimeCap >= TIME_CAP) {
                 characterHealth.takeDamage(damage);
                 takeDamageTimeCap = 0;
+                dash({-16, -16}, -4);
                 updatePlayerState(Hurt);
                 isNeedResetCols = true;
                 return;
@@ -49,7 +50,7 @@ void Character::takeDamage (Character* secondCollider, float damage, float delta
             if (takeDamageTimeCap + 1.5 >= TIME_CAP) {
                 updatePlayerState(Idle, true);
             }
-        }
+    }
 void Character::updatePlayerState (enum PlayerState state, bool specialUpdate) {
     if (!specialUpdate) {
         if (playerState == Hurt) {
@@ -90,6 +91,29 @@ void Character::updateDirectionState (Vector2 newDirection) {
 }
 enum PlayerState Character::getPlayerState2 () {
     return playerState2;
+}
+void Character::dash (Vector2 distance, int speed) {
+    switch (directionState)
+    {
+    case PlayerDirection::Left:
+        dashDistance.x = - distance.x;
+        dashSpeed.x = -speed;
+        break;
+    case PlayerDirection::Right:
+        dashDistance.x = distance.x;
+        dashSpeed.x = speed;
+        break;
+    case PlayerDirection::Up:
+        dashDistance.y = -distance.y;
+        dashSpeed.y = -speed;
+        break;
+    case PlayerDirection::Down:
+        dashDistance.y = distance.y;
+        dashSpeed.y = speed;
+        break;
+    default:
+        break;
+    }
 }
 void Character::updateDirectionStateAI (Vector2 newDirection) {
     if (newDirection.x >= 0) {
@@ -310,6 +334,14 @@ Vector2* Character::getWorldPosPointer () {
     return &worldPos;
 }
 void Character::tick (float deltaTime) {
+            if (dashDistance.x != 0) {
+                dashDistance.x -= dashSpeed.x;
+                worldPos.x += dashSpeed.x;
+            }
+            if (dashDistance.y != 0) {
+                dashDistance.y -= dashSpeed.y;
+                worldPos.y += dashSpeed.y;
+            }
             updateAnimation(deltaTime);
             // draw({0,0});
         }

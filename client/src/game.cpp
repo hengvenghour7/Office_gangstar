@@ -102,6 +102,10 @@ void Game::tick (float deltaTime) {
                 cameraShakeVector = {20, 20};
                 shakeAmplitudeFactor = 4;
             }
+            if (IsKeyPressed(KEY_N))
+            {
+                player.dash({200, 200}, 20);
+            }
             std::vector<Drawing*> allDrawableObjects2 = allDrawableObjects;
             for (Drawing* propSet : currentWorld->getAllDrawableProps()) {
                 allDrawableObjects2.push_back(propSet);

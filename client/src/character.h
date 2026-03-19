@@ -34,6 +34,8 @@ class Character : public Drawing
         float width;
         float height;
         int currentLevel{0};
+        Vector2 dashDistance{0, 0};
+        Vector2 dashSpeed{0, 0};
         Vector2 worldPos{static_cast<float>((rand() % 500) + 10), static_cast<float>((rand() % 200) + 100)};
         Vector2 screenPos{0,0};
         Vector2 direction{0,0};
@@ -93,6 +95,7 @@ class Character : public Drawing
         HealthComponent* getHealthComponent();
         void setCanSwitchLevel(bool isCanSwitch, int key);
         IsCanSwtichSet getCanSwitchLevel();
+        void dash(Vector2 distance, int speed);
     };
 class Player: public Character
 {
