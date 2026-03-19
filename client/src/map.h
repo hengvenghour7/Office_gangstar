@@ -171,11 +171,14 @@ class WorldSet {
     std::vector<InteractablePropV2> interactableV2List{};
     std::vector<std::vector<int>> carPathArray{};
     std::vector<Car> carList{};
+    bool isExploding{false};
+    Texture2D explosionTexture;
 
     public:
         WorldSet(const char* backgroundTexture, const char* foregroundTexture, std::vector<DrawingDataSet> drawingDataSet, int mapWidth, int mapHeight, 
         std::vector<int>* collisionData, std::vector<MapProp*>* worldProps, std::string mapPropertyPath, 
         WorldEnums worldName, Player& player, std::vector<InteractableInputProperties> interactableProperties, int levelAmount = 0, int AI_amount = 0);
+        
         WorldDrawProperty drawProperty;
         World background;
         World foreground;
@@ -202,6 +205,7 @@ class WorldSet {
         std::vector<Drawing*> getMapLayers();
         std::vector<InteractablePropV2>* getInteractableV2List();
         std::vector<Car>* getCarList();
+        void callExplosion();
 };
 
 #endif

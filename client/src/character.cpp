@@ -23,7 +23,15 @@ void HealthComponent::drawHealth(float locationX, float locationY, float width, 
 };
 Character::Character (const char * imageTexture, float speed, float damage, std::vector<std::vector<int>>* worldCollisionArray) : 
             characterHealth(200), speed(speed), takeDamageTimeCap(1.f), stunTimeCap(takeDamageTimeCap + 0.5f), directionState(Right), damage(damage),
-            worldCollisionArray(worldCollisionArray) {
+            worldCollisionArray(worldCollisionArray),
+            fightAnimationFrameSet ({
+                    { 39, 39 , 39, 15, 15, 15},
+                    { 27, 27 , 27, 15, 15, 15},
+                    { 33, 33 , 33, 15, 15, 15},
+                    { 45, 45 , 45, 15, 15, 15},
+                }),
+            currentFightFrameSet(fightAnimationFrameSet.right)
+            {
             width = 896/56;
             height = 640/20;
             maxCols = 6;
@@ -135,7 +143,6 @@ void Character::updateDirectionStateAI (Vector2 newDirection) {
     }
 }
 void Character::updateAnimation (float deltaTime) {
-            updateAnimationTime += deltaTime;
             switch (playerState) {
                 case Attacking:
                     switch (directionState)
@@ -144,21 +151,25 @@ void Character::updateAnimation (float deltaTime) {
                             rowIndex = 15;
                             startCols = 0;
                             maxCols = 6;
+                            currentFightFrameSet = fightAnimationFrameSet.right;
                             break;
                         case Left:
                             rowIndex = 15;
                             startCols = 12;
                             maxCols = 18;
+                            currentFightFrameSet = fightAnimationFrameSet.left;
                             break;
                         case Up:
                             rowIndex = 15;
                             startCols = 6;
                             maxCols = 12;
+                            currentFightFrameSet = fightAnimationFrameSet.up;
                             break;
                         case Down:
                             rowIndex = 15;
                             startCols = 18;
                             maxCols = 24;
+                            currentFightFrameSet = fightAnimationFrameSet.down;
                             break;
                         default:
                             break;
@@ -307,9 +318,21 @@ void Character::updateAnimation (float deltaTime) {
             if (updateAnimationTime > 0.1) {
                 updateAnimationTime = 0;
                 colIndex++;
+                
                 if (colIndex > maxCols - 1) colIndex = startCols;
                 characterRecSrc = { colIndex*width, rowIndex*height, width, height};
+                
+                // currentFightFrameSet.currentFrame++;
+                // if (currentFightFrameSet.currentFrame > currentFightFrameSet.maxFrame) {
+                //     currentFightFrameSet.currentFrame = currentFightFrameSet.minFrame;
+                // }
             }
+            // if (updateFightAnimationTime > 0.2) {
+            //     updateFightAnimationTime = 0;
+                
+            // }
+            updateAnimationTime += deltaTime;
+            // updateFightAnimationTime += deltaTime;
         }
 void Character::updateHitBox () {
             characterHitBox.x = characterCollision.x + (directionState == Right ? 20 : directionState == Left ? -20 : 0);
@@ -460,6 +483,11 @@ void Player::draw(Vector2 mapPos) {
     Vector2 shakePos = {this->worldPos.x + mapPos.x, this->worldPos.y + mapPos.y};
     Rectangle drawDes = {characterRecDes.x + shakePos.x, characterRecDes.y + shakePos.y, characterRecDes.width, characterRecDes.height};
     DrawTexturePro(characterTexture, characterRecSrc, drawDes, {0,0}, 0, WHITE);
+    if (playerState == PlayerState::Attacking)
+    {
+        Rectangle fightAnimationRecSrc = {currentFightFrameSet.currentFrame * characterRecSrc.width, currentFightFrameSet.currentRow * characterRecSrc.height, characterRecSrc.width, characterRecSrc.height};
+        DrawTexturePro(characterTexture, fightAnimationRecSrc, drawDes, {0,0}, 0, WHITE);
+    }
     if (holdingItems.size() > 0) {
         InteractableItem& temp_holdingItem = holdingItems[0];
         DrawTexturePro(*temp_holdingItem.getTexture(), {0,0, (float)temp_holdingItem.getTextureWidth(), (float)temp_holdingItem.getTextureHeight()}, 

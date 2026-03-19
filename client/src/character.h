@@ -17,6 +17,12 @@ struct IsCanSwtichSet {
     bool isCanSwitch;
     int key;
 };
+struct FightAnimationFrameSet {
+    AnimationFrameSet left;
+    AnimationFrameSet right;
+    AnimationFrameSet up;
+    AnimationFrameSet down;
+};
 class HealthComponent {
     protected:
     public:
@@ -46,6 +52,7 @@ class Character : public Drawing
         int rowIndex;
         float scale_factor{1.5f};
         float updateAnimationTime = 0;
+        float updateFightAnimationTime = 0;
         Rectangle characterRecDes;
         Rectangle characterRecSrc;
         Image characterImg;
@@ -64,6 +71,8 @@ class Character : public Drawing
         std::vector<std::vector<int>>* worldCollisionArray{};
         float damage;
         IsCanSwtichSet canSwitchLevel {true, 0};
+        FightAnimationFrameSet fightAnimationFrameSet;
+        AnimationFrameSet currentFightFrameSet;
     public:
         virtual void tick (float deltaTime);
         Character (const char * imageTexture, float speed, float damage, std::vector<std::vector<int>>* worldCollisionArray);

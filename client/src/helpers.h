@@ -14,6 +14,14 @@ enum class SwitchDirectionEnum {
     Left = 3,
     Right = 4
 };
+struct AnimationFrameSet {
+    int currentFrame;
+    int minFrame;
+    int maxFrame;
+    int currentRow;
+    int minRow;
+    int maxRow;
+};
 class ObjectDetail {
     Rectangle dimension;
     std::unordered_map<std::string, json> properties{};

@@ -207,7 +207,8 @@ WorldSet::WorldSet(const char* backgroundTexture, const char* foregroundTexture,
     std::vector<int>* collisionData, std::vector<MapProp*>* worldProps, std::string mapPropertyPath,
     WorldEnums worldName, Player& player, std::vector<InteractableInputProperties> interactableProperties, int levelAmount, int AI_amount): 
     drawProperty(mapWidth, mapHeight, collisionData), background(backgroundTexture, &drawProperty), foreground(foregroundTexture, &drawProperty), worldProps(worldProps),
-    worldName(worldName)  {
+    worldName(worldName),
+    explosionTexture(LoadTexture("resources/image/animated/Landmine_Explosion.png"))  {
         for (DrawingDataSet obj: drawingDataSet) {
             mapLayers.emplace_back(obj.imgSrc, obj.level);
         }
