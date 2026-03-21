@@ -105,7 +105,7 @@ void Game::tick (float deltaTime) {
             }
             if (IsKeyPressed(KEY_N))
             {
-                player.dash({200, 200}, 20);
+                player.dash({100, 100}, 20);
             }
             std::vector<Drawing*> allDrawableObjects2 = allDrawableObjects;
             for (Drawing* propSet : currentWorld->getAllDrawableProps()) {
