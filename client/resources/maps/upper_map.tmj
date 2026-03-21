@@ -3245,6 +3245,70 @@
                  "width":11,
                  "x":1138.5,
                  "y":478
+                }, 
+                {
+                 "height":27,
+                 "id":35,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"id",
+                         "type":"int",
+                         "value":2
+                        }, 
+                        {
+                         "name":"imgSrc",
+                         "type":"string",
+                         "value":"resources\/image\/animated\/Stoplight.png"
+                        }, 
+                        {
+                         "name":"srcHeight",
+                         "type":"int",
+                         "value":27
+                        }, 
+                        {
+                         "name":"srcWidth",
+                         "type":"int",
+                         "value":11
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":11,
+                 "x":608.328,
+                 "y":1084.51
+                }, 
+                {
+                 "height":27,
+                 "id":36,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"id",
+                         "type":"int",
+                         "value":2
+                        }, 
+                        {
+                         "name":"imgSrc",
+                         "type":"string",
+                         "value":"resources\/image\/animated\/Stoplight.png"
+                        }, 
+                        {
+                         "name":"srcHeight",
+                         "type":"int",
+                         "value":27
+                        }, 
+                        {
+                         "name":"srcWidth",
+                         "type":"int",
+                         "value":11
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":11,
+                 "x":562.833,
+                 "y":1102.58
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -3280,7 +3344,7 @@
                  "y":1062.55
                 }, 
                 {
-                 "height":20.4089610590232,
+                 "height":20.409,
                  "id":25,
                  "name":"",
                  "properties":[
@@ -3297,9 +3361,31 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":137.115150584873,
-                 "x":1152.08712512724,
-                 "y":533.147604478078
+                 "width":137.115,
+                 "x":1152.09,
+                 "y":533.148
+                }, 
+                {
+                 "height":18.4984,
+                 "id":31,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"id",
+                         "type":"int",
+                         "value":2
+                        }, 
+                        {
+                         "name":"starting_light",
+                         "type":"int",
+                         "value":0
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":103.749,
+                 "x":601.459,
+                 "y":1287.99
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -4000,8 +4086,8 @@
                  "type":"",
                  "visible":true,
                  "width":64,
-                 "x":1159.6577674477,
-                 "y":748.289779508763
+                 "x":1159.66,
+                 "y":748.29
                 }, 
                 {
                  "height":50,
@@ -4247,8 +4333,8 @@
                  "type":"",
                  "visible":true,
                  "width":64,
-                 "x":309.730008166342,
-                 "y":1547.96312582449
+                 "x":309.73,
+                 "y":1547.96
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -4380,7 +4466,7 @@
          "y":0
         }],
  "nextlayerid":64,
- "nextobjectid":30,
+ "nextobjectid":37,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.2",

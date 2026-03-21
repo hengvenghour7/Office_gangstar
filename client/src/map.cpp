@@ -448,6 +448,7 @@ WorldSet::WorldSet(const char* backgroundTexture, const char* foregroundTexture,
                 if (temp_starting_light > TrafficLightState::Green || temp_starting_light < TrafficLightState::Red)
                     temp_starting_light = TrafficLightState::Red;
                 trafficLights.emplace(temp_id, TrafficLightSet(temp_dimension, temp_id, temp_starting_light));
+                trafficLights.at(temp_id).setY(100*TILE_SIZE*MAP_SCALE + 2);
             }
             std::vector<ObjectDetail> temp_traffic_light_obj = getObjectsFromJsonLayer(j, "traffic_light", 
                 {"id", "imgSrc", "srcHeight", "srcWidth"});

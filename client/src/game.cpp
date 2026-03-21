@@ -267,9 +267,9 @@ void Game::prepareWorld (SpawnToDetail& spawnToDetail) {
     enemies = *currentWorld->getAIPlayers();
     player.setPlayerWorldPos(currentWorld->getSpawnLocation(spawnToDetail.targetSpawnPoint));
     player.changeCollisionCheck(currentWorld->getWorldCollisionArray(), currentWorld->getCollisionCode());
-    currentWorld->foreground.setY(100*TILE_SIZE*MAP_SCALE);
     allDrawableObjects.push_back(&currentWorld->background);
     allDrawableObjects.push_back(&currentWorld->foreground);
+    currentWorld->foreground.setY(100*TILE_SIZE*MAP_SCALE);
     for (Drawing* layer: currentWorld->getMapLayers()) {
         allDrawableObjects.push_back(layer);
     }
