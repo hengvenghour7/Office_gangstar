@@ -13,6 +13,11 @@
 #include "item/item.h"
 #include <functional>
 
+enum class TrafficLightState {
+    Red = 0,
+    Yellow = 1,
+    Green = 2
+};
 struct SpawnToDetail {
     WorldEnums targetMap;
     int targetSpawnPoint;
@@ -45,6 +50,40 @@ struct MovementFrameSet {
     FrameSet rightMovementFrame;
     FrameSet upMovementFrame;
     FrameSet downMovementFrame;
+};
+class TrafficLightProp {
+    int id;
+    Rectangle dimension;
+    Rectangle srcDimension;
+    Texture2D lightTexture;
+    public:
+        TrafficLightProp (const char * imgSrc, int id, Rectangle dimension, Rectangle srcDimension);
+        void drawTrafficLight (Vector2 mapPos, int currentFrame);
+};
+class TrafficLightSet : public Drawing {
+    int id;
+    Rectangle collision;
+    int currentFrame;
+    int maxRedFrame;
+    int redActiveFrame{1};
+    int maxYellowFrame;
+    int yellowActiveFrame{4};
+    int maxGreenFrame;
+    int greenActiveFrame{7};
+    bool isTransition;
+    TrafficLightState lightState;
+    float countdownTime;
+    int timeToNextlight = 4;
+    std::vector<TrafficLightProp> trafficLightProps;
+    public:
+        TrafficLightSet (Rectangle dimension, int id, TrafficLightState startingLightState);
+        void tick(float deltaTime);
+        virtual void draw (Vector2 mapPos) override;
+        TrafficLightState getLightState ();
+        void changeLight ();
+        Rectangle getCollision ();
+        int getCurrentFrameByLightState (TrafficLightState inputLightState);
+        void AddTrafficLightProp (std::string imgSrc, int id, Rectangle dimension, int srcWidth, int srcHeight);
 };
 class Shop {
     Rectangle shopDimension;
@@ -99,6 +138,7 @@ class Car : public InteractablePropV2 {
         virtual void draw (Vector2 mapPos) override;
         virtual void updateAnimation(float deltaTime) override;
         void findDrivingPath(std::vector<std::vector<int>>* pathArray);
+        void setDirection(Vector2 direction);
 };
 class MapSwitcherProp: public Drawing {
     Vector2 location;
@@ -173,6 +213,7 @@ class WorldSet {
     std::vector<Car> carList{};
     bool isExploding{false};
     Texture2D explosionTexture;
+    std::unordered_map<int ,TrafficLightSet> trafficLights{};
 
     public:
         WorldSet(const char* backgroundTexture, const char* foregroundTexture, std::vector<DrawingDataSet> drawingDataSet, int mapWidth, int mapHeight, 
@@ -205,7 +246,6 @@ class WorldSet {
         std::vector<Drawing*> getMapLayers();
         std::vector<InteractablePropV2>* getInteractableV2List();
         std::vector<Car>* getCarList();
-        void callExplosion();
 };
 
 #endif

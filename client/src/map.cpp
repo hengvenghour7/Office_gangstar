@@ -12,6 +12,81 @@ WorldDrawProperty::WorldDrawProperty (int width, int height, std::vector<int>* c
 void WorldDrawProperty::changeProperty(int width, int height, Vector2 des, std::vector<int>* collisionData) {
     
 };
+TrafficLightProp::TrafficLightProp (const char * imgSrc, int id, Rectangle dimension, Rectangle srcDimension): lightTexture(LoadTexture(imgSrc)),
+    id(id), dimension(dimension), srcDimension(srcDimension) {
+
+}
+void TrafficLightProp::drawTrafficLight (Vector2 mapPos, int currentFrame) {
+    Rectangle recDes = {dimension.x + mapPos.x, dimension.y + mapPos.y, dimension.width, dimension.height};
+    srcDimension.x = currentFrame * srcDimension.width;
+    DrawTexturePro(lightTexture, srcDimension, recDes, {0, 0}, 0, WHITE);
+}
+TrafficLightSet::TrafficLightSet (Rectangle dimension, int id, TrafficLightState startingLightState) : collision(dimension), id(id),
+    lightState(startingLightState), countdownTime(0), currentFrame(getCurrentFrameByLightState(startingLightState)), maxRedFrame(3), maxYellowFrame(6),
+    maxGreenFrame(9), isTransition(false) {
+
+}
+int TrafficLightSet::getCurrentFrameByLightState (TrafficLightState inputLightState) {
+    switch (inputLightState)
+    {
+    case TrafficLightState::Red:
+        return 1;
+    case TrafficLightState::Yellow:
+        return 4;
+    case TrafficLightState::Green:
+        return 7;
+    default:
+        return 1;
+    }
+}
+void TrafficLightSet::tick (float deltaTime) {
+    if (isTransition) {
+        if (countdownTime >= 0.1) {
+            countdownTime = 0;
+            changeLight();
+        }
+    } else {
+        if (countdownTime >= timeToNextlight) {
+            countdownTime = 0;
+            changeLight();
+        }
+    }
+    countdownTime += deltaTime;
+}
+void TrafficLightSet::changeLight () {
+    int temp_light_state = (int)lightState;
+    currentFrame++;
+    if (currentFrame != (redActiveFrame) && currentFrame != (yellowActiveFrame) && currentFrame != (greenActiveFrame)) {
+        isTransition = true;
+    } else {
+        temp_light_state++;
+        isTransition = false;
+    }
+    if (currentFrame >= maxGreenFrame) {
+        currentFrame = 0;
+        temp_light_state = 0;
+    }
+    if (temp_light_state > (int)TrafficLightState::Green) {
+        temp_light_state = (int)TrafficLightState::Red;
+    }
+    lightState = (TrafficLightState)temp_light_state;
+}
+void TrafficLightSet::draw (Vector2 mapPos) {
+    for (TrafficLightProp prop : trafficLightProps) {
+        prop.drawTrafficLight(mapPos, currentFrame);
+    }
+}
+Rectangle TrafficLightSet::getCollision () {
+    return collision;
+}
+TrafficLightState TrafficLightSet::getLightState () {
+    return lightState;
+}
+void TrafficLightSet::AddTrafficLightProp (std::string imgSrc, int id, Rectangle dimension, int srcWidth, int srcHeight) {
+    const char *temp_imgSrc = imgSrc.c_str();
+    Rectangle srcDimension = {(float)currentFrame, 0, (float)srcWidth, (float)srcHeight};
+    trafficLightProps.emplace_back(temp_imgSrc, id, dimension, srcDimension);
+}
 Shop::Shop(Rectangle shopDimension, std::string name, std::vector<ShopItemProperties> allShopItemProperties): 
     shopDimension(shopDimension),
     name(name) {
@@ -110,8 +185,10 @@ void Car::draw (Vector2 mapPos) {
         {0, 0}, 0, WHITE
     );
 };
+void Car::setDirection (Vector2 direction) {
+    this->direction = direction;
+}
 void Car::updateAnimation (float deltaTime) {
-    // std::cout<< "direction y" << dimension.y << std::flush;
     if (animationUpdateTime > 0.1) {
         animationUpdateTime = 0;
         if (currentFrame < endFrame) {
@@ -173,7 +250,6 @@ void Car::updateAnimation (float deltaTime) {
         drawDesDimension.y = dimension.y + dimension.height*0.5 - movementFrameSet.downMovementFrame.desHeight*0.5 * MAP_SCALE;
         drawDesDimension.width = movementFrameSet.downMovementFrame.desWidth * MAP_SCALE;
         drawDesDimension.height = movementFrameSet.downMovementFrame.desHeight * MAP_SCALE;
-        // std::cout << "__is down__" <<std::flush;
         break;
     default:
         break;
@@ -183,7 +259,6 @@ void Car::updateAnimation (float deltaTime) {
     dimension.y += direction.y;
 };
 void Car::findDrivingPath(std::vector<std::vector<int>>* pathArray) {
-    // std::cout<< "find car path" << std::flush;
     findAllPath(pathArray, dimension, &direction);
     if (direction.y < 0) {
         directionState = CarDirectionState::Up;
@@ -256,7 +331,6 @@ WorldSet::WorldSet(const char* backgroundTexture, const char* foregroundTexture,
                     levelDataList[i + 1] = {tmpCollisionArray, *tmpCollisionCode};
                 }
             }
-            std::cout<< "all level are sssss " << levelDataList.size() <<std::flush;
         }
         if (interactableProperties.size() > 0) {
             std::vector<ObjectDetail> temp_objs = getObjectsFromJsonLayer(j, "interactable_items", {"imgSrc", "name", 
@@ -345,7 +419,28 @@ WorldSet::WorldSet(const char* backgroundTexture, const char* foregroundTexture,
                     int temp_interactableDistance = carObj.getProperty("interactableDistance").get<int>();
                 carList.emplace_back(carObj.getDimension(), []() {}, temp_imgSrc, temp_startFrame, temp_midFrame, temp_endFrame,
                             temp_srcWidth, temp_srcHeight, temp_interactableDistance, temp_row, temp_srcYOffset, temp_movementFrameSet);
-                // std::cout<< "yyy____ " << carList[0].getDimension().width << " __ " << std::flush;
+            }
+        }
+        {
+            std::vector<ObjectDetail> temp_traffic_light_sets = getObjectsFromJsonLayer(j, "traffic_light_detector", 
+            {"id", "starting_light"});
+            for (ObjectDetail set: temp_traffic_light_sets) {
+                int temp_id = set.getProperty("id").get<int>();
+                TrafficLightState temp_starting_light = (TrafficLightState)set.getProperty("starting_light").get<int>();
+                Rectangle temp_dimension = set.getDimension();
+                if (temp_starting_light > TrafficLightState::Green || temp_starting_light < TrafficLightState::Red)
+                    temp_starting_light = TrafficLightState::Red;
+                trafficLights.emplace(temp_id, TrafficLightSet(temp_dimension, temp_id, temp_starting_light));
+            }
+            std::vector<ObjectDetail> temp_traffic_light_obj = getObjectsFromJsonLayer(j, "traffic_light", 
+                {"id", "imgSrc", "srcHeight", "srcWidth"});
+            for (ObjectDetail obj : temp_traffic_light_obj) {
+                int temp_id = obj.getProperty("id");
+                std::string temp_imgSrc = obj.getProperty("imgSrc").get<std::string>();
+                int temp_srcHeight = obj.getProperty("srcHeight").get<int>();
+                int temp_srcWidth = obj.getProperty("srcWidth").get<int>();
+                Rectangle temp_dimension = obj.getDimension();
+                trafficLights.at(temp_id).AddTrafficLightProp(temp_imgSrc, temp_id, temp_dimension, temp_srcWidth, temp_srcHeight);
             }
         }
         if (carList.size() > 0) {
@@ -502,6 +597,10 @@ std::vector<Drawing*> WorldSet::getAllDrawableProps () {
     for (Drawing &item : interactableItemList) {
         allWorldProps.push_back(&item);
     }
+    for (auto &[key, prop] : trafficLights) {
+        Drawing* drawableProp = &prop;
+        allWorldProps.push_back(drawableProp);
+    }
     return allWorldProps;
 };
 void WorldSet::animateWorldProps(float deltaTime) {
@@ -511,8 +610,24 @@ void WorldSet::animateWorldProps(float deltaTime) {
     for (InteractablePropV2 &prop : interactableV2List) {
         prop.updateAnimation(deltaTime);
     }
+    for (auto &[key, lightSet] : trafficLights) {
+        lightSet.tick(deltaTime);
+    }
     for (Car &car : carList) {
-        car.findDrivingPath(&carPathArray);
+        if (trafficLights.size() > 0) {
+            for (auto &[key, lightSet] : trafficLights) {
+                bool isCollide = checkIsCollide(car.getDimension(), lightSet.getCollision()).isCollide;
+                if (( isCollide && lightSet.getLightState() == TrafficLightState::Green) || !isCollide)
+                {
+                    car.findDrivingPath(&carPathArray);
+                } else {
+                    car.setDirection({0 , 0});
+                    // lightSet.tick(deltaTime);
+                }
+            }
+        } else {
+            car.findDrivingPath(&carPathArray);
+        }
         car.updateAnimation(deltaTime);
     }
 }
@@ -522,7 +637,6 @@ Vector2 WorldSet::getSpawnLocation(int spawnIndex) {
     if (it != mapSwitchersList.end()) {
         // key exists
         spawnLocation = Vector2Subtract(it->second.getSpawnLocation(), {SCREEN_WIDTH/2, SCREEN_HEIGHT/2}) ;
-        // spawnLocation = {0 - SCREEN_WIDTH/2, 0 - SCREEN_HEIGHT/2};
         
     } else {
         auto it2 = autoMapSwitcherList.find(spawnIndex);
