@@ -55,19 +55,34 @@ void TrafficLightSet::tick (float deltaTime) {
 }
 void TrafficLightSet::changeLight () {
     int temp_light_state = (int)lightState;
-    currentFrame++;
+    currentFrame--;
     if (currentFrame != (redActiveFrame) && currentFrame != (yellowActiveFrame) && currentFrame != (greenActiveFrame)) {
         isTransition = true;
     } else {
-        temp_light_state++;
         isTransition = false;
     }
-    if (currentFrame >= maxGreenFrame) {
-        currentFrame = 0;
-        temp_light_state = 0;
+    if (currentFrame < 9 && currentFrame % 3 == 0) temp_light_state --;
+    if (currentFrame <= 0) {
+        currentFrame = maxGreenFrame;
+        temp_light_state = (int)TrafficLightState::Green;
     }
-    if (temp_light_state > (int)TrafficLightState::Green) {
-        temp_light_state = (int)TrafficLightState::Red;
+    if (temp_light_state < (int)TrafficLightState::Red) {
+        temp_light_state = (int)TrafficLightState::Green;
+    }
+    switch (temp_light_state)
+    {
+    case (int)TrafficLightState::Red:
+        timeToNextlight = redFrameDuration;
+        break;
+    case (int)TrafficLightState::Yellow:
+        timeToNextlight = yellowFrameDuration;
+        break;
+    case (int)TrafficLightState::Green:
+        timeToNextlight = greenFrameDuration;
+        break;
+    default:
+        timeToNextlight = greenFrameDuration;
+        break;
     }
     lightState = (TrafficLightState)temp_light_state;
 }
@@ -255,8 +270,8 @@ void Car::updateAnimation (float deltaTime) {
         break;
     }
     animationUpdateTime+= deltaTime;
-    dimension.x += direction.x;
-    dimension.y += direction.y;
+    dimension.x += direction.x * speed;
+    dimension.y += direction.y * speed;
 };
 void Car::findDrivingPath(std::vector<std::vector<int>>* pathArray) {
     findAllPath(pathArray, dimension, &direction);
@@ -277,6 +292,8 @@ void Car::findDrivingPath(std::vector<std::vector<int>>* pathArray) {
         return;
     }
     directionState = CarDirectionState::Right;
+    dimension.x += direction.x;
+    dimension.y += direction.y;
 };
 WorldSet::WorldSet(const char* backgroundTexture, const char* foregroundTexture, std::vector<DrawingDataSet> drawingDataSet, int mapWidth, int mapHeight, 
     std::vector<int>* collisionData, std::vector<MapProp*>* worldProps, std::string mapPropertyPath,
@@ -614,16 +631,22 @@ void WorldSet::animateWorldProps(float deltaTime) {
         lightSet.tick(deltaTime);
     }
     for (Car &car : carList) {
+        bool isCarShouldMove {false};
         if (trafficLights.size() > 0) {
             for (auto &[key, lightSet] : trafficLights) {
                 bool isCollide = checkIsCollide(car.getDimension(), lightSet.getCollision()).isCollide;
-                if (( isCollide && lightSet.getLightState() == TrafficLightState::Green) || !isCollide)
+                if ((isCollide && lightSet.getLightState() == TrafficLightState::Red))
                 {
-                    car.findDrivingPath(&carPathArray);
+                    isCarShouldMove = false;
+                    break;
                 } else {
-                    car.setDirection({0 , 0});
-                    // lightSet.tick(deltaTime);
+                    isCarShouldMove = true;
                 }
+            }
+            if (isCarShouldMove) {
+                car.findDrivingPath(&carPathArray);
+            } else {
+                car.setDirection({0, 0});
             }
         } else {
             car.findDrivingPath(&carPathArray);

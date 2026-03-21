@@ -66,10 +66,13 @@ class TrafficLightSet : public Drawing {
     int currentFrame;
     int maxRedFrame;
     int redActiveFrame{1};
+    int redFrameDuration {4};
     int maxYellowFrame;
+    int yellowFrameDuration {1};
     int yellowActiveFrame{4};
     int maxGreenFrame;
     int greenActiveFrame{7};
+    int greenFrameDuration {4};
     bool isTransition;
     TrafficLightState lightState;
     float countdownTime;
@@ -128,6 +131,7 @@ class InteractablePropV2: public Drawing {
 class Car : public InteractablePropV2 {
     MovementFrameSet movementFrameSet;
     Vector2 direction;
+    float speed{2.f};
     bool isTransitioning {false};
     Rectangle drawDesDimension;
     CarDirectionState directionState {CarDirectionState::Right};
