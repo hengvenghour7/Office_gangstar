@@ -25,6 +25,7 @@ class Time {
 };
 class Game {
     private:
+        bool isWorldInitialize{false};
         bool isGameOver;
         bool isMenuOpen;
         bool isOpenInteractionDialog;

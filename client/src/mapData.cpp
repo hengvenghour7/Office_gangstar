@@ -46,7 +46,9 @@ WorldSet& getCenterWorld(Player& player) {
         "resources/maps/office_gang_map.tmj",
         WorldEnums::CenterWorld,
         player,
-        {}
+        {},
+        2,
+        3
     );
 
     return centerWorld;

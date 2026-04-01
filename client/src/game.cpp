@@ -17,7 +17,7 @@ Time::Time() : countDownTime(0), hour(11), minute(50), dayState(DayState::AM) {
 }
 void Time::tick(float deltaTime) {
     // std::cout << "count down start " << minute << " _" << std::flush;
-    if (countDownTime > 2) {
+    if (countDownTime > 4) {
         countDownTime = 0;
         minute += 10;
         if (minute >= 60) {
@@ -69,20 +69,22 @@ lightMask(LoadRenderTexture(SCREEN_WIDTH, SCREEN_HEIGHT))
     std::uniform_real_distribution<float> dis(1.f, 4.0f);
     // Generate a random number
     float randomValue = dis(gen);
-    for (int i = 0; i< 5; i++) {
-        enemies.emplace_back("resources/image/character/workingman.png", &player, i, dis(gen)/4, dis(gen) + 20, currentWorld->getWorldCollisionArray());
-    }
-    currentWorld->foreground.setY(100*TILE_SIZE*MAP_SCALE);
-    allDrawableObjects.push_back(&currentWorld->background);
-    allDrawableObjects.push_back(&currentWorld->foreground);
-    allDrawableObjects.push_back(&player);
-    // for (Drawing* propSet : currentWorld->getAllDrawableProps()) {
-    //     allDrawableObjects.push_back(propSet);
+    // for (int i = 0; i< 5; i++) {
+    //     enemies.emplace_back("resources/image/character/workingman.png", &player, i, dis(gen)/4, dis(gen) + 20, currentWorld->getWorldCollisionArray());
     // }
-    for (Drawing* layer: currentWorld->getMapLayers()) {
-        allDrawableObjects.push_back(layer);
-    }
-    shopUI.setShopItems(currentWorld->getShopItems("shop1"));
+    // currentWorld->foreground.setY(100*TILE_SIZE*MAP_SCALE);
+    // allDrawableObjects.push_back(&currentWorld->background);
+    // allDrawableObjects.push_back(&currentWorld->foreground);
+    // allDrawableObjects.push_back(&player);
+    // // for (Drawing* propSet : currentWorld->getAllDrawableProps()) {
+    // //     allDrawableObjects.push_back(propSet);
+    // // }
+    // for (Drawing* layer: currentWorld->getMapLayers()) {
+    //     allDrawableObjects.push_back(layer);
+    // }
+    SpawnToDetail spawnToDetail = {WorldEnums::CenterWorld, 0};
+    prepareWorld(spawnToDetail);
+    
 
 }
 void Game::tick (float deltaTime) {
@@ -261,8 +263,11 @@ void Game::checkSwitchWorldInteraction(float deltaTime, Vector2& mapPos) {
     }
 }
 void Game::prepareWorld (SpawnToDetail& spawnToDetail) {
-    currentWorld->saveAIPlayers(enemies);
+    if (currentWorld != nullptr && isWorldInitialize) {
+        currentWorld->saveAIPlayers(enemies);
+    }
     currentWorld = &getWorld(spawnToDetail.targetMap, player);
+    isWorldInitialize = true;
     allDrawableObjects = {};
     enemies = *currentWorld->getAIPlayers();
     player.setPlayerWorldPos(currentWorld->getSpawnLocation(spawnToDetail.targetSpawnPoint));
@@ -321,6 +326,7 @@ void Game::checkShopInteraction(Player &player, Vector2 mapPos) {
         for (Shop& shop: *currentWorld->getCurrentWorldShops()) {
             Rectangle screenShopDimension = shop.getShopDimension(mapPos);
             if (checkIsCollide(player.getCharacterCollision(), screenShopDimension).isCollide) {
+                shopUI.setShopItems(currentWorld->getShopItems(shop.getShopName()));
                 gameUIState = GameUIStateEnums::OpenShop;
                 return;
             }

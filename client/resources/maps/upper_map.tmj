@@ -3592,6 +3592,34 @@
         }, 
         {
          "draworder":"topdown",
+         "id":64,
+         "name":"shop location",
+         "objects":[
+                {
+                 "height":51,
+                 "id":37,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"shopName",
+                         "type":"string",
+                         "value":"shop1"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":63,
+                 "x":409.128878775341,
+                 "y":1350.17232105916
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
          "id":60,
          "name":"car_items",
          "objects":[
@@ -4465,8 +4493,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":64,
- "nextobjectid":37,
+ "nextlayerid":65,
+ "nextobjectid":38,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.2",
