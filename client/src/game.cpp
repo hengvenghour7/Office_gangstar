@@ -17,7 +17,7 @@ Time::Time() : countDownTime(0), hour(11), minute(50), dayState(DayState::AM) {
 }
 void Time::tick(float deltaTime) {
     // std::cout << "count down start " << minute << " _" << std::flush;
-    if (countDownTime > 4) {
+    if (countDownTime > 8) {
         countDownTime = 0;
         minute += 10;
         if (minute >= 60) {
@@ -221,16 +221,14 @@ void Game::checkSwitchWorldInteraction(float deltaTime, Vector2& mapPos) {
         // value.draw(mapPos);
         Rectangle temp_dimension = value.getCollision();
         // DrawRectangle(temp_dimension.x, temp_dimension.y, temp_dimension.width, temp_dimension.height, PURPLE);
-        if (checkIsCollide(player.getCharacterCollision(), value.getCollision()).isCollide && switchCooldownTime <= 0) {
-            switchCooldownTime = 2;
-            isCanSwitch = false;
+        if (checkIsCollide(player.getCharacterCollision(), value.getCollision()).isCollide && canAutoSwitchMap.isCanSwitch) {
+            canAutoSwitchMap = {false, value.getSwitchDestination().targetSpawnPoint};
             SpawnToDetail spawnToDetail = value.getSwitchDestination();
             prepareWorld(spawnToDetail);
             return;
-        } else {
-            if (switchCooldownTime > 0) {
-                switchCooldownTime -= deltaTime;
-            }
+        } 
+        if ( !checkIsCollide(player.getCharacterCollision(), value.getCollision()).isCollide && canAutoSwitchMap.isCanSwitch == false  && key == canAutoSwitchMap.key) {
+            canAutoSwitchMap = {true, key};
         }
     }
     for (auto &[key, value] : (*currentWorld->getAutoLevelSwitcherList())) {

@@ -64,5 +64,30 @@ class InventoryUI {
     public:
         InventoryUI(std::vector<UIComponentProperties> shopItemProperties);
 };
+class TabHeader {
+
+};
+class UserInfoTab {
+    public:
+        UserInfoTab();
+        void draw();
+};
+class SkillTab {
+    public:
+        SkillTab();
+        void draw();
+};
+class InventoryTab {
+
+};
+class UserInfoUI {
+    InventoryTab inventoryTab;
+    UserInfoTab infoTab;
+    SkillTab skillTab;
+    public:
+        UserInfoUI();
+        void draw();
+        void handleUserInfoUI();
+};
 
 #endif

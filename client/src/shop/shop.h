@@ -33,6 +33,7 @@ class ShopUIItem {
         void changeIndex (int index);
         void draw();
 };
+
 class Inventory {
     std::vector<ShopUIItem> items{};
     Rectangle dimension;

@@ -30,10 +30,10 @@ class Game {
         bool isMenuOpen;
         bool isOpenInteractionDialog;
         bool isCanSwitch{true};
-        float switchCooldownTime {0};
         const char* interactionText{""};
         Vector2 cameraShakeVector{0, 0};
         float shakeAmplitudeFactor{1.0};
+        float playerInvunerableTime {2};
         GameStateEnums gameState;
         GameUIStateEnums gameUIState;
         ShopUI shopUI;
@@ -53,6 +53,7 @@ class Game {
         Player player;
         Time time;
         RenderTexture2D lightMask;
+        IsCanSwtichSet canAutoSwitchMap {true, 0};
     public:
         Game();
         void tick(float deltaTime);
