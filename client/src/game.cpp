@@ -69,19 +69,7 @@ lightMask(LoadRenderTexture(SCREEN_WIDTH, SCREEN_HEIGHT))
     std::uniform_real_distribution<float> dis(1.f, 4.0f);
     // Generate a random number
     float randomValue = dis(gen);
-    // for (int i = 0; i< 5; i++) {
-    //     enemies.emplace_back("resources/image/character/workingman.png", &player, i, dis(gen)/4, dis(gen) + 20, currentWorld->getWorldCollisionArray());
-    // }
-    // currentWorld->foreground.setY(100*TILE_SIZE*MAP_SCALE);
-    // allDrawableObjects.push_back(&currentWorld->background);
-    // allDrawableObjects.push_back(&currentWorld->foreground);
-    // allDrawableObjects.push_back(&player);
-    // // for (Drawing* propSet : currentWorld->getAllDrawableProps()) {
-    // //     allDrawableObjects.push_back(propSet);
-    // // }
-    // for (Drawing* layer: currentWorld->getMapLayers()) {
-    //     allDrawableObjects.push_back(layer);
-    // }
+
     SpawnToDetail spawnToDetail = {WorldEnums::CenterWorld, 0};
     prepareWorld(spawnToDetail);
     
