@@ -55,6 +55,7 @@ class Inventory {
     Rectangle dimension;
     Texture2D backgroundTexture;
     Texture2D categoryBackground;
+    Texture2D iconTextureSet;
     std::unordered_map<std::string, InventoryCategory> allCategories;
     int categoryWidth;
     int categoryHeight;

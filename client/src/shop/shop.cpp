@@ -46,6 +46,7 @@ void ShopUIItem::draw() {
 }
 Inventory::Inventory (std::vector<ShopItem> shopItems): backgroundTexture(LoadTexture("resources/image/UI/shop/shop_background.png")),
     categoryBackground(LoadTexture("resources/image/UI/inventory_category_bg.png")),
+    iconTextureSet(LoadTexture("resources/image/Modern_UI_Style_1.png")),
     categoryWidth(80),
     categoryHeight(48),
     currentCategory("Inventory"),
@@ -180,6 +181,8 @@ void Inventory::drawInventory() {
     }
 }
 void Inventory::drawSetting() {
+    DrawTexturePro(iconTextureSet, {7 * 16,15 * 16, 16, 16}, {dimension.x + 40, dimension.y + 40, 16 * 2, 16 * 2 }, {0,0}, 0, WHITE);
+    DrawTexturePro(iconTextureSet, {10 * 16,15 * 16, 16, 16}, {dimension.x + 80, dimension.y + 40, 16 * 2, 16 * 2 }, {0,0}, 0, WHITE);
     DrawText("Settings", dimension.x + 100, dimension.y + 100, 14, WHITE);
 }
 void Inventory::drawSkill() {

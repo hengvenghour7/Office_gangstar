@@ -56,7 +56,7 @@ class Game {
         IsCanSwtichSet canAutoSwitchMap {true, 0};
     public:
         Game();
-        void tick(float deltaTime);
+        void tick(float deltaTime, Music& music);
         void handleStartMenuTick();
         void startGame();
         void saveGame();

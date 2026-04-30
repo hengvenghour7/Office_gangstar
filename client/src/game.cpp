@@ -75,9 +75,10 @@ lightMask(LoadRenderTexture(SCREEN_WIDTH, SCREEN_HEIGHT))
     
 
 }
-void Game::tick (float deltaTime) {
+void Game::tick (float deltaTime, Music& music) {
     BeginDrawing();
     ClearBackground(BLACK);
+    UpdateMusicStream(music);
     switch (gameState)
     {
     case GameStateEnums::Playing:

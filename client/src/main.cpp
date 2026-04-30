@@ -9,12 +9,15 @@ int main () {
     
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Office Gang");
     SetExitKey(KEY_NULL);
+    InitAudioDevice();
+    Music music = LoadMusicStream("resources/musics/5-Peaceful.ogg");
+    PlayMusicStream(music);
     SetTargetFPS(60);
     Game game;
     if (!isMultiPlayer) {
         while (WindowShouldClose() == false){
             float deltaTime = GetFrameTime();
-            game.tick(deltaTime);
+            game.tick(deltaTime, music);
         }
     } else {
         runMultiPlayer();
