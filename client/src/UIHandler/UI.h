@@ -63,6 +63,7 @@ class InventoryUI {
     Texture2D backgroundTexture;
     public:
         InventoryUI(std::vector<UIComponentProperties> shopItemProperties);
+        void draw();
 };
 class TabHeader {
 

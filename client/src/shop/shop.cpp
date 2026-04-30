@@ -2,6 +2,22 @@
 #include "../globalVar.h"
 #include "../helpers.h"
 
+InventoryCategory::InventoryCategory (ButtonParameter buttonDetail, Rectangle dimension, int index):
+BaseButton(buttonDetail, dimension, index),
+srcWidth(16),
+srcHeight(16),
+itemTexture(LoadTexture(
+            ((std::string)("resources/image/UI/inventoryCategory/" + name + ".png")).c_str()
+        )
+    )
+{
+
+}
+void InventoryCategory::draw () {
+    DrawTexturePro(itemTexture, {0, 0, srcWidth, srcHeight},
+        {dimension.x + 20, dimension.y + 10, srcHeight * 2, srcHeight * 2},
+         {0, 0}, 0, WHITE);
+}
 ShopItem::ShopItem (const char* textureSrc, std::string name, int heal, int energyHeal, int price, std::string description): texture(LoadTexture(textureSrc)),
     name(name), heal(heal), energyHeal(energyHeal), price(price), description(description) {
 
@@ -28,21 +44,89 @@ void ShopUIItem::draw() {
     DrawTexturePro(*texture, {0,0, 16, 16}, dimension, {0,0}, 0, WHITE);
     DrawText(name.c_str(), dimension.x, dimension.y + 50, 16, WHITE);
 }
-Inventory::Inventory (std::vector<ShopItem> shopItems): backgroundTexture(LoadTexture("resources/image/UI/shop/shop_background.png")), 
+Inventory::Inventory (std::vector<ShopItem> shopItems): backgroundTexture(LoadTexture("resources/image/UI/shop/shop_background.png")),
+    categoryBackground(LoadTexture("resources/image/UI/inventory_category_bg.png")),
+    categoryWidth(80),
+    categoryHeight(48),
+    currentCategory("Inventory"),
     dimension {SCREEN_WIDTH/2 - 480*0.5, SCREEN_HEIGHT*0.5 - 320*0.5, 480, 320} {
     int column{0};
     int temp_index{0};
+    std::vector<ButtonParameter> categories = {
+        {
+            "Inventory",
+            [this]() {
+                this->currentCategory = "Inventory";
+                std::cout << "Inventory" << std::endl;
+            }
+        },
+        {
+            "Status",
+            [this]() {
+                this->currentCategory = "Status";
+                std::cout << "Status" << std::endl;
+            }
+        },
+        {
+            "Skill",
+            [this]() {
+                this->currentCategory = "Skill";
+                std::cout << "Skill" << std::endl;
+            }
+        },
+        {
+            "Weapon",
+            [this]() {
+                this->currentCategory = "Weapon";
+                std::cout << "Weapon" << std::endl;
+            }
+        },
+        {
+            "Setting",
+            [this]() {
+                this->currentCategory = "Setting";
+                std::cout << "Setting" << std::endl;
+            }
+        },
+    };
+    // "Inventory", "Status", "Skill", "Weapon", "Setting"
     Rectangle temp_dimension = {dimension.x + 40 + 70*column, dimension.y + 50, 50,50};
-    for (ShopItem item: shopItems) {
+
+    for (int i = 0; i < categories.size(); i++) {
+        std::string currentName = categories[i].name;
+        Rectangle current_dimension = {dimension.x + categoryWidth * i, dimension.y - 32, static_cast<float>(categoryWidth), static_cast<float>(categoryHeight)};
+        InventoryCategory newCategory(categories[i], current_dimension, i);
+        allCategories.emplace(currentName, newCategory);
+        std::cout<< "item cat " << i << std::endl << std::flush;
+    };
+    for (ShopItem &item: shopItems) {
         items.emplace_back(&item.texture, item.name, item.heal, item.energyHeal, temp_dimension, temp_index, item.price, item.description);
         column++;
         temp_dimension.x = temp_dimension.x + 40 + 70*column;
         temp_index++;
     }
 }
+void Inventory::tick () {
+    handleInventoryClick();
+}
+void Inventory::handleInventoryClick() {
+    for (auto& category: allCategories) {
+        bool isCollide = checkButtonClick(category.second.getDimension()).isCollide;
+        if (isCollide) {
+            category.second.doAction();
+        }
+    }
+}
 void Inventory::draw () {
-    DrawText("Inventory", dimension.x + 20, dimension.y - 20, 20, WHITE);
-    DrawTexturePro(backgroundTexture, {0,0, 480, 320}, {dimension.x, dimension.y, 480, 320 }, {0,0}, 0, WHITE);
+    DrawText(currentCategory.c_str(), dimension.x + 20, dimension.y - 50, 20, WHITE);
+    
+    for (auto& category: allCategories) {
+        DrawTexturePro(categoryBackground, {0,0, 80, 64}, 
+            {category.second.getDimension().x, category.second.getDimension().y, category.second.getDimension().width, category.second.getDimension().height + 16}
+            , {0,0}, 0, WHITE);
+        category.second.draw();
+    }
+    DrawTexturePro(backgroundTexture, {0,0, 480, 320}, {dimension.x , dimension.y, 480, 320 }, {0,0}, 0, WHITE);
     for (ShopUIItem item: items) {
         Rectangle button_dimension = item.getDimension();
         if (checkMouseOnHover(button_dimension).isCollide) {
@@ -51,7 +135,6 @@ void Inventory::draw () {
         item.draw();
     }
 }
-
 void Inventory::AddItems(ShopUIItem item) {
     Rectangle temp_dimension {};
     int temp_index {};
@@ -82,7 +165,6 @@ void Inventory::reArrangeItems() {
             }
         }
         items[i].changeDimension(temp_dimension);
-        
     }
 }
 std::vector<ShopUIItem>* Inventory::getItems() {

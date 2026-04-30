@@ -47,6 +47,7 @@ enum PlayerState {
     Attacking,
     Hurt,
     Swimming,
+    Driving,
     Dead
 };
 enum PlayerDirection {

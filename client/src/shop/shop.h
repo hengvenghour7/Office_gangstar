@@ -4,7 +4,16 @@
 #include <raylib.h>
 #include <iostream>
 #include <vector>
+#include <../UIHandler/button.h>
 
+class InventoryCategory: public BaseButton {
+    Texture2D itemTexture;
+    float srcWidth;
+    float srcHeight;
+    public:
+        InventoryCategory(ButtonParameter buttonDetail, Rectangle dimension, int index);
+        virtual void draw() override;
+};
 class ShopItem {
     public:
         Texture2D texture;
@@ -38,8 +47,15 @@ class Inventory {
     std::vector<ShopUIItem> items{};
     Rectangle dimension;
     Texture2D backgroundTexture;
+    Texture2D categoryBackground;
+    std::unordered_map<std::string, InventoryCategory> allCategories;
+    int categoryWidth;
+    int categoryHeight;
+    std::string currentCategory;
     public:
         Inventory(std::vector<ShopItem> shopItems);
+        void tick();
+        void handleInventoryClick();
         void AddItems(ShopUIItem item);
         std::vector<ShopUIItem>* getItems();
         void reArrangeItems();
