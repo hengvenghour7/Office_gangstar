@@ -44,21 +44,19 @@ Character::Character (const char * imageTexture, float speed, float damage, std:
             characterCollision = {screenPos.x, screenPos.y, width*scale_factor, height*scale_factor};
             characterHitBox = {screenPos.x + 20, screenPos.y, width*scale_factor, height*scale_factor};
         }
-void Character::takeDamage (Character* secondCollider, float damage, float deltaTime) {
-    const float TIME_CAP = 2.f;
-            if (checkIsCollide(getCharacterCollision(), secondCollider->getCharacterHitBox(), 0, 0).isCollide && secondCollider->getPlayerState2() == Attacking && takeDamageTimeCap >= TIME_CAP) {
-                characterHealth.takeDamage(damage);
-                takeDamageTimeCap = 0;
-                dash({-16, -16}, -4);
-                updatePlayerState(Hurt);
-                isNeedResetCols = true;
-                return;
-            }
-            takeDamageTimeCap += deltaTime;
-            if (takeDamageTimeCap + 1.5 >= TIME_CAP) {
-                updatePlayerState(Idle, true);
-            }
+void Character::takeDamage (Character* secondCollider, float damage, float deltaTime)
+{
+    float const TIME_CAP = 2.0f;
+    if (checkIsCollide(getCharacterCollision(), secondCollider->getCharacterHitBox(), 0, 0).isCollide && secondCollider->getPlayerState2() == Attacking && takeDamageTimeCap > TIME_CAP) {
+        characterHealth.takeDamage(damage);
+        takeDamageTimeCap = 0;
+        dash({-16, -16}, -4);
+        updatePlayerState(Hurt);
+        isNeedResetCols = true;
+        return;
     }
+            
+}
 void Character::updatePlayerState (enum PlayerState state, bool specialUpdate) {
     if (!specialUpdate) {
         if (playerState == Hurt) {
@@ -357,6 +355,14 @@ Vector2* Character::getWorldPosPointer () {
     return &worldPos;
 }
 void Character::tick (float deltaTime) {
+            float const TIME_CAP = 2.0f;
+            if (playerState == PlayerState::Hurt) {
+            }
+            takeDamageTimeCap += deltaTime;
+            if (takeDamageTimeCap + 1.5 > TIME_CAP && playerState == PlayerState::Hurt)
+            {
+                updatePlayerState(Idle, true);
+            }
             if (dashDistance.x != 0) {
                 dashDistance.x -= dashSpeed.x;
                 worldPos.x += dashSpeed.x;
