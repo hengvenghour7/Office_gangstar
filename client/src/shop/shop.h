@@ -60,6 +60,7 @@ class Inventory {
     int categoryHeight;
     std::string currentCategory;
     CategoryState categoryState;
+    float categoryButtonYOffset;
     public:
         Inventory(std::vector<ShopItem> shopItems);
         void tick();
@@ -73,6 +74,8 @@ class Inventory {
         void drawSkill();
         void drawStatus();
         void drawSetting();
+        void drawWeapon();
+        void updateCategoryButtonPos(std::string targetCategory);
 };
 
 #endif

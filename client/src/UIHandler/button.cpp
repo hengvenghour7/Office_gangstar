@@ -20,3 +20,11 @@ int BaseButton::getIndex() {
 void BaseButton::draw()
 {
 }
+void BaseButton::updatePosition(Vector2 pos) {
+    dimension.x = pos.x;
+    dimension.y = pos.y;
+}
+std::string& BaseButton::getName()
+{
+    return name;
+}

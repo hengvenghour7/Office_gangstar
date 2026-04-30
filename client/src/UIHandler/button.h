@@ -21,6 +21,8 @@ class BaseButton {
         virtual void draw();
         Rectangle& getDimension();
         int getIndex();
+        void updatePosition(Vector2 pos);
+        std::string& getName();
 };
 
 #endif
