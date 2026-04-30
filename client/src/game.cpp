@@ -401,7 +401,6 @@ void Game::handleGamePlayUIInteraction () {
         shopUI.handleInteraction(player);
         break;
     case GameUIStateEnums::OpenInventory:
-        player.getPlayerInventory()->draw();
         player.getPlayerInventory()->tick();
         player.handleInteraction();
         break;

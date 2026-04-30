@@ -49,6 +49,7 @@ Inventory::Inventory (std::vector<ShopItem> shopItems): backgroundTexture(LoadTe
     categoryWidth(80),
     categoryHeight(48),
     currentCategory("Inventory"),
+    categoryState(CategoryState::Inventory),
     dimension {SCREEN_WIDTH/2 - 480*0.5, SCREEN_HEIGHT*0.5 - 320*0.5, 480, 320} {
     int column{0};
     int temp_index{0};
@@ -57,6 +58,7 @@ Inventory::Inventory (std::vector<ShopItem> shopItems): backgroundTexture(LoadTe
             "Inventory",
             [this]() {
                 this->currentCategory = "Inventory";
+                this->categoryState = CategoryState::Inventory;
                 std::cout << "Inventory" << std::endl;
             }
         },
@@ -64,6 +66,7 @@ Inventory::Inventory (std::vector<ShopItem> shopItems): backgroundTexture(LoadTe
             "Status",
             [this]() {
                 this->currentCategory = "Status";
+                this->categoryState = CategoryState::Status;
                 std::cout << "Status" << std::endl;
             }
         },
@@ -71,6 +74,7 @@ Inventory::Inventory (std::vector<ShopItem> shopItems): backgroundTexture(LoadTe
             "Skill",
             [this]() {
                 this->currentCategory = "Skill";
+                this->categoryState = CategoryState::Skill;
                 std::cout << "Skill" << std::endl;
             }
         },
@@ -78,6 +82,7 @@ Inventory::Inventory (std::vector<ShopItem> shopItems): backgroundTexture(LoadTe
             "Weapon",
             [this]() {
                 this->currentCategory = "Weapon";
+                this->categoryState = CategoryState::Weapon;
                 std::cout << "Weapon" << std::endl;
             }
         },
@@ -85,6 +90,7 @@ Inventory::Inventory (std::vector<ShopItem> shopItems): backgroundTexture(LoadTe
             "Setting",
             [this]() {
                 this->currentCategory = "Setting";
+                this->categoryState = CategoryState::Setting;
                 std::cout << "Setting" << std::endl;
             }
         },
@@ -107,15 +113,32 @@ Inventory::Inventory (std::vector<ShopItem> shopItems): backgroundTexture(LoadTe
     }
 }
 void Inventory::tick () {
-    handleInventoryClick();
+    handleCategoryClick();
+    draw();
+    switch (categoryState)
+    {
+    case CategoryState::Inventory:
+        drawInventory();
+        break;
+    case CategoryState::Skill:
+        break;
+    case CategoryState::Setting:
+        drawSetting();
+        break;
+    default:
+        break;
+    }
 }
-void Inventory::handleInventoryClick() {
+void Inventory::handleCategoryClick() {
     for (auto& category: allCategories) {
         bool isCollide = checkButtonClick(category.second.getDimension()).isCollide;
         if (isCollide) {
             category.second.doAction();
         }
     }
+}
+CategoryState& Inventory::getCategoryState() {
+    return categoryState;
 }
 void Inventory::draw () {
     DrawText(currentCategory.c_str(), dimension.x + 20, dimension.y - 50, 20, WHITE);
@@ -127,6 +150,8 @@ void Inventory::draw () {
         category.second.draw();
     }
     DrawTexturePro(backgroundTexture, {0,0, 480, 320}, {dimension.x , dimension.y, 480, 320 }, {0,0}, 0, WHITE);
+}
+void Inventory::drawInventory() {
     for (ShopUIItem item: items) {
         Rectangle button_dimension = item.getDimension();
         if (checkMouseOnHover(button_dimension).isCollide) {
@@ -134,6 +159,9 @@ void Inventory::draw () {
         }
         item.draw();
     }
+}
+void Inventory::drawSetting() {
+    DrawText("Settings", dimension.x + 100, dimension.y + 100, 14, WHITE);
 }
 void Inventory::AddItems(ShopUIItem item) {
     Rectangle temp_dimension {};

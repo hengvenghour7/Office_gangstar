@@ -418,14 +418,23 @@ Inventory* Player::getPlayerInventory() {
     return &playerInventory;
 }
 void Player::handleInteraction() {
-    std::vector<ShopUIItem>*  inventoryItems = playerInventory.getItems();
-    for (size_t i = 0; i < (*inventoryItems).size(); i++) {
-        if (checkButtonClick((*inventoryItems)[i].getDimension()).isCollide) {
-            getHealthComponent()->heal((*inventoryItems)[i].heal);
-            inventoryItems->erase(inventoryItems->begin() + i);
-            playerInventory.reArrangeItems();
-            break;
+    switch (playerInventory.getCategoryState())
+    {
+    case CategoryState::Inventory:
+    {
+        std::vector<ShopUIItem>*  inventoryItems = playerInventory.getItems();
+        for (size_t i = 0; i < (*inventoryItems).size(); i++) {
+            if (checkButtonClick((*inventoryItems)[i].getDimension()).isCollide) {
+                getHealthComponent()->heal((*inventoryItems)[i].heal);
+                inventoryItems->erase(inventoryItems->begin() + i);
+                playerInventory.reArrangeItems();
+                break;
+            }
         }
+    }
+    break;
+    default:
+        break;
     }
 }
 Vector2 Player::getCenter (Vector2 mapPos) {

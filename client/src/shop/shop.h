@@ -6,6 +6,13 @@
 #include <vector>
 #include <../UIHandler/button.h>
 
+enum class CategoryState {
+    Inventory,
+    Status,
+    Skill,
+    Weapon,
+    Setting
+};
 class InventoryCategory: public BaseButton {
     Texture2D itemTexture;
     float srcWidth;
@@ -52,14 +59,20 @@ class Inventory {
     int categoryWidth;
     int categoryHeight;
     std::string currentCategory;
+    CategoryState categoryState;
     public:
         Inventory(std::vector<ShopItem> shopItems);
         void tick();
-        void handleInventoryClick();
+        void handleCategoryClick();
         void AddItems(ShopUIItem item);
         std::vector<ShopUIItem>* getItems();
         void reArrangeItems();
+        CategoryState& getCategoryState();
         void draw();
+        void drawInventory();
+        void drawSkill();
+        void drawStatus();
+        void drawSetting();
 };
 
 #endif
