@@ -21,6 +21,11 @@ class InventoryCategory: public BaseButton {
         InventoryCategory(ButtonParameter buttonDetail, Rectangle dimension, int index);
         virtual void draw() override;
 };
+class SettingTab {
+    public:
+        SettingTab();
+        void draw();
+};
 class ShopItem {
     public:
         Texture2D texture;

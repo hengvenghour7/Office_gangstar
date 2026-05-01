@@ -9,6 +9,15 @@
 using json = nlohmann::json;
 
 WorldSet& getCenterWorld(Player& player) {
+    static std::vector<int> centerMapCollisionData;
+    std::fstream file("resources/maps/office_gang_map.tmj");
+    if (!file.is_open()) {
+    }
+    if (file.is_open()) {
+        json j;
+        file >> j;
+        centerMapCollisionData = getArrayFromJson(j, "Collision");
+    }
     static std::vector<PropDrawCondition> animatedObjectPropCondition{
         {79735, LoadTexture("resources/image/Fishing_Boat_2_left.png"), 0, 0, 8, 0, 768/8, 64},
         {79736, LoadTexture("resources/image/Fishing_Boat_left_2.png"), 0, 0, 8, 0, 640/8,48}
@@ -41,7 +50,7 @@ WorldSet& getCenterWorld(Player& player) {
         drawingDataSet,
         150,
         100,
-        &collisionData,
+        &centerMapCollisionData,
         &centerWorldProps,
         "resources/maps/office_gang_map.tmj",
         WorldEnums::CenterWorld,
@@ -189,14 +198,14 @@ WorldSet& getSunnaInterior(Player& player) {
 WorldSet& getUpperMap(Player& player) {
     static std::vector<MapProp*> upperMapProps = {
     };
-    std::vector<int> mapCollisionData;
+    static std::vector<int> upperMapCollisionData;
     std::fstream file("resources/maps/upper_map.tmj");
     if (!file.is_open()) {
     }
     if (file.is_open()) {
         json j;
         file >> j;
-        mapCollisionData = getArrayFromJson(j, "Collision");
+        upperMapCollisionData = getArrayFromJson(j, "Collision");
     }
     std::vector<DrawingDataSet> drawingDataSet = {
         {"resources/image/upper_map_2.png", 1}
@@ -225,7 +234,7 @@ WorldSet& getUpperMap(Player& player) {
         drawingDataSet,
         150,
         100,
-        &mapCollisionData,
+        &upperMapCollisionData,
         &upperMapProps,
         "resources/maps/upper_map.tmj",
         WorldEnums::UpperMap,

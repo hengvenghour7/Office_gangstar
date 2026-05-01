@@ -172,6 +172,13 @@ void Inventory::draw () {
     DrawTexturePro(backgroundTexture, {0,0, 480, 320}, {dimension.x , dimension.y, 480, 320 }, {0,0}, 0, WHITE);
 }
 void Inventory::drawInventory() {
+    if (items.size() <= 0) {
+        const char * displayText = "No items";
+        int fontSize = 20;
+        float textLength = MeasureText(displayText, fontSize);
+        DrawText(displayText, dimension.x + dimension.width * 0.5 - textLength * 0.5, dimension.y + dimension.height * 0.5 - fontSize * 0.5, fontSize, WHITE);
+        return;
+    }
     for (ShopUIItem item: items) {
         Rectangle button_dimension = item.getDimension();
         if (checkMouseOnHover(button_dimension).isCollide) {
