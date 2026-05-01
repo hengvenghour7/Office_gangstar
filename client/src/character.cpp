@@ -432,6 +432,7 @@ void Player::handleInteraction(Music& music) {
             }
         }
     }
+    break;
     case CategoryState::Setting:
         playerInventory.handleSettingInteraction(music);
         break;
