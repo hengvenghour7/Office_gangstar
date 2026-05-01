@@ -129,7 +129,7 @@ class Player: public Character
         virtual Vector2 getCenter(Vector2 mapPos) override;
         Inventory* getPlayerInventory();
         void replaceHoldingItems(InteractableItem item);
-        void handleInteraction();
+        void handleInteraction(Music& music);
         std::vector<InteractableItem>* getHoldingItems();
         int& getCoinAmount();
         void increaseCoin(int amount);

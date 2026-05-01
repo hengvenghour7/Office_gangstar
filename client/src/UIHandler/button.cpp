@@ -28,8 +28,9 @@ std::string& BaseButton::getName()
 {
     return name;
 }
-CategoryTabButton::CategoryTabButton (Texture2D& texture, ButtonParameter buttonDetail, Rectangle dimension, int index)
+CategoryTabButton::CategoryTabButton (Texture2D& texture, Rectangle srcDimension, ButtonParameter buttonDetail, Rectangle dimension, int index)
 : BaseButton(buttonDetail, dimension, index),
+srcDimension(srcDimension),
 texture(texture)
 {
 
@@ -44,5 +45,5 @@ bool CategoryTabButton::getIsTrigger()
 }
 void CategoryTabButton::draw()
 {
-    
+    DrawTexturePro(texture, srcDimension, dimension, {0, 0}, 0, WHITE);
 }

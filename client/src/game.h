@@ -65,7 +65,7 @@ class Game {
         void checkPropsInteraction(Player& player, Vector2 mapPos);
         void checkShopInteraction(Player& player, Vector2 mapPos);
         void loadWorld(WorldEnums targetMap, Vector2 targetLocation);
-        void handleGamePlayUIInteraction();
+        void handleGamePlayUIInteraction(Music& music);
         void prepareWorld(SpawnToDetail& spawnToDetail);
         Vector2 handleCameraShake();
 };

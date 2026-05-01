@@ -8,4 +8,5 @@ class TabPanel {
     std::unordered_map<std::string, CategoryTabButton> tabButtons;
     public:
         TabPanel(ButtonParameter, std::vector<std::string> texturePaths);
+        void draw();
 };

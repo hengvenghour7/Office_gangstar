@@ -12,7 +12,7 @@ struct ButtonParameter {
 struct ButtonParameter2 {
     std::string name;
     std::function<void()> action;
-    Rectangle dimension;
+    Rectangle srcDimension;
 };
 class BaseButton {
     protected:
@@ -32,11 +32,11 @@ class BaseButton {
 class CategoryTabButton: public BaseButton {
     Texture2D& texture;
     bool isTrigger;
+    Rectangle srcDimension;
     public:
-        CategoryTabButton (Texture2D& texture, ButtonParameter buttonDetail, Rectangle dimension, int index);
+        CategoryTabButton (Texture2D& texture, Rectangle srcDimension, ButtonParameter buttonDetail, Rectangle dimension, int index);
         virtual void draw () override;
         void setIsTrigger(bool isTrigger);
         bool getIsTrigger();
 };
-
 #endif

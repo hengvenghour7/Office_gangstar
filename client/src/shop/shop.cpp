@@ -52,7 +52,15 @@ Inventory::Inventory (std::vector<ShopItem> shopItems): backgroundTexture(LoadTe
     currentCategory("Inventory"),
     categoryState(CategoryState::Inventory),
     dimension {SCREEN_WIDTH/2 - 480*0.5, SCREEN_HEIGHT*0.5 - 320*0.5, 480, 320},
-    categoryButtonYOffset(dimension.y - 32)
+    categoryButtonYOffset(dimension.y - 32),
+    soundButton(iconTextureSet, 
+        {7 * 16,15 * 16, 16, 16}, {"Sound", []() {std::cout << "sound is trigger"; }}, 
+        {dimension.x + 40, dimension.y + 40, 16 * 2, 16 * 2 },
+        0),
+    muteSoundButton(iconTextureSet, 
+        {10 * 16,15 * 16, 16, 16}, {"Sound", []() {std::cout << "sound is mute"; }}, 
+        {dimension.x + 80, dimension.y + 40, 16 * 2, 16 * 2 },
+        0)
 {
     int column{0};
     int temp_index{0};
@@ -157,6 +165,17 @@ void Inventory::handleCategoryClick() {
         }
     }
 }
+void Inventory::handleSettingInteraction(Music& music)
+{
+    bool isSoundClick = checkButtonClick(soundButton.getDimension()).isCollide;
+    bool isMuteSoundClick = checkButtonClick(muteSoundButton.getDimension()).isCollide;
+    if (isSoundClick) {
+        ResumeMusicStream(music);
+    }
+    if (isMuteSoundClick) {
+        PauseMusicStream(music);
+    }
+}
 CategoryState& Inventory::getCategoryState() {
     return categoryState;
 }
@@ -188,8 +207,11 @@ void Inventory::drawInventory() {
     }
 }
 void Inventory::drawSetting() {
-    DrawTexturePro(iconTextureSet, {7 * 16,15 * 16, 16, 16}, {dimension.x + 40, dimension.y + 40, 16 * 2, 16 * 2 }, {0,0}, 0, WHITE);
-    DrawTexturePro(iconTextureSet, {10 * 16,15 * 16, 16, 16}, {dimension.x + 80, dimension.y + 40, 16 * 2, 16 * 2 }, {0,0}, 0, WHITE);
+    soundButton.draw();
+    muteSoundButton.draw();
+    // muteSoundButton.draw();
+    // DrawTexturePro(iconTextureSet, {7 * 16,15 * 16, 16, 16}, {dimension.x + 40, dimension.y + 40, 16 * 2, 16 * 2 }, {0,0}, 0, WHITE);
+    // DrawTexturePro(iconTextureSet, {10 * 16,15 * 16, 16, 16}, {dimension.x + 80, dimension.y + 40, 16 * 2, 16 * 2 }, {0,0}, 0, WHITE);
     DrawText("Settings", dimension.x + 100, dimension.y + 100, 14, WHITE);
 }
 void Inventory::drawSkill() {

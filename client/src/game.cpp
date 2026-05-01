@@ -156,7 +156,7 @@ void Game::tick (float deltaTime, Music& music) {
                 }
                 gameUIState = GameUIStateEnums::OpenInventory;
             }
-            handleGamePlayUIInteraction();
+            handleGamePlayUIInteraction(music);
             for (AIPlayer &enemy : enemies) {
                 enemy.AITick(deltaTime, &enemies);
                 if (enemy.getHealthComponent()->currentHealth <= 0) {
@@ -382,7 +382,7 @@ void Game::loadWorld(WorldEnums targetMap, Vector2 targetLocation) {
         allDrawableObjects.push_back(propSet);
     }
 }
-void Game::handleGamePlayUIInteraction () {
+void Game::handleGamePlayUIInteraction (Music& music) {
     switch (gameUIState)
     {
     case GameUIStateEnums::OpenShop:
@@ -391,7 +391,7 @@ void Game::handleGamePlayUIInteraction () {
         break;
     case GameUIStateEnums::OpenInventory:
         player.getPlayerInventory()->tick();
-        player.handleInteraction();
+        player.handleInteraction(music);
         break;
     default:
         break;

@@ -417,7 +417,7 @@ void Player::replaceHoldingItems (InteractableItem item) {
 Inventory* Player::getPlayerInventory() {
     return &playerInventory;
 }
-void Player::handleInteraction() {
+void Player::handleInteraction(Music& music) {
     switch (playerInventory.getCategoryState())
     {
     case CategoryState::Inventory:
@@ -432,7 +432,9 @@ void Player::handleInteraction() {
             }
         }
     }
-    break;
+    case CategoryState::Setting:
+        playerInventory.handleSettingInteraction(music);
+        break;
     default:
         break;
     }

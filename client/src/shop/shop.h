@@ -67,6 +67,8 @@ class Inventory {
     std::string currentCategory;
     CategoryState categoryState;
     float categoryButtonYOffset;
+    CategoryTabButton soundButton;
+    CategoryTabButton muteSoundButton;
     public:
         Inventory(std::vector<ShopItem> shopItems);
         void tick();
@@ -81,6 +83,7 @@ class Inventory {
         void drawStatus();
         void drawSetting();
         void drawWeapon();
+        void handleSettingInteraction(Music& music);
         void updateCategoryButtonPos(std::string targetCategory);
 };
 
