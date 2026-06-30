@@ -378,6 +378,9 @@ Vector2 Character::getCenter (Vector2 mapPos) {
     std::cout<<"this function need to be check later";
     return {0,0};
 }
+int Character::getAttackFrame() {
+    return attackFrame;
+}
 Rectangle Character::getCharacterCollision ()  {
             return characterCollision;
         };
@@ -454,64 +457,78 @@ std::vector<InteractableItem>* Player::getHoldingItems() {
 }
 void Player::tick (float deltaTime) {
     // DrawRectangle(characterHitBox.x, characterHitBox.y, characterHitBox.width, characterHitBox.height, GREEN);
-    if (playerState != Hurt) {
-        if (IsKeyDown(KEY_K)) {
-                updatePlayerState(Attacking);
-            }
-        if (IsKeyReleased(KEY_K)) {
-            updatePlayerState(Idle);
+    if (attackFrame < MAX_ATTACK_FRAME) {
+        if (updateAnimationTime > 0.1)
+        {
+            attackFrame++;
         }
-        if (playerState != Attacking) {
-            if (IsKeyPressed(KEY_A) || IsKeyPressed(KEY_W) || IsKeyPressed(KEY_D) || IsKeyPressed(KEY_S) ||
-                IsKeyReleased(KEY_A) || IsKeyReleased(KEY_W) || IsKeyReleased(KEY_D) || IsKeyReleased(KEY_S)) {
-                    isNeedResetCols = true;
+    }
+    else
+    {
+        if (playerState != Hurt) {
+            if (IsKeyDown(KEY_K)) {
+                    updatePlayerState(Attacking);
+                    if (attackFrame > MAX_ATTACK_FRAME - 1)
+                    {
+                        attackFrame = 0;
+                    }
+                }
+            if (attackFrame >= MAX_ATTACK_FRAME)
+            {
+                updatePlayerState(PlayerState::Idle);
+            }
+            if (playerState != Attacking) {
+                if (IsKeyPressed(KEY_A) || IsKeyPressed(KEY_W) || IsKeyPressed(KEY_D) || IsKeyPressed(KEY_S) ||
+                    IsKeyReleased(KEY_A) || IsKeyReleased(KEY_W) || IsKeyReleased(KEY_D) || IsKeyReleased(KEY_S)) {
+                        isNeedResetCols = true;
+                    };
+                if (IsKeyDown(KEY_A)) {
+                    direction.x = -1;
+                }
+                if (IsKeyDown(KEY_D)) {
+                    direction.x = 1;
+                }
+                if (IsKeyDown(KEY_W)) {
+                    direction.y = -1;
+                }
+                if (IsKeyDown(KEY_S)) {
+                    direction.y = 1;
                 };
-            if (IsKeyDown(KEY_A)) {
-                direction.x = -1;
-            }
-            if (IsKeyDown(KEY_D)) {
-                direction.x = 1;
-            }
-            if (IsKeyDown(KEY_W)) {
-                direction.y = -1;
-            }
-            if (IsKeyDown(KEY_S)) {
-                direction.y = 1;
-            };
-            if (direction.x != 0 || direction.y != 0) {
-                if (IsKeyDown(KEY_LEFT_SHIFT)) {
-                    updatePlayerState(Running);
+                if (direction.x != 0 || direction.y != 0) {
+                    if (IsKeyDown(KEY_LEFT_SHIFT)) {
+                        updatePlayerState(Running);
+                    } else {
+                        updatePlayerState(Walking);
+                    }
                 } else {
-                    updatePlayerState(Walking);
+                    updatePlayerState(Idle);
                 }
-            } else {
-                updatePlayerState(Idle);
+                updateDirectionState(direction);
+                updateHitBox();
             }
-            updateDirectionState(direction);
-            updateHitBox();
-        }
-        if(Vector2Length(direction) != 0) {
-            direction = Vector2Normalize(direction)*speed*deltaTime*50;
-            direction.x = (int)(std::round(direction.x)); 
-            direction.y = (int)(std::round(direction.y));
-            if (!checkPlayerCollisionTile(worldCollisionArray, characterCollision, worldPos, direction, collisionCode).isCollide) {
-                worldPos = Vector2Add(worldPos, direction);
-                setY(worldPos.y + characterCollision.y + characterCollision.height);
+            if(Vector2Length(direction) != 0) {
+                direction = Vector2Normalize(direction)*speed*deltaTime*50;
+                direction.x = (int)(std::round(direction.x)); 
+                direction.y = (int)(std::round(direction.y));
+                if (!checkPlayerCollisionTile(worldCollisionArray, characterCollision, worldPos, direction, collisionCode).isCollide) {
+                    worldPos = Vector2Add(worldPos, direction);
+                    setY(worldPos.y + characterCollision.y + characterCollision.height);
+                    }
                 }
-            }
-        direction = {0,0};
-    } 
+            direction = {0,0};
+        } 
+    }
         Character::tick(deltaTime);
     }
 void Player::draw(Vector2 mapPos) {
     Vector2 shakePos = {this->worldPos.x + mapPos.x, this->worldPos.y + mapPos.y};
     Rectangle drawDes = {characterRecDes.x + shakePos.x, characterRecDes.y + shakePos.y, characterRecDes.width, characterRecDes.height};
     DrawTexturePro(characterTexture, characterRecSrc, drawDes, {0,0}, 0, WHITE);
-    if (playerState == PlayerState::Attacking)
-    {
-        Rectangle fightAnimationRecSrc = {currentFightFrameSet.currentFrame * characterRecSrc.width, currentFightFrameSet.currentRow * characterRecSrc.height, characterRecSrc.width, characterRecSrc.height};
-        DrawTexturePro(characterTexture, fightAnimationRecSrc, drawDes, {0,0}, 0, WHITE);
-    }
+    // if (playerState == PlayerState::Attacking)
+    // {
+    //     Rectangle fightAnimationRecSrc = {currentFightFrameSet.currentFrame * characterRecSrc.width, currentFightFrameSet.currentRow * characterRecSrc.height, characterRecSrc.width, characterRecSrc.height};
+    //     DrawTexturePro(characterTexture, fightAnimationRecSrc, drawDes, {0,0}, 0, WHITE);
+    // }
     if (holdingItems.size() > 0) {
         InteractableItem& temp_holdingItem = holdingItems[0];
         DrawTexturePro(*temp_holdingItem.getTexture(), {0,0, (float)temp_holdingItem.getTextureWidth(), (float)temp_holdingItem.getTextureHeight()}, 
@@ -564,6 +581,17 @@ AIPlayer::AIPlayer (const char * imageTexture, Player* inputPlayer, int id, floa
     player = inputPlayer;
 }
 void AIPlayer::AITick(float deltaTime, std::vector<AIPlayer>* allAIPlayer) {
+    if (attackFrame < MAX_ATTACK_FRAME)
+    {
+        if (updateAnimationTime > 0.1)
+        {
+            attackFrame++;
+        }
+        updatePlayerState(PlayerState::Attacking);
+    }
+    if (playerState == PlayerState::Attacking && attackFrame >= MAX_ATTACK_FRAME) {
+        updatePlayerState(PlayerState::Idle);
+    }
     appraochTarget(allAIPlayer, deltaTime);
     Character::tick(deltaTime);
 }
@@ -573,6 +601,10 @@ void AIPlayer::drawHealth() {
 }
 void AIPlayer::doDamage() {
     updatePlayerState(Attacking);
+    if (attackFrame > MAX_ATTACK_FRAME - 1)
+    {
+        attackFrame = 0;
+    }
 }
 void AIPlayer::draw(Vector2 mapPos) {
     Character::draw(mapPos);
@@ -581,10 +613,13 @@ void AIPlayer::draw(Vector2 mapPos) {
 void AIPlayer::appraochTarget (std::vector<AIPlayer>* allAIPlayer, float deltaTime) {
     if (checkIsCollide(characterHitBox, player->getCharacterCollision(), 0, 0).isCollide) {
         doDamage();
-        player->takeDamage(this, this->damage, deltaTime );
+        if (attackFrame > MAX_ATTACK_FRAME - 2)
+        {
+            player->takeDamage(this, this->damage, deltaTime);
+        }
     }
     takeDamage(player, player->getDamage(), deltaTime);
-    if (playerState != Hurt) {
+    if (playerState != Hurt && playerState != PlayerState::Attacking) {
         if (!isNeedToMoveBack) {
             direction = Vector2Normalize(Vector2Subtract(player->getScreenPos(), screenPos));
             for (AIPlayer &enemy : *allAIPlayer) {

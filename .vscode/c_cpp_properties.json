@@ -4,14 +4,8 @@
             "name": "Win32",
             "includePath": [
                 "${workspaceFolder}/**",
-
-                // MSYS2 MinGW core include directory
                 "C:/msys64/mingw64/include",
-
-                // GCC C++ standard library headers (required)
                 "C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include",
-
-                // Raylib
                 "C:/raylib/raylib/src",
                 "C:/raylib/raylib/src/external",
                 "${workspaceFolder}/client/src/include"
@@ -29,7 +23,11 @@
                 "/opt/homebrew/include/**",
                 "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include",
                 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include",
-                "/Users/venghour/Documents/Coding/Games/Office_gangstar/client/src/include"
+                "/Users/venghour/Documents/Coding/Games/Office_gangstar/client/src/include",
+                "${workspaceFolder}/**",
+                "/Users/venghour/Documents/Coding/Games/Office_gangstar/client/src/**",
+                "/opt/homebrew/include",
+                "/usr/local/include"
             ],
             "compilerPath": "/usr/bin/clang++",
             "cStandard": "c17",
