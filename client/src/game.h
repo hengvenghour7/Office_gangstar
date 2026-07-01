@@ -54,6 +54,9 @@ class Game {
         Time time;
         RenderTexture2D lightMask;
         IsCanSwtichSet canAutoSwitchMap {true, 0};
+        WeaponSelectorWheel weaponWheel;
+        Texture2D cursorTexture;
+        bool isCursorShown {false};
     public:
         Game();
         void tick(float deltaTime, Music& music);
@@ -68,4 +71,5 @@ class Game {
         void handleGamePlayUIInteraction(Music& music);
         void prepareWorld(SpawnToDetail& spawnToDetail);
         Vector2 handleCameraShake();
+        void drawCustomCursor ();
 };

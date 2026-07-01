@@ -74,3 +74,63 @@ void ShopUI::handleInteraction(Player& player) {
         }
     }
 };
+WeaponButton::WeaponButton(std::string name, EquipmentState state, const char* textureSrc): name(name), state(state),
+texture(LoadTexture(textureSrc)) {
+}
+void WeaponButton::setDimension (Rectangle dimension) {
+    this->dimension = dimension;
+}
+WeaponSelectorWheel::WeaponSelectorWheel(): radius(150), center({400, 300}) {
+    WeaponButton axe("Axe", EquipmentState::BareHand, "resources/image/UI/weapon/axe.png");
+    WeaponButton gun("Gun", EquipmentState::Weaponized, "resources/image/UI/weapon/gun.png");
+    allAvailableWeapon.push_back(axe);
+    allAvailableWeapon.push_back(axe);
+    allAvailableWeapon.push_back(gun);
+    allAvailableWeapon.push_back(gun);
+    allAvailableWeapon.push_back(gun);
+
+    float angleStep = 2 * PI / allAvailableWeapon.size();
+    for (int i = 0; i < allAvailableWeapon.size(); i++) {
+        WeaponButton& weapon = allAvailableWeapon[i];
+        float theta = i * angleStep;
+        Rectangle buttonDimension =
+        {
+            center.x + cosf(theta) * radius * 0.6f - 16 * 3 * 0.5f, 
+            center.y + sinf(theta) * radius * 0.6f - 16 * 3 * 0.5f,
+            16 * 3,
+            16 * 3
+        };
+        weapon.setDimension(buttonDimension);
+    }
+}
+void WeaponSelectorWheel::checkWheelInteraction(Player& player) {
+    for (WeaponButton& b : allAvailableWeapon) {
+        if (checkButtonClick(b.dimension).isCollide) {
+            std::cout<< b.name << std::flush;
+            player.setEquipmentState(b.state);
+        }
+    }
+}
+void WeaponSelectorWheel::draw() {
+    DrawCircle(center.x, center.y, radius, GetColor(BACKGROUND_COLOR));
+    DrawCircle(center.x, center.y, 10, GetColor(HOVER_BACKGROUND_COLOR));
+    Rectangle recSrc = 
+        {
+            0, 
+            0,
+            static_cast<float>(32),
+            static_cast<float>(32)
+        };
+    for (WeaponButton& b : allAvailableWeapon) {
+        
+        if (checkMouseOnHover(b.dimension).isCollide) {
+            DrawCircle(
+                b.dimension.x + b.dimension.width * 0.5,
+                b.dimension.y + b.dimension.height * 0.5,
+                b.dimension.width + 2,
+                GetColor(HOVER_BACKGROUND_COLOR)
+            );
+        }
+        DrawTexturePro(b.texture, recSrc, b.dimension, {0,0}, 0, WHITE);
+    }
+}

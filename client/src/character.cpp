@@ -354,6 +354,9 @@ void Character::draw (Vector2 des) {
 Vector2* Character::getWorldPosPointer () {
     return &worldPos;
 }
+void Character::setAttackFrame (int frame) {
+    attackFrame = frame;
+}
 void Character::tick (float deltaTime) {
             float const TIME_CAP = 2.0f;
             if (playerState == PlayerState::Hurt) {
@@ -396,10 +399,15 @@ void Character::setExplosion(bool isExplode) {
 bool Character::getIsSetExplosion() {
     return isSetExplosion;
 }
+void Player::setEquipmentState (EquipmentState equipmentState) {
+    this->equipmentState = equipmentState;
+}
 Player::Player (const char * imageTexture, std::vector<std::vector<int>>* worldCollisionArray, float speed, float damage): Character(imageTexture, speed, damage, worldCollisionArray), 
         healthBarTexture(LoadTexture("resources/image/UI/healthUI.png")),
         coinTexture(LoadTexture("resources/image/UI/coin.png")),
-        playerInventory({}) {
+        playerInventory({}),
+        equipmentState(EquipmentState::BareHand)
+        {
             screenPos.x = SCREEN_WIDTH/2;
             screenPos.y = SCREEN_HEIGHT/2;
             worldPos = {200, 100};
@@ -524,11 +532,11 @@ void Player::draw(Vector2 mapPos) {
     Vector2 shakePos = {this->worldPos.x + mapPos.x, this->worldPos.y + mapPos.y};
     Rectangle drawDes = {characterRecDes.x + shakePos.x, characterRecDes.y + shakePos.y, characterRecDes.width, characterRecDes.height};
     DrawTexturePro(characterTexture, characterRecSrc, drawDes, {0,0}, 0, WHITE);
-    // if (playerState == PlayerState::Attacking)
-    // {
-    //     Rectangle fightAnimationRecSrc = {currentFightFrameSet.currentFrame * characterRecSrc.width, currentFightFrameSet.currentRow * characterRecSrc.height, characterRecSrc.width, characterRecSrc.height};
-    //     DrawTexturePro(characterTexture, fightAnimationRecSrc, drawDes, {0,0}, 0, WHITE);
-    // }
+    if (playerState == PlayerState::Attacking && equipmentState == EquipmentState::Weaponized)
+    {
+        Rectangle fightAnimationRecSrc = {currentFightFrameSet.currentFrame * characterRecSrc.width, currentFightFrameSet.currentRow * characterRecSrc.height, characterRecSrc.width, characterRecSrc.height};
+        DrawTexturePro(characterTexture, fightAnimationRecSrc, drawDes, {0,0}, 0, WHITE);
+    }
     if (holdingItems.size() > 0) {
         InteractableItem& temp_holdingItem = holdingItems[0];
         DrawTexturePro(*temp_holdingItem.getTexture(), {0,0, (float)temp_holdingItem.getTextureWidth(), (float)temp_holdingItem.getTextureHeight()}, 
@@ -556,6 +564,18 @@ void Player::drawHealth(int x, int y) {
     DrawTexturePro(coinTexture, {0,0, 32, 32}, 
         {SCREEN_WIDTH - 32*2, 0, 32*scale_factor, 32*scale_factor}, 
         {0,0}, 0, WHITE);
+    switch (equipmentState)
+    {
+    case EquipmentState::BareHand :
+        DrawText("Bare Hand", 20, 50, 16, WHITE);
+        break;
+    case EquipmentState::Weaponized :
+        DrawText("Gun", 20, 50, 16, WHITE);
+        break;
+    default:
+        DrawText("Bare Hand", 20, 50, 16, WHITE);
+        break;
+    }
 }
 Vector2 Player::getWorldPos () {
             return worldPos;
@@ -576,11 +596,14 @@ void Player::changeCollisionCheck (std::vector<std::vector<int>>* newWorldCollis
     worldCollisionArray = newWorldCollisionArray;
     collisionCode = newCollisionCode;
 }
+EquipmentState& Player::getEquipmentState() {
+    return equipmentState;
+}
 AIPlayer::AIPlayer (const char * imageTexture, Player* inputPlayer, int id, float speed, float damage, std::vector<std::vector<int>>* worldCollisionArray): 
     Character(imageTexture, speed, damage, worldCollisionArray), id(id) {
     player = inputPlayer;
 }
-void AIPlayer::AITick(float deltaTime, std::vector<AIPlayer>* allAIPlayer) {
+void AIPlayer::AITick(float deltaTime, std::vector<AIPlayer>* allAIPlayer, Vector2 mapPos) {
     if (attackFrame < MAX_ATTACK_FRAME)
     {
         if (updateAnimationTime > 0.1)
@@ -592,7 +615,7 @@ void AIPlayer::AITick(float deltaTime, std::vector<AIPlayer>* allAIPlayer) {
     if (playerState == PlayerState::Attacking && attackFrame >= MAX_ATTACK_FRAME) {
         updatePlayerState(PlayerState::Idle);
     }
-    appraochTarget(allAIPlayer, deltaTime);
+    appraochTarget(allAIPlayer, deltaTime, mapPos);
     Character::tick(deltaTime);
 }
 void AIPlayer::drawHealth() {
@@ -610,7 +633,7 @@ void AIPlayer::draw(Vector2 mapPos) {
     Character::draw(mapPos);
     drawHealth();
 }
-void AIPlayer::appraochTarget (std::vector<AIPlayer>* allAIPlayer, float deltaTime) {
+void AIPlayer::appraochTarget (std::vector<AIPlayer>* allAIPlayer, float deltaTime, Vector2 mapPos) {
     if (checkIsCollide(characterHitBox, player->getCharacterCollision(), 0, 0).isCollide) {
         doDamage();
         if (attackFrame > MAX_ATTACK_FRAME - 2)
@@ -618,7 +641,26 @@ void AIPlayer::appraochTarget (std::vector<AIPlayer>* allAIPlayer, float deltaTi
             player->takeDamage(this, this->damage, deltaTime);
         }
     }
-    takeDamage(player, player->getDamage(), deltaTime);
+    switch (player->getEquipmentState())
+    {
+    case EquipmentState::BareHand:
+        takeDamage(player, player->getDamage(), deltaTime);
+        break;
+    case EquipmentState::Weaponized:
+    {
+        float const TIME_CAP = 1.0f;
+        Rectangle checkDimension = {worldPos.x + mapPos.x, worldPos.y + mapPos.y, characterRecDes.width, characterRecDes.height};
+        if (checkButtonClick(checkDimension).isCollide && takeDamageTimeCap > TIME_CAP) {
+            characterHealth.takeDamage(30.f);
+            updatePlayerState(PlayerState::Hurt);
+            takeDamageTimeCap = 0;
+        }
+        break;
+    }
+    default:
+        takeDamage(player, player->getDamage(), deltaTime);
+        break;
+    }
     if (playerState != Hurt && playerState != PlayerState::Attacking) {
         if (!isNeedToMoveBack) {
             direction = Vector2Normalize(Vector2Subtract(player->getScreenPos(), screenPos));

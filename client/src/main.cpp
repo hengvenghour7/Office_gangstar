@@ -12,8 +12,8 @@ int main () {
     InitAudioDevice();
     Music music = LoadMusicStream("resources/musics/5-Peaceful.ogg");
     PlayMusicStream(music);
-    PauseMusicStream(music);
     SetTargetFPS(60);
+    HideCursor();
     Game game;
     if (!isMultiPlayer) {
         while (WindowShouldClose() == false){

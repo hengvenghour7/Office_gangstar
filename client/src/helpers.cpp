@@ -170,10 +170,12 @@ CollisionProperty checkCollisionTile(std::vector<std::vector<int>>* tileArray, R
     CollisionProperty collision {false, {}};
     return collision;
 };
-CollisionProperty checkPlayerCollisionTile(std::vector<std::vector<int>>* tileArray, Rectangle characterCollision, Vector2 worldPos, Vector2 direction, int colorCode) {
-
+CollisionProperty checkPlayerCollisionTile(std::vector<std::vector<int>>* tileArray, Rectangle characterCollision, Vector2 worldPos, Vector2 direction, int colorCode) 
+{
     CollisionProperty collision {false, {}};
-        // std::cout<< "world color code " <<colorCode <<std::flush;
+    if (tileArray == nullptr) {
+        return collision;
+    }
     Vector2 charCollisionScreenPos{direction.x > 0 ?  characterCollision.x + characterCollision.width : characterCollision.x,direction.y > 0 ? characterCollision.y + characterCollision.height : characterCollision.y};
     Vector2 playerWorldPos = Vector2Add(charCollisionScreenPos, worldPos);
     Vector2 currentTile {(float)(int)((playerWorldPos.x)/TILE_SIZE/MAP_SCALE), (float)(int)((playerWorldPos.y)/TILE_SIZE/MAP_SCALE)};
@@ -292,4 +294,8 @@ std::vector<ObjectDetail> getObjectsFromJsonLayer(json& jObject, std::string lay
 }
 void drawItemDescription (Rectangle DestinationRec, std::string description) {
     DrawText(description.c_str(), DestinationRec.x, DestinationRec.y + DestinationRec.height + 30, 14, WHITE);
+}
+void drawCustomCursor() {
+    Vector2 mousePosition = GetMousePosition();
+    DrawCircle(mousePosition.x, mousePosition.y, 5, GREEN);
 }

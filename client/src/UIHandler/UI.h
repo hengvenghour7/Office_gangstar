@@ -90,5 +90,24 @@ class UserInfoUI {
         void draw();
         void handleUserInfoUI();
 };
+class WeaponButton {
+    public:
+        std::string name;
+        EquipmentState state {EquipmentState::Weaponized};
+        Texture2D texture;
+        Rectangle dimension;
+
+        WeaponButton(std::string name, EquipmentState state, const char * textureSrc);
+        void setDimension(Rectangle dimension);
+};
+class WeaponSelectorWheel {
+    std::vector<WeaponButton> allAvailableWeapon {};
+    Vector2 center;
+    int radius;
+    public:
+        WeaponSelectorWheel();
+        void draw();
+        void checkWheelInteraction(Player& player);
+};
 
 #endif

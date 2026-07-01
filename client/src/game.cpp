@@ -59,7 +59,9 @@ worldDrawProperty(150, 100, &collisionData),
 currentWorld(&getCenterWorld(player)),
 player("resources/image/character/workingman2.png", currentWorld->getWorldCollisionArray(), 3, 50),
 time(),
-lightMask(LoadRenderTexture(SCREEN_WIDTH, SCREEN_HEIGHT))
+lightMask(LoadRenderTexture(SCREEN_WIDTH, SCREEN_HEIGHT)),
+weaponWheel(),
+cursorTexture(LoadTexture("resources/image/UI/bull_eye_white.png"))
 {
     std::random_device rd;
 
@@ -79,7 +81,10 @@ void Game::tick (float deltaTime, Music& music) {
     BeginDrawing();
     ClearBackground(BLACK);
     UpdateMusicStream(music);
-
+    if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
+        player.updatePlayerState(PlayerState::Attacking);
+        player.setAttackFrame(2);
+    }
     switch (gameState)
     {
     case GameStateEnums::Playing:
@@ -159,7 +164,7 @@ void Game::tick (float deltaTime, Music& music) {
             }
             handleGamePlayUIInteraction(music);
             for (AIPlayer &enemy : enemies) {
-                enemy.AITick(deltaTime, &enemies);
+                enemy.AITick(deltaTime, &enemies, mapPos);
                 if (enemy.getHealthComponent()->currentHealth <= 0) {
                     player.increaseCoin(50);
                 }
@@ -203,6 +208,19 @@ void Game::tick (float deltaTime, Music& music) {
     
     default:
         break;
+    }
+    if (gameState == GameStateEnums::StartScreen || player.getEquipmentState() == EquipmentState::Weaponized) {
+        if (isCursorShown) {
+            isCursorShown = false;
+            HideCursor();
+        }
+        drawCustomCursor();
+    } 
+    else {
+        if (!isCursorShown) {
+            ShowCursor();
+            isCursorShown = true;
+        }
     }
     EndDrawing();
 }
@@ -384,6 +402,10 @@ void Game::loadWorld(WorldEnums targetMap, Vector2 targetLocation) {
     }
 }
 void Game::handleGamePlayUIInteraction (Music& music) {
+    if (IsKeyDown(KEY_Q)) {
+        weaponWheel.draw();
+        weaponWheel.checkWheelInteraction(player);
+    }
     switch (gameUIState)
     {
     case GameUIStateEnums::OpenShop:
@@ -413,4 +435,10 @@ Vector2 Game::handleCameraShake() {
     }
     Vector2 shakeAmplitude = {sin(cameraShakeVector.y) * shakeAmplitudeFactor, sin(cameraShakeVector.y) * shakeAmplitudeFactor};
     return shakeAmplitude;
+}
+void Game::drawCustomCursor() {
+    Vector2 mousePosition = GetMousePosition();
+    Rectangle srcDimension = {0, 0, 128, 128};
+    Rectangle desDimension = {mousePosition.x - 5, mousePosition.y - 5, 15, 15};
+    DrawTexturePro(cursorTexture, srcDimension, desDimension, {0, 0}, 0, WHITE);
 }

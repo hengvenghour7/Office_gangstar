@@ -17,6 +17,10 @@ struct IsCanSwtichSet {
     bool isCanSwitch;
     int key;
 };
+enum class EquipmentState {
+    BareHand,
+    Weaponized
+};
 struct FightAnimationFrameSet {
     AnimationFrameSet left;
     AnimationFrameSet right;
@@ -110,6 +114,7 @@ class Character : public Drawing
         void setExplosion(bool isExplode);
         bool getIsSetExplosion();
         int getAttackFrame();
+        void setAttackFrame(int frame);
         int MAX_ATTACK_FRAME{4};
     };
 class Player: public Character
@@ -121,6 +126,7 @@ class Player: public Character
         int coinAmount{0};
         Inventory playerInventory;
         std::vector<InteractableItem> holdingItems{};
+        EquipmentState equipmentState;
     public:
         Player (const char * imageTexture, std::vector<std::vector<int>>* worldCollisionArray, float speed, float damage);
         virtual void tick(float deltaTime) override;
@@ -137,6 +143,8 @@ class Player: public Character
         int& getCoinAmount();
         void increaseCoin(int amount);
         void decreaseCoin(int amount);
+        void setEquipmentState(EquipmentState equipmentState);
+        EquipmentState& getEquipmentState();
         virtual void draw(Vector2 mapPos = {0,0}) override;
 };
     
@@ -152,8 +160,8 @@ class AIPlayer : public Character {
     public:
         AIPlayer (const char * imageTexture, Player* inputTarget, int id, float speed, float damage, std::vector<std::vector<int>>* worldCollisionArray);
         void doDamage ();
-        void AITick(float deltaTime, std::vector<AIPlayer>* allAIPlayer);
-        void appraochTarget (std::vector<AIPlayer>* allAIPlayer, float deltaTime) ;
+        void AITick(float deltaTime, std::vector<AIPlayer>* allAIPlayer, Vector2 mapPos);
+        void appraochTarget (std::vector<AIPlayer>* allAIPlayer, float deltaTime, Vector2 mapPos) ;
         void drawHealth();
 };
 
