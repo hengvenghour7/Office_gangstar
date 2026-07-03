@@ -170,24 +170,62 @@ CollisionProperty checkCollisionTile(std::vector<std::vector<int>>* tileArray, R
     CollisionProperty collision {false, {}};
     return collision;
 };
-CollisionProperty checkPlayerCollisionTile(std::vector<std::vector<int>>* tileArray, Rectangle characterCollision, Vector2 worldPos, Vector2 direction, int colorCode) 
+CollisionProperty checkPlayerCollisionTile(
+    std::vector<std::vector<int>>* tileArray,
+    Rectangle characterCollision,
+    Vector2 worldPos,
+    Vector2 direction,
+    int colorCode)
 {
-    CollisionProperty collision {false, {}};
-    if (tileArray == nullptr) {
+    CollisionProperty collision{false, {}};
+
+    if (!tileArray || tileArray->empty() || (*tileArray)[0].empty()) {
         return collision;
     }
-    Vector2 charCollisionScreenPos{direction.x > 0 ?  characterCollision.x + characterCollision.width : characterCollision.x,direction.y > 0 ? characterCollision.y + characterCollision.height : characterCollision.y};
+
+    const int mapHeight = (int)tileArray->size();
+    const int mapWidth  = (int)(*tileArray)[0].size();
+
+    auto inBounds = [&](int x, int y) -> bool {
+        return x >= 0 && x < mapWidth && y >= 0 && y < mapHeight;
+    };
+
+    Vector2 charCollisionScreenPos{
+        direction.x > 0 ? characterCollision.x + characterCollision.width : characterCollision.x,
+        direction.y > 0 ? characterCollision.y + characterCollision.height : characterCollision.y
+    };
+
     Vector2 playerWorldPos = Vector2Add(charCollisionScreenPos, worldPos);
-    Vector2 currentTile {(float)(int)((playerWorldPos.x)/TILE_SIZE/MAP_SCALE), (float)(int)((playerWorldPos.y)/TILE_SIZE/MAP_SCALE)};
-    Vector2 desTile {(float)(int)((playerWorldPos.x + direction.x)/TILE_SIZE/MAP_SCALE), 
-        (float)(int)((playerWorldPos.y + direction.y)/TILE_SIZE/MAP_SCALE)};
-    if (desTile.x < 0 || desTile.x >= (*tileArray)[0].size() || desTile.y < 0 || desTile.y >= (*tileArray).size()) {
+
+    int currentX = (int)(playerWorldPos.x / TILE_SIZE / MAP_SCALE);
+    int currentY = (int)(playerWorldPos.y / TILE_SIZE / MAP_SCALE);
+
+    int desX = (int)((playerWorldPos.x + direction.x) / TILE_SIZE / MAP_SCALE);
+    int desY = (int)((playerWorldPos.y + direction.y) / TILE_SIZE / MAP_SCALE);
+
+    // If destination is out of bounds → treat as collision
+    if (!inBounds(desX, desY)) {
         collision.isCollide = true;
-    } else {
-        if ((*tileArray)[currentTile.y][desTile.x] == colorCode || (*tileArray)[desTile.y][currentTile.x] || (*tileArray)[currentTile.y][currentTile.x]) {
-            collision.isCollide = true;
-        }
+        return collision;
     }
+
+    // If current tile is out of bounds → also treat as collision (or safe fallback)
+    if (!inBounds(currentX, currentY)) {
+        collision.isCollide = true;
+        return collision;
+    }
+
+    const int currentTile = (*tileArray)[currentY][currentX];
+    const int destTile    = (*tileArray)[desY][desX];
+
+    // Collision rules
+    if (destTile == colorCode ||
+        currentTile == colorCode ||
+        destTile != 0) // assuming 0 = empty tile (adjust if needed)
+    {
+        collision.isCollide = true;
+    }
+
     return collision;
 }
 CollisionProperty checkInteractionTile(std::vector<std::vector<int>>* tileArray, Rectangle characterCollision, Vector2 worldPos, float XOffset, float YOffset, int colorCode) {
